@@ -53,12 +53,6 @@ const serviceToGroup = (
   serviceId,
   groupId,
 ) => {
-  console.log(`
-UPDATE services
-SET group_id = ${groupId}
-WHERE id = ${serviceId};
-`);
-  
   const db = openDB();
   const stmt = db.prepare(
     `

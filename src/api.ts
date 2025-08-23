@@ -6,6 +6,7 @@ export type GetServicesResponse = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
+  groupId: number
 };
 
 export const getServices = async () => {
@@ -67,4 +68,18 @@ export const deleteService = async (id: number) => {
   const services = await response.json();
 
   return services as DeleteServiceResponse;
+};
+
+export type GetServiceGroupsResponse = {
+  id: number;
+  title: string;
+  services: GetServicesResponse[]
+};
+
+export const getServiceGroups = async () => {
+  const response = await fetch("http://localhost:3000/groups?services=true");
+
+  const services = await response.json();
+
+  return services as GetServiceGroupsResponse[];
 };

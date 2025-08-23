@@ -97,12 +97,52 @@ app.delete("/services/:id", (req, res) => {
 });
 
 app.get("/groups", async (req, res) => {
-  const data = await db.allGroups();
+  const includeServices = req.query.services == "true";
 
-  const groups = data.map((entry) => ({
+  const rawGroups = await db.allGroups();
+
+  const groupsWithDefaultGroup = [
+    ...rawGroups,
+    { id: undefined, title: "", services: [] },
+  ];
+
+  if (!includeServices) {
+    const groups = groupsWithDefaultGroup.map((entry) => {
+      return {
+        id: entry.id,
+        title: entry.title,
+      };
+    });
+
+    res.json(groups);
+
+    return;
+  }
+
+  const rawServices = await db.allServices();
+  const services = rawServices.map((entry) => ({
     id: entry.id,
     title: entry.title,
+    description: entry.description,
+    link: entry.link,
+    icon_url: entry.icon_url,
+    icon_wrap: entry.icon_wrap ? true : false,
+    enabled: entry.status_enabled ? true : false,
+    groupId: entry.group_id,
   }));
+
+  const servicesGrouped = services.reduce((acc, service) => {
+    (acc[service.groupId] ??= []).push(service);
+    return acc;
+  }, {});
+
+  const groups = groupsWithDefaultGroup.map((entry) => {
+    return {
+      id: entry.id,
+      title: entry.title,
+      services: servicesGrouped[entry.id] || [],
+    };
+  });
 
   res.json(groups);
 });

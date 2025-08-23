@@ -4,19 +4,25 @@ import Service from "./components/Service.vue";
 import {
   addService,
   deleteService,
+  getServiceGroups,
   getServices,
   updateService,
+  type GetServiceGroupsResponse,
   type GetServicesResponse,
 } from "./api";
 import ServiceEditForm, {
   type SubmitData,
 } from "./components/ServiceEditForm.vue";
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
+import ServiceGroup from "./components/ServiceGroup.vue";
 
 const services = ref<GetServicesResponse[] | null>(null);
+const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 onMounted(async () => {
   services.value = await getServices();
+
+  groups.value = await getServiceGroups();
 });
 
 const addServiceDialog =
@@ -107,9 +113,12 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       />
     </dialog>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4">
+    <ServiceGroup
+      :title="group.title"
+      v-for="group in groups"
+    >
       <EditServiceWrapper
-        v-for="service in services"
+        v-for="service in group.services"
         :edit="isEditMode"
         @edit="editService(service)"
         @delete="handleDeleteService(service)"
@@ -122,6 +131,6 @@ const handleDeleteService = async (service: GetServicesResponse) => {
           :icon_wrap="service.icon_wrap"
         />
       </EditServiceWrapper>
-    </div>
+    </ServiceGroup>
   </div>
 </template>

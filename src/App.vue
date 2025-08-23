@@ -99,6 +99,8 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
   } catch (error) {
     console.log(error);
   }
+  
+  groups.value = await getServiceGroups();
 };
 
 const handleEditGroup = async (id: number, data: AddGroupRequest) => {

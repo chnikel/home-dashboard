@@ -11,13 +11,17 @@ textarea {
 }
 
 button {
-  @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer;
+  @apply bg-neutral-500 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded cursor-pointer;
 }
 
 button[data-type="primary"] {
   @apply bg-blue-500 hover:bg-blue-700 text-white;
 }
 
-label:has(input,textarea) {
+button[data-type="danger"] {
+  @apply bg-neutral-500 hover:bg-red-800 text-white;
+}
+
+label:has(input, textarea) {
   @apply block uppercase tracking-wide text-neutral-700 text-xs font-bold mb-2;
 }

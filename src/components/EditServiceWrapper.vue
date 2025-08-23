@@ -8,13 +8,25 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="relative hover:bg-neutral-300/5">
+  <div class="relative group">
     <div
       v-if="edit"
-      class="absolute inset-0"
+      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
     >
-      <button @click="emit('edit')">Edit</button>
-      <button @click="emit('delete')">Delete</button>
+      <div class="flex gap-3 justify-center items-center h-full">
+        <button
+          data-variant="outline"
+          @click="emit('edit')"
+        >
+          Edit
+        </button>
+        <button
+          data-type="danger"
+          @click="emit('delete')"
+        >
+          Delete
+        </button>
+      </div>
     </div>
     <slot />
   </div>

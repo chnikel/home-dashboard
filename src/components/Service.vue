@@ -28,7 +28,12 @@ defineProps<{
       <h3 class="text-lg font-semibold line-clamp-1 flex gap-2 items-center">
         {{ title }}
       </h3>
-      <p class="text-sm text-fg-dimmed line-clamp-1">{{ description }}</p>
+      <p class="text-sm text-neutral-400 line-clamp-1">{{ description }}</p>
+      <!-- <span
+        class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+      >
+        dwa
+      </span> -->
     </div>
   </a>
 </template>

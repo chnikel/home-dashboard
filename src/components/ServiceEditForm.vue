@@ -52,7 +52,7 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <form class="grid">
+  <form class="grid p-3">
     <div>
       <label>
         First Name
@@ -110,12 +110,14 @@ const onSubmit = () => {
       </label>
     </div>
 
-    <button
+    <div class="space-x-2">
+      <button
       data-type="primary"
       @click="onSubmit"
     >
       Speichern
     </button>
-    <button>Schließen</button>
+    <button data-variant="outline">Schließen</button>
+    </div>
   </form>
 </template>

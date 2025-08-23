@@ -11,11 +11,11 @@ textarea {
 }
 
 button {
-  @apply bg-neutral-500 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded cursor-pointer;
+  @apply bg-neutral-500 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded-lg cursor-pointer border border-neutral-500 hover:border-neutral-600;
 }
 
 button[data-type="primary"] {
-  @apply bg-blue-500 hover:bg-blue-700 text-white;
+  @apply bg-blue-500 hover:bg-blue-700 border-inherit text-white;
 }
 
 button[data-type="danger"] {

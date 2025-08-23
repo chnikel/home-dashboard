@@ -34,7 +34,7 @@ const initialFormData: SubmitData = {
   description: "",
   link: "",
   icon_url: "",
-  icon_wrap: false,
+  icon_wrap: true,
   enabled: true,
 };
 

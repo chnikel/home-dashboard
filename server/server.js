@@ -74,6 +74,47 @@ app.delete("/services/:id", (req, res) => {
   res.json({ message: "Service erfolgreich gelöscht" });
 });
 
+app.get("/groups", async (req, res) => {
+  const data = await db.allGroups();
+
+  const groups = data.map((entry) => ({
+    id: entry.id,
+    title: entry.title,
+  }));
+
+  res.json(groups);
+});
+
+app.post("/groups", (req, res) => {
+  const data = {
+    title: req.body.title,
+  };
+
+  db.insertGroup(data);
+
+  res.json({ message: "Gruppe erfolgreich hinzugefügt" });
+});
+
+app.put("/groups/:id", (req, res) => {
+  const id = req.params.id;
+
+  const data = {
+    title: req.body.title,
+  };
+
+  db.updateGroup(id, data);
+
+  res.json({ message: "Gruppe erfolgreich aktualisiert" });
+});
+
+app.delete("/groups/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.deleteGroup(id);
+
+  res.json({ message: "Gruppe erfolgreich gelöscht" });
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

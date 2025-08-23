@@ -1,0 +1,21 @@
+meta {
+  name: Group - Update
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{host}}/groups/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "title": "Dienste - Changed"
+  }
+}

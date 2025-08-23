@@ -65,6 +65,13 @@ CREATE TABLE IF NOT EXISTS services (
     tags TEXT
 );
 `);
+
+  db.run(`
+CREATE TABLE IF NOT EXISTS groups (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL
+);
+`);
 });
 
 const updateService = (
@@ -108,10 +115,75 @@ WHERE id = ${id};
 
 db.close();
 
+const allGroups = async () => {
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    db.all("SELECT id, title FROM groups", (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(rows);
+    });
+  });
+};
+
+const insertGroup = ({ title }) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+INSERT INTO groups 
+(title)
+VALUES
+(
+  '${title}'
+);
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
+const updateGroup = (id, { title }) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+UPDATE groups
+SET 
+    title = '${title}'
+WHERE id = ${id};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
+const deleteGroup = (id) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+DELETE FROM groups
+WHERE id = ${id};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
 module.exports = {
   db,
   insertService,
   allServices,
   updateService,
   deleteService,
+  allGroups,
+  insertGroup,
+  updateGroup,
+  deleteGroup,
 };

@@ -24,7 +24,7 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId?: number
+  groupId?: number;
 };
 
 export type AddServiceResponse = {};
@@ -114,4 +114,20 @@ export const addGroup = async (data: AddGroupRequest) => {
   const services = await response.json();
 
   return services as AddGroupResponse;
+};
+
+export type UpdateGroupResponse = {};
+
+export const updateGroup = async (id: number, data: AddGroupRequest) => {
+  const response = await fetch(`http://localhost:3000/groups/${id}`, {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as UpdateGroupResponse;
 };

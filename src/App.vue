@@ -6,7 +6,9 @@ import {
   addService,
   deleteService,
   getServiceGroups,
+  updateGroup,
   updateService,
+  type AddGroupRequest,
   type GetServiceGroupsResponse,
   type GetServicesResponse,
 } from "./api";
@@ -97,6 +99,16 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
     console.log(error);
   }
 };
+
+const handleEditGroup = async (id: number, data: AddGroupRequest) => {
+  try {
+    await updateGroup(id, data);
+  } catch (error) {
+    console.log(error);
+  }
+
+  groups.value = await getServiceGroups();
+};
 </script>
 
 <template>
@@ -137,8 +149,11 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
     </dialog>
 
     <ServiceGroup
-      :title="group.title || '<missing title>'"
       v-for="group in groups"
+      :id="group.id"
+      :edit="isEditMode"
+      :title="group.title"
+      @edit="(id, data) => handleEditGroup(id, data)"
     >
       <EditServiceWrapper
         v-for="service in group.services"

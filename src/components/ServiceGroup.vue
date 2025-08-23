@@ -1,12 +1,43 @@
 <script setup lang="ts">
-defineProps<{
+import { ref, useTemplateRef } from "vue";
+import EditGroupWrapper from "./EditGroupWrapper.vue";
+import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
+
+const props = defineProps<{
+  edit: boolean;
+  id: number;
   title: string;
 }>();
+
+const emit = defineEmits<{
+  (e: "edit", id: number, data: AddGroupSubmitData): void;
+}>();
+
+const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
+
+const groupData = ref<AddGroupSubmitData | null>(null);
+
+const onEdit = (data: AddGroupSubmitData) => {
+  emit('edit', props.id, data)
+}
+
+const editGroup = () => {
+  groupData.value = {
+    title: props.title,
+  };
+
+  editGroupDialog.value?.showModal()
+};
 </script>
 
 <template>
   <div class="text-white">
-    <h2 class="text-2xl font-light py-2 px-4">{{ title }}</h2>
+    <EditGroupWrapper
+      :edit="edit"
+      @edit="editGroup()"
+    >
+      <h2 class="text-2xl font-light py-2 px-4">{{ title || '<missing title>' }}</h2>
+    </EditGroupWrapper>
 
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4"
@@ -14,4 +45,12 @@ defineProps<{
       <slot />
     </div>
   </div>
+
+  <dialog ref="edit-group-dialog">
+    <GroupEditForm
+      method="dialog"
+      :initial="groupData || undefined"
+      @submit="onEdit($event)"
+    />
+  </dialog>
 </template>

@@ -52,6 +52,7 @@ const editService = (service: GetServicesResponse) => {
     icon_url: service.icon_url,
     icon_wrap: service.icon_wrap,
     enabled: service.enabled,
+    groupId: service.groupId,
   };
 
   editServiceDialog.value?.showModal();

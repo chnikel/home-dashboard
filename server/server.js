@@ -82,6 +82,7 @@ app.put("/services/:id", (req, res) => {
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
     tags: [],
+    groupId: req.body.groupId,
   };
 
   db.updateService(id, data);

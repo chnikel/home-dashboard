@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS groups (
 
 const updateService = (
   id,
-  { title, description, link, icon_url, icon_wrap, status_enabled, tags }
+  { title, description, link, icon_url, icon_wrap, status_enabled, tags, groupId }
 ) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -111,7 +111,8 @@ SET
     icon_url = '${icon_url}',
     icon_wrap = ${icon_wrap},
     status_enabled = ${status_enabled},
-    tags = ''
+    tags = '',
+    group_id = ${groupId}
 WHERE id = ${id};
 `
   );

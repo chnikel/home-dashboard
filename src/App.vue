@@ -84,7 +84,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
 </script>
 
 <template>
-  <div class="h-screen bg-stone-800 p-3">
+  <div class="h-screen bg-stone-900 p-3">
     <div class="space-x-2">
       <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
       <button @click="toggleEdit()">

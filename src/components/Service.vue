@@ -13,7 +13,7 @@ defineProps<{
     class="p-6 flex gap-3 text-white hover:bg-stone-300/5 rounded-2xl"
   >
     <div
-      class="w-16 h-16 bg-stone-700 border-stone-600 border rounded-2xl shrink-0 p-2"
+      class="w-16 h-16 bg-stone-700/80 border-stone-600 border rounded-2xl shrink-0 p-2"
     >
       <img
         class="block h-full w-full"

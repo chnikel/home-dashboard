@@ -3,7 +3,7 @@
 textarea,
 input[type="number"],
 input[type="text"] {
-  @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500;
+  @apply appearance-none block w-full bg-neutral-200 text-neutral-700 border border-neutral-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-neutral-500;
 }
 
 textarea {
@@ -11,13 +11,13 @@ textarea {
 }
 
 button {
-  @apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded;
+  @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded cursor-pointer;
 }
 
 button[data-type="primary"] {
   @apply bg-blue-500 hover:bg-blue-700 text-white;
 }
 
-label:has(input) {
-  @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+label:has(input,textarea) {
+  @apply block uppercase tracking-wide text-neutral-700 text-xs font-bold mb-2;
 }

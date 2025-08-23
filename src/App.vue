@@ -84,7 +84,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
 </script>
 
 <template>
-  <div class="h-screen bg-stone-900 p-3">
+  <div class="h-screen bg-neutral-900 p-3">
     <div class="space-x-2">
       <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
       <button @click="toggleEdit()">
@@ -108,7 +108,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       />
     </dialog>
 
-    <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
       <EditServiceWrapper
         v-for="service in services"
         :edit="isEditMode"

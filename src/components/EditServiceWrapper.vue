@@ -8,7 +8,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="relative hover:bg-stone-300/5">
+  <div class="relative hover:bg-neutral-300/5">
     <div
       v-if="edit"
       class="absolute inset-0"

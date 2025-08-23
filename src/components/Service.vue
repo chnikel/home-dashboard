@@ -11,12 +11,12 @@ defineProps<{
 <template>
   <a
     :href="link"
-    class="p-6 flex gap-3 text-white hover:bg-stone-300/5 rounded-2xl"
+    class="p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
   >
     <div
-      class="w-16 h-16 bg-stone-700/80 rounded-2xl shrink-0"
+      class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0"
       :class="{
-        'p-2 border-stone-600 border': !icon_wrap,
+        'p-2 border-neutral-600 border': !icon_wrap,
       }"
     >
       <img

@@ -155,20 +155,22 @@ const handleEditGroup = async (id: number, data: AddGroupRequest) => {
       :title="group.title"
       @edit="(id, data) => handleEditGroup(id, data)"
     >
-      <EditServiceWrapper
-        v-for="service in group.services"
-        :edit="isEditMode"
-        @edit="editService(service)"
-        @delete="handleDeleteService(service)"
-      >
-        <Service
-          :title="service.title"
-          :description="service.description"
-          :link="service.link"
-          :icon_url="service.icon_url"
-          :icon_wrap="service.icon_wrap"
-        />
-      </EditServiceWrapper>
+      <template v-for="service in group.services">
+        <EditServiceWrapper
+          v-if="service.enabled || isEditMode"
+          :edit="isEditMode"
+          @edit="editService(service)"
+          @delete="handleDeleteService(service)"
+        >
+          <Service
+            :title="service.title"
+            :description="service.description"
+            :link="service.link"
+            :icon_url="service.icon_url"
+            :icon_wrap="service.icon_wrap"
+          />
+        </EditServiceWrapper>
+      </template>
     </ServiceGroup>
   </div>
 </template>

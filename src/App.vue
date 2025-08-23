@@ -88,8 +88,10 @@ const handleDeleteService = async (service: GetServicesResponse) => {
 <template>
   <div class="h-screen p-3">
     <div class="space-x-2 mb-6">
-      <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
-      <button @click="toggleEdit()">
+      <button @click="addServiceDialog?.showModal()" >Service hinzufügen</button>
+      <button @click="toggleEdit()" :class="{
+        '!bg-orange-500': isEditMode
+      }">
         {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
       </button>
     </div>

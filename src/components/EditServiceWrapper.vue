@@ -8,7 +8,9 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="relative group">
+  <div class="relative group" :class="{
+    'outline outline-orange-500 rounded-2xl': edit
+  }">
     <div
       v-if="edit"
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"

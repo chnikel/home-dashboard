@@ -3,6 +3,7 @@ defineProps<{ edit: boolean }>();
 
 const emit = defineEmits<{
   (e: "edit"): void;
+  (e: "delete"): void;
 }>();
 </script>
 
@@ -13,6 +14,7 @@ const emit = defineEmits<{
       class="absolute inset-0"
     >
       <button @click="emit('edit')">Edit</button>
+      <button @click="emit('delete')">Delete</button>
     </div>
     <slot />
   </div>

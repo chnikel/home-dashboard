@@ -3,6 +3,7 @@ import { onMounted, ref, useTemplateRef } from "vue";
 import Service from "./components/Service.vue";
 import {
   addService,
+  deleteService,
   getServices,
   updateService,
   type GetServicesResponse,
@@ -57,7 +58,7 @@ const editService = (service: GetServicesResponse) => {
 const handleEditService = async (data: SubmitData) => {
   if (!editServiceId.value) {
     alert("Keine Service ID");
-    return
+    return;
   }
 
   try {
@@ -67,6 +68,18 @@ const handleEditService = async (data: SubmitData) => {
   }
 
   services.value = await getServices();
+};
+
+const handleDeleteService = async (service: GetServicesResponse) => {
+  if (confirm("Service löschen?")) {
+    try {
+      await deleteService(service.id);
+    } catch (error) {
+      console.log(error);
+    }
+
+    services.value = await getServices();
+  }
 };
 </script>
 
@@ -100,6 +113,7 @@ const handleEditService = async (data: SubmitData) => {
         v-for="service in services"
         :edit="isEditMode"
         @edit="editService(service)"
+        @delete="handleDeleteService(service)"
       >
         <Service
           :title="service.title"

@@ -41,7 +41,6 @@ export const addService = async (data: AddServiceRequest) => {
   return services as AddServiceResponse;
 };
 
-
 export type EditServiceResponse = {};
 
 export const updateService = async (id: number, data: AddServiceRequest) => {
@@ -56,4 +55,16 @@ export const updateService = async (id: number, data: AddServiceRequest) => {
   const services = await response.json();
 
   return services as EditServiceResponse;
+};
+
+export type DeleteServiceResponse = {};
+
+export const deleteService = async (id: number) => {
+  const response = await fetch(`http://localhost:3000/services/${id}`, {
+    method: "delete",
+  });
+
+  const services = await response.json();
+
+  return services as DeleteServiceResponse;
 };

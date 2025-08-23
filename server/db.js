@@ -92,6 +92,26 @@ WHERE id = ${id};
   db.close();
 };
 
+const deleteService = (id) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+DELETE FROM services
+WHERE id = ${id};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
 db.close();
 
-module.exports = { db, insertService, allServices, updateService };
+module.exports = {
+  db,
+  insertService,
+  allServices,
+  updateService,
+  deleteService,
+};

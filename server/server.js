@@ -49,7 +49,7 @@ app.post("/services", (req, res) => {
 });
 
 app.put("/services/:id", (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
   const data = {
     title: req.body.title,
@@ -64,6 +64,14 @@ app.put("/services/:id", (req, res) => {
   db.updateService(id, data);
 
   res.json({ message: "Service erfolgreich aktualisiert" });
+});
+
+app.delete("/services/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.deleteService(id);
+
+  res.json({ message: "Service erfolgreich gelöscht" });
 });
 
 app.listen(port, () => {

@@ -82,7 +82,7 @@ const onSubmit = () => {
 
     <div>
       <label>
-        icon_url
+        Icon url
         <input
           type="text"
           v-model="form.icon_url"
@@ -92,7 +92,7 @@ const onSubmit = () => {
 
     <div>
       <label>
-        Icon url
+        Icon wrap
         <input
           type="checkbox"
           v-model="form.icon_wrap"

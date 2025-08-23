@@ -53,6 +53,10 @@ const onSubmit = () => {
   form.value = initialFormData;
 };
 
+const onCancel = () => {
+  form.value = initialFormData;
+}
+
 const groupOptions = ref<{ label: string; value: number }[]>([]);
 
 onMounted(async () => {
@@ -145,7 +149,7 @@ onMounted(async () => {
       >
         Speichern
       </button>
-      <button data-variant="outline">Schließen</button>
+      <button data-variant="outline" @click="onCancel()">Schließen</button>
     </div>
   </form>
 </template>

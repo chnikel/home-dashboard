@@ -26,7 +26,7 @@ app.get("/services", async (req, res) => {
     icon_url: entry.icon_url,
     icon_wrap: entry.icon_wrap ? true : false,
     enabled: entry.status_enabled ? true : false,
-  }))
+  }));
 
   res.json(services);
 });
@@ -44,7 +44,7 @@ app.post("/services", (req, res) => {
 
   db.insertService(data);
 
-  res.send("Hello World!");
+  res.json({ message: "Service erfolgreich hinzugefügt" });
 });
 
 app.listen(port, () => {

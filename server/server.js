@@ -27,6 +27,7 @@ app.get("/services", async (req, res) => {
     icon_url: entry.icon_url,
     icon_wrap: entry.icon_wrap ? true : false,
     enabled: entry.status_enabled ? true : false,
+    groupId: entry.group_id,
   }));
 
   res.json(services);
@@ -46,6 +47,15 @@ app.post("/services", (req, res) => {
   db.insertService(data);
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
+});
+
+app.post("/services/:id/group/:group", (req, res) => {
+  const id = req.params.id;
+  const groupId = req.params.group;
+
+  db.serviceToGroup(id, groupId);
+
+  res.json({ message: "Service erfolgreich der Gruppe zugewiesen" });
 });
 
 app.put("/services/:id", (req, res) => {

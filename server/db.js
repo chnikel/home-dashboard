@@ -5,7 +5,7 @@ const allServices = async () => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     db.all(
-      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, tags FROM services",
+      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, tags, group_id FROM services",
       (err, rows) => {
         if (err) {
           reject(err);
@@ -49,6 +49,31 @@ VALUES
   db.close();
 };
 
+const serviceToGroup = (
+  serviceId,
+  groupId,
+) => {
+  console.log(`
+UPDATE services
+SET group_id = ${groupId}
+WHERE id = ${serviceId};
+`);
+  
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+UPDATE services
+SET group_id = ${groupId}
+WHERE id = ${serviceId};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
+
 const db = openDB();
 db.serialize(() => {
   console.log("🗂️  Create DB if not exists...");
@@ -62,7 +87,8 @@ CREATE TABLE IF NOT EXISTS services (
     icon_url TEXT,
     icon_wrap BOOLEAN,
     status_enabled BOOLEAN,
-    tags TEXT
+    tags TEXT,
+    group_id INT
 );
 `);
 
@@ -186,4 +212,5 @@ module.exports = {
   insertGroup,
   updateGroup,
   deleteGroup,
+  serviceToGroup
 };

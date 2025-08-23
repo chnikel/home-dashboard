@@ -4,8 +4,8 @@ export type GetServicesResponse = {
   description: string;
   link: string;
   icon_url: string;
-  icon_wrap: 1;
-  status_enabled: 1;
+  icon_wrap: boolean;
+  enabled: boolean;
 };
 
 export const getServices = async () => {

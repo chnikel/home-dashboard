@@ -19,7 +19,16 @@ app.get("/", (req, res) => {
 app.get("/services", async (req, res) => {
   const data = await db.allServices();
 
-  res.json(data);
+  const services = data.map((entry) => ({
+    title: entry.title,
+    description: entry.description,
+    link: entry.link,
+    icon_url: entry.icon_url,
+    icon_wrap: entry.icon_wrap ? true : false,
+    enabled: entry.status_enabled ? true : false,
+  }))
+
+  res.json(services);
 });
 
 app.post("/services", (req, res) => {
@@ -27,10 +36,10 @@ app.post("/services", (req, res) => {
     title: req.body.title,
     description: req.body.description,
     link: req.body.link,
-    icon_url: req.body.icon.url,
-    icon_wrap: req.body.icon.wrap,
-    status_enabled: req.body.status.enabled,
-    tags: req.body.tags,
+    icon_url: req.body.icon_url,
+    icon_wrap: req.body.icon_wrap,
+    status_enabled: req.body.enabled,
+    tags: [],
   };
 
   db.insertService(data);

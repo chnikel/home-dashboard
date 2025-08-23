@@ -30,6 +30,18 @@ app.get("/services", async (req, res) => {
     groupId: entry.group_id,
   }));
 
+  const groupBy = req.query.groupBy;
+
+  if (groupBy) {
+    const servicesGrouped = services.reduce((acc, service) => {
+      (acc[service[groupBy]] ??= []).push(service);
+      return acc;
+    }, {});
+
+    res.json(servicesGrouped);
+    return;
+  }
+
   res.json(services);
 });
 

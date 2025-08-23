@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { getGroups } from "../api";
 
 export type SubmitData = {
   title: string;
@@ -8,6 +9,7 @@ export type SubmitData = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
+  groupId?: number;
 };
 
 const props = defineProps<{
@@ -26,6 +28,7 @@ watch(props, (newProps) => {
     icon_url: props.initial?.icon_url || form.value.icon_url,
     icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
     enabled: props.initial?.enabled || form.value.enabled,
+    groupId: props.initial?.groupId || form.value.groupId,
   };
 });
 
@@ -49,6 +52,17 @@ const onSubmit = () => {
 
   form.value = initialFormData;
 };
+
+const groupOptions = ref<{ label: string; value: number }[]>([]);
+
+onMounted(async () => {
+  const groups = await getGroups();
+
+  groupOptions.value = groups.map((group) => ({
+    label: group.title,
+    value: group.id,
+  }));
+});
 </script>
 
 <template>
@@ -110,14 +124,28 @@ const onSubmit = () => {
       </label>
     </div>
 
-    <div class="space-x-2">
+    <div>
+      <label>
+        Group
+        <select v-model="form.groupId">
+          <option
+            v-for="option in groupOptions"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <div class="space-x-2 mt-3">
       <button
-      data-type="primary"
-      @click="onSubmit"
-    >
-      Speichern
-    </button>
-    <button data-variant="outline">Schließen</button>
+        data-type="primary"
+        @click="onSubmit"
+      >
+        Speichern
+      </button>
+      <button data-variant="outline">Schließen</button>
     </div>
   </form>
 </template>

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+select,
 textarea,
 input[type="number"],
 input[type="text"] {

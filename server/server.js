@@ -54,6 +54,7 @@ app.post("/services", (req, res) => {
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
     tags: [],
+    groupId: req.body.groupId,
   };
 
   db.insertService(data);
@@ -103,7 +104,7 @@ app.get("/groups", async (req, res) => {
 
   const groupsWithDefaultGroup = [
     ...rawGroups,
-    { id: undefined, title: "", services: [] },
+    { id: null, title: "", services: [] },
   ];
 
   if (!includeServices) {

@@ -25,12 +25,13 @@ const insertService = ({
   icon_wrap,
   status_enabled,
   tags,
+  groupId
 }) => {
   const db = openDB();
   const stmt = db.prepare(
     `
 INSERT INTO services 
-(title, description, link, icon_url, icon_wrap, status_enabled, tags)
+(title, description, link, icon_url, icon_wrap, status_enabled, tags, group_id)
 VALUES
 (
   '${title}',
@@ -39,7 +40,8 @@ VALUES
   '${icon_url}',
   ${icon_wrap},
   ${status_enabled},
-  '${tags}'
+  '${tags}',
+  ${groupId || null}
 );
 `
   );

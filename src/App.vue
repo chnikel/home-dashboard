@@ -5,7 +5,6 @@ import {
   addService,
   deleteService,
   getServiceGroups,
-  getServices,
   updateService,
   type GetServiceGroupsResponse,
   type GetServicesResponse,
@@ -16,12 +15,9 @@ import ServiceEditForm, {
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
 
-const services = ref<GetServicesResponse[] | null>(null);
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 onMounted(async () => {
-  services.value = await getServices();
-
   groups.value = await getServiceGroups();
 });
 
@@ -35,7 +31,7 @@ const handleAddService = async (data: SubmitData) => {
     console.log(error);
   }
 
-  services.value = await getServices();
+  groups.value = await getServiceGroups();
 };
 
 const isEditMode = ref(false);
@@ -73,7 +69,7 @@ const handleEditService = async (data: SubmitData) => {
     console.log(error);
   }
 
-  services.value = await getServices();
+  groups.value = await getServiceGroups();
 };
 
 const handleDeleteService = async (service: GetServicesResponse) => {
@@ -84,7 +80,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       console.log(error);
     }
 
-    services.value = await getServices();
+    groups.value = await getServiceGroups();
   }
 };
 </script>
@@ -114,7 +110,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
     </dialog>
 
     <ServiceGroup
-      :title="group.title"
+      :title="group.title || '<missing title>'"
       v-for="group in groups"
     >
       <EditServiceWrapper

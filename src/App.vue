@@ -120,6 +120,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
           :description="service.description"
           :link="service.link"
           :icon_url="service.icon_url"
+          :icon_wrap="service.icon_wrap"
         />
       </EditServiceWrapper>
     </div>

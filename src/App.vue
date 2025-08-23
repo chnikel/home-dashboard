@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef } from "vue";
 import Service from "./components/Service.vue";
-import { addService, getServices, type GetServicesResponse } from "./api";
+import {
+  addService,
+  getServices,
+  updateService,
+  type GetServicesResponse,
+} from "./api";
 import ServiceEditForm, {
   type SubmitData,
 } from "./components/ServiceEditForm.vue";
+import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 
 const services = ref<GetServicesResponse[] | null>(null);
 
@@ -12,7 +18,8 @@ onMounted(async () => {
   services.value = await getServices();
 });
 
-const dialog = useTemplateRef<HTMLDialogElement>("dialog");
+const addServiceDialog =
+  useTemplateRef<HTMLDialogElement>("add-service-dialog");
 
 const handleAddService = async (data: SubmitData) => {
   try {
@@ -23,15 +30,56 @@ const handleAddService = async (data: SubmitData) => {
 
   services.value = await getServices();
 };
+
+const isEditMode = ref(false);
+const editServiceId = ref<number | null>(null);
+const editData = ref<SubmitData | null>(null);
+const editServiceDialog = useTemplateRef<HTMLDialogElement>(
+  "edit-service-dialog"
+);
+
+const toggleEdit = () => (isEditMode.value = !isEditMode.value);
+
+const editService = (service: GetServicesResponse) => {
+  editServiceId.value = service.id;
+  editData.value = {
+    title: service.title,
+    description: service.description,
+    link: service.link,
+    icon_url: service.icon_url,
+    icon_wrap: service.icon_wrap,
+    enabled: service.enabled,
+  };
+
+  editServiceDialog.value?.showModal();
+};
+
+const handleEditService = async (data: SubmitData) => {
+  if (!editServiceId.value) {
+    alert("Keine Service ID");
+    return
+  }
+
+  try {
+    await updateService(editServiceId.value, data);
+  } catch (error) {
+    console.log(error);
+  }
+
+  services.value = await getServices();
+};
 </script>
 
 <template>
   <div class="h-screen bg-stone-800 p-3">
-    <div>
-      <button @click="dialog.showModal()">Service hinzufügen</button>
+    <div class="space-x-2">
+      <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
+      <button @click="toggleEdit()">
+        {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
+      </button>
     </div>
 
-    <dialog ref="dialog">
+    <dialog ref="add-service-dialog">
       <p>Greetings, one and all!</p>
       <ServiceEditForm
         method="dialog"
@@ -39,14 +87,27 @@ const handleAddService = async (data: SubmitData) => {
       />
     </dialog>
 
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <Service
-        v-for="service in services"
-        :title="service.title"
-        :description="service.description"
-        :link="service.link"
-        :icon_url="service.icon_url"
+    <dialog ref="edit-service-dialog">
+      <ServiceEditForm
+        method="dialog"
+        :initial="editData || undefined"
+        @submit="handleEditService($event)"
       />
+    </dialog>
+
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <EditServiceWrapper
+        v-for="service in services"
+        :edit="isEditMode"
+        @edit="editService(service)"
+      >
+        <Service
+          :title="service.title"
+          :description="service.description"
+          :link="service.link"
+          :icon_url="service.icon_url"
+        />
+      </EditServiceWrapper>
     </div>
   </div>
 </template>

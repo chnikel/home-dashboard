@@ -40,3 +40,20 @@ export const addService = async (data: AddServiceRequest) => {
 
   return services as AddServiceResponse;
 };
+
+
+export type EditServiceResponse = {};
+
+export const updateService = async (id: number, data: AddServiceRequest) => {
+  const response = await fetch(`http://localhost:3000/services/${id}`, {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as EditServiceResponse;
+};

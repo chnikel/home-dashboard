@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export type SubmitData = {
   title: string;
@@ -14,14 +14,31 @@ const props = defineProps<{
   initial?: Partial<SubmitData>;
 }>();
 
-const form = ref<SubmitData>({
-  title: props.initial?.title || "",
-  description: props.initial?.description || "",
-  link: props.initial?.link || "",
-  icon_url: props.initial?.icon_url || "",
-  icon_wrap: props.initial?.icon_wrap || false,
-  enabled: props.initial?.enabled || true,
+watch(props, (newProps) => {
+  if (!newProps.initial) {
+    return;
+  }
+
+  form.value = {
+    title: props.initial?.title || form.value.title,
+    description: props.initial?.description || form.value.description,
+    link: props.initial?.link || form.value.link,
+    icon_url: props.initial?.icon_url || form.value.icon_url,
+    icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
+    enabled: props.initial?.enabled || form.value.enabled,
+  };
 });
+
+const initialFormData: SubmitData = {
+  title: "",
+  description: "",
+  link: "",
+  icon_url: "",
+  icon_wrap: false,
+  enabled: true,
+};
+
+const form = ref<SubmitData>(initialFormData);
 
 const emit = defineEmits<{
   (e: "submit", data: SubmitData): void;
@@ -30,14 +47,7 @@ const emit = defineEmits<{
 const onSubmit = () => {
   emit("submit", { ...form.value });
 
-  form.value = {
-    title: "",
-    description: "",
-    link: "",
-    icon_url: "",
-    icon_wrap: false,
-    enabled: true,
-  };
+  form.value = initialFormData;
 };
 </script>
 

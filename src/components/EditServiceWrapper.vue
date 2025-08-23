@@ -8,9 +8,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="relative group" :class="{
-    'outline outline-orange-500 rounded-2xl': edit
-  }">
+  <div
+    class="relative group"
+    :class="{
+      'outline outline-orange-500 rounded-2xl': edit,
+    }"
+  >
     <div
       v-if="edit"
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
@@ -20,13 +23,13 @@ const emit = defineEmits<{
           data-variant="outline"
           @click="emit('edit')"
         >
-          Edit
+          Bearbeiten
         </button>
         <button
           data-type="danger"
           @click="emit('delete')"
         >
-          Delete
+          Löschen
         </button>
       </div>
     </div>

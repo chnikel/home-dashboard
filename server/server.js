@@ -20,6 +20,7 @@ app.get("/services", async (req, res) => {
   const data = await db.allServices();
 
   const services = data.map((entry) => ({
+    id: entry.id,
     title: entry.title,
     description: entry.description,
     link: entry.link,
@@ -45,6 +46,24 @@ app.post("/services", (req, res) => {
   db.insertService(data);
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
+});
+
+app.put("/services/:id", (req, res) => {
+  const id = req.params.id
+
+  const data = {
+    title: req.body.title,
+    description: req.body.description,
+    link: req.body.link,
+    icon_url: req.body.icon_url,
+    icon_wrap: req.body.icon_wrap,
+    status_enabled: req.body.enabled,
+    tags: [],
+  };
+
+  db.updateService(id, data);
+
+  res.json({ message: "Service erfolgreich aktualisiert" });
 });
 
 app.listen(port, () => {

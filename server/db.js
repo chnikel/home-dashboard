@@ -67,6 +67,31 @@ CREATE TABLE IF NOT EXISTS services (
 `);
 });
 
+const updateService = (
+  id,
+  { title, description, link, icon_url, icon_wrap, status_enabled, tags }
+) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+UPDATE services
+SET 
+    title = '${title}',
+    description = '${description}',
+    link = '${link}',
+    icon_url = '${icon_url}',
+    icon_wrap = ${icon_wrap},
+    status_enabled = ${status_enabled},
+    tags = ''
+WHERE id = ${id};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
 db.close();
 
-module.exports = { db, insertService, allServices };
+module.exports = { db, insertService, allServices, updateService };

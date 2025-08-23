@@ -1,0 +1,26 @@
+meta {
+  name: Service - Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{host}}/services/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "title": "NGINX Proxy Manager",
+    "description": "Reverse proxy system",
+    "link": "http://192.168.178.23:811/login",
+    "icon_url": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nginx-proxy-manager.svg",
+    "icon_wrap": false,
+    "enabled": false
+  }
+}

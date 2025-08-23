@@ -9,11 +9,34 @@ export type GetServicesResponse = {
 };
 
 export const getServices = async () => {
-  const response = await fetch(
-    "http://localhost:3000/services"
-  );
+  const response = await fetch("http://localhost:3000/services");
 
   const services = await response.json();
 
   return services as GetServicesResponse[];
+};
+
+export type AddServiceRequest = {
+  title: string;
+  description: string;
+  link: string;
+  icon_url: string;
+  icon_wrap: boolean;
+  enabled: boolean;
+};
+
+export type AddServiceResponse = {};
+
+export const addService = async (data: AddServiceRequest) => {
+  const response = await fetch("http://localhost:3000/services", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as AddServiceResponse;
 };

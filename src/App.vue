@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef } from "vue";
 import Service from "./components/Service.vue";
-import { getServices, type GetServicesResponse } from "./api";
-import ServiceEditForm from "./components/ServiceEditForm.vue";
+import { addService, getServices, type GetServicesResponse } from "./api";
+import ServiceEditForm, {
+  type SubmitData,
+} from "./components/ServiceEditForm.vue";
 
 const services = ref<GetServicesResponse[] | null>(null);
 
@@ -12,8 +14,14 @@ onMounted(async () => {
 
 const dialog = useTemplateRef<HTMLDialogElement>("dialog");
 
-const handleAddService = (data: any) => {
-  console.log(data);
+const handleAddService = async (data: SubmitData) => {
+  try {
+    await addService(data);
+  } catch (error) {
+    console.log(error);
+  }
+
+  services.value = await getServices();
 };
 </script>
 

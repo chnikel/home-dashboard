@@ -11,6 +11,12 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/services", async (req, res) => {
+  const data = await db.allServices()
+
+  res.json(data);
+});
+
 app.post("/services", (req, res) => {
   const data = {
     title: req.body.title,

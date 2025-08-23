@@ -131,3 +131,15 @@ export const updateGroup = async (id: number, data: AddGroupRequest) => {
 
   return services as UpdateGroupResponse;
 };
+
+export type DeleteGroupResponse = {};
+
+export const deleteGroup = async (id: number) => {
+  const response = await fetch(`http://localhost:3000/groups/${id}`, {
+    method: "delete",
+  });
+
+  const groups = await response.json();
+
+  return groups as DeleteGroupResponse;
+};

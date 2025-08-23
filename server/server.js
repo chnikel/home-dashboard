@@ -175,6 +175,7 @@ app.delete("/groups/:id", (req, res) => {
   const id = req.params.id;
 
   db.deleteGroup(id);
+  db.clearGroup(id);
 
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });

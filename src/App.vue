@@ -4,6 +4,7 @@ import Service from "./components/Service.vue";
 import {
   addGroup,
   addService,
+  deleteGroup,
   deleteService,
   getServiceGroups,
   updateGroup,
@@ -109,6 +110,18 @@ const handleEditGroup = async (id: number, data: AddGroupRequest) => {
 
   groups.value = await getServiceGroups();
 };
+
+const handleDeleteGroup = async (groupId: number) => {
+  if (confirm("Gruppe löschen?")) {
+    try {
+      await deleteGroup(groupId);
+    } catch (error) {
+      console.log(error);
+    }
+
+    groups.value = await getServiceGroups();
+  }
+};
 </script>
 
 <template>
@@ -150,10 +163,10 @@ const handleEditGroup = async (id: number, data: AddGroupRequest) => {
 
     <ServiceGroup
       v-for="group in groups"
-      :id="group.id"
       :edit="isEditMode"
-      :title="group.title"
-      @edit="(id, data) => handleEditGroup(id, data)"
+      :title="group.id == null ? 'Keine Gruppe' : group.title"
+      @edit="handleEditGroup(group.id, $event)"
+      @delete="handleDeleteGroup(group.id)"
     >
       <template v-for="service in group.services">
         <EditServiceWrapper

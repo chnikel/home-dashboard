@@ -5,12 +5,12 @@ import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
 
 const props = defineProps<{
   edit: boolean;
-  id: number;
   title: string;
 }>();
 
 const emit = defineEmits<{
-  (e: "edit", id: number, data: AddGroupSubmitData): void;
+  (e: "edit", data: AddGroupSubmitData): void;
+  (e: "delete"): void;
 }>();
 
 const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
@@ -18,7 +18,7 @@ const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
 const groupData = ref<AddGroupSubmitData | null>(null);
 
 const onEdit = (data: AddGroupSubmitData) => {
-  emit('edit', props.id, data)
+  emit('edit', data)
 }
 
 const editGroup = () => {
@@ -35,6 +35,7 @@ const editGroup = () => {
     <EditGroupWrapper
       :edit="edit"
       @edit="editGroup()"
+      @delete="$emit('delete')"
     >
       <h2 class="text-2xl font-light py-2 px-4">{{ title || '<missing title>' }}</h2>
     </EditGroupWrapper>

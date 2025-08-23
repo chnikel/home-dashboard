@@ -25,7 +25,7 @@ const insertService = ({
   icon_wrap,
   status_enabled,
   tags,
-  groupId
+  groupId,
 }) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -51,10 +51,7 @@ VALUES
   db.close();
 };
 
-const serviceToGroup = (
-  serviceId,
-  groupId,
-) => {
+const serviceToGroup = (serviceId, groupId) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -69,6 +66,20 @@ WHERE id = ${serviceId};
   db.close();
 };
 
+const clearGroup = (groupId) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+UPDATE services
+SET group_id = null
+WHERE group_id = ${groupId};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
 
 const db = openDB();
 db.serialize(() => {
@@ -98,7 +109,16 @@ CREATE TABLE IF NOT EXISTS groups (
 
 const updateService = (
   id,
-  { title, description, link, icon_url, icon_wrap, status_enabled, tags, groupId }
+  {
+    title,
+    description,
+    link,
+    icon_url,
+    icon_wrap,
+    status_enabled,
+    tags,
+    groupId,
+  }
 ) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -209,5 +229,6 @@ module.exports = {
   insertGroup,
   updateGroup,
   deleteGroup,
-  serviceToGroup
+  clearGroup,
+  serviceToGroup,
 };

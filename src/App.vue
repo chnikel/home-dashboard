@@ -1,7 +1,14 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Service from './components/Service.vue';
+</script>
 
 <template>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem similique
-  aliquam nihil ipsa amet commodi ipsam iusto cumque blanditiis totam tenetur
-  corrupti incidunt nemo enim itaque maiores aut, quis laudantium.
+  <div class="h-screen bg-stone-800 p-3">
+   <div class="grid grid-cols-1 md:grid-cols-2">
+    <Service />
+    <Service />
+    <Service />
+    <Service />
+   </div>
+  </div>
 </template>

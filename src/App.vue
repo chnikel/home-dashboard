@@ -2,6 +2,7 @@
 import { onMounted, ref, useTemplateRef } from "vue";
 import Service from "./components/Service.vue";
 import {
+  addGroup,
   addService,
   deleteService,
   getServiceGroups,
@@ -14,6 +15,8 @@ import ServiceEditForm, {
 } from "./components/ServiceEditForm.vue";
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
+import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
+import GroupEditForm from "./components/GroupEditForm.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -84,18 +87,39 @@ const handleDeleteService = async (service: GetServicesResponse) => {
     groups.value = await getServiceGroups();
   }
 };
+
+const addGroupDialog = useTemplateRef<HTMLDialogElement>("add-group-dialog");
+
+const handleAddGroup = async (data: AddGroupSubmitData) => {
+  try {
+    await addGroup(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
   <div class="h-screen p-3">
     <div class="space-x-2 mb-6">
-      <button @click="addServiceDialog?.showModal()" >Service hinzufügen</button>
-      <button @click="toggleEdit()" :class="{
-        '!bg-orange-500': isEditMode
-      }">
+      <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
+      <button @click="addGroupDialog?.showModal()">Gruppe hinzufügen</button>
+      <button
+        @click="toggleEdit()"
+        :class="{
+          '!bg-orange-500': isEditMode,
+        }"
+      >
         {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
       </button>
     </div>
+
+    <dialog ref="add-group-dialog">
+      <GroupEditForm
+        method="dialog"
+        @submit="handleAddGroup($event)"
+      />
+    </dialog>
 
     <dialog ref="add-service-dialog">
       <ServiceEditForm

@@ -95,3 +95,23 @@ export const getServiceGroups = async () => {
 
   return services as GetServiceGroupsResponse[];
 };
+
+export type AddGroupRequest = {
+  title: string;
+};
+
+export type AddGroupResponse = {};
+
+export const addGroup = async (data: AddGroupRequest) => {
+  const response = await fetch("http://localhost:3000/groups", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as AddGroupResponse;
+};

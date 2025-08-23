@@ -55,7 +55,7 @@ const onSubmit = () => {
   <form class="grid p-3">
     <div>
       <label>
-        First Name
+        Title
         <input
           type="text"
           v-model="form.title"

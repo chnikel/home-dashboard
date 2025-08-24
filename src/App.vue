@@ -132,9 +132,13 @@ const afterMove = async () => {
 
 <template>
   <div class="h-screen p-3">
-    <div class="space-x-2 mb-6">
-      <button @click="addServiceDialog?.showModal()">Service hinzufügen</button>
-      <button @click="addGroupDialog?.showModal()">Gruppe hinzufügen</button>
+    <div class="space-x-2 mb-6 flex justify-end">
+      <template v-if="isEditMode">
+        <button @click="addServiceDialog?.showModal()">
+          Service hinzufügen
+        </button>
+        <button @click="addGroupDialog?.showModal()">Gruppe hinzufügen</button>
+      </template>
       <button
         @click="toggleEdit()"
         :class="{

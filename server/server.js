@@ -202,6 +202,15 @@ app.post("/tags", (req, res) => {
   res.json({ message: "Tag erfolgreich hinzugefügt" });
 });
 
+app.post("/tags/:id/service/:service", (req, res) => {
+  const id = req.params.id;
+  const serviceId = req.params.service;
+
+  db.tagToService(id, serviceId);
+
+  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });

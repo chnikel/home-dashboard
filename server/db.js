@@ -125,6 +125,14 @@ CREATE TABLE IF NOT EXISTS tags (
 );
 `);
 
+  db.run(`
+  CREATE TABLE IF NOT EXISTS service_tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL
+);
+`);
+
 });
 
 const updateService = (
@@ -271,6 +279,25 @@ VALUES
   db.close();
 };
 
+const tagToService = (tagId, serviceId) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+INSERT INTO service_tags (service_id, tag_id)
+VALUES 
+(
+  ${tagId},
+  ${serviceId}
+);
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
+
 module.exports = {
   db,
   insertService,
@@ -285,4 +312,5 @@ module.exports = {
   serviceToGroup,
   allTags,
   insertTag,
+  tagToService,
 };

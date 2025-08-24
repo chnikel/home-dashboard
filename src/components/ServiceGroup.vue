@@ -2,8 +2,10 @@
 import { ref, useTemplateRef } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
 import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
+import { moveService } from "../api";
 
 const props = defineProps<{
+  id: number;
   edit: boolean;
   title: string;
 }>();
@@ -11,6 +13,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "edit", data: AddGroupSubmitData): void;
   (e: "delete"): void;
+  (e: "move"): void;
 }>();
 
 const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
@@ -28,10 +31,27 @@ const editGroup = () => {
 
   editGroupDialog.value?.showModal()
 };
+
+const onDrop =async(event: DragEvent) => {
+ const serviceId = event.dataTransfer?.getData("text/plain");
+ console.log(serviceId);
+
+ if (!serviceId) {
+  console.log("serviceId nicht gefunden");
+  
+  return
+ }
+ await moveService(serviceId, props.id?.toString() || null)
+
+ emit("move")
+ 
+}
 </script>
 
 <template>
-  <div class="text-white">
+  <div 
+  @dragover.prevent
+  @drop="onDrop($event)" class="text-white">
     <EditGroupWrapper
       :edit="edit"
       @edit="editGroup()"

@@ -1,4 +1,4 @@
-const host = import.meta.env.VITE_FRONTEND_HOST || ""
+const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
 export type GetServicesResponse = {
   id: number;
@@ -59,6 +59,24 @@ export const updateService = async (id: number, data: AddServiceRequest) => {
   const services = await response.json();
 
   return services as EditServiceResponse;
+};
+
+export type MoveServiceResponse = {};
+
+export const moveService = async (
+  serviceId: string,
+  groupId: string | null
+) => {
+  const response = await fetch(
+    `${host}/services/${serviceId}/group/${groupId}`,
+    {
+      method: "post",
+    }
+  );
+
+  const services = await response.json();
+
+  return services as MoveServiceResponse;
 };
 
 export type DeleteServiceResponse = {};

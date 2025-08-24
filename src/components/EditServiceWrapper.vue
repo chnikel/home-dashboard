@@ -1,14 +1,19 @@
 <script setup lang="ts">
-defineProps<{ edit: boolean }>();
+const props = defineProps<{ id: number; edit: boolean }>();
 
 const emit = defineEmits<{
   (e: "edit"): void;
   (e: "delete"): void;
 }>();
+
+const onDragStart = (event: DragEvent) => {
+  event.dataTransfer?.setData("text/plain", props.id.toString());
+};
 </script>
 
 <template>
   <div
+    @dragstart="onDragStart($event)"
     class="relative group"
     :class="{
       'outline outline-orange-500 rounded-2xl': edit,

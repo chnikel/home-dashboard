@@ -124,6 +124,10 @@ const handleDeleteGroup = async (groupId: number) => {
     groups.value = await getServiceGroups();
   }
 };
+
+const afterMove = async () => {
+  groups.value = await getServiceGroups();
+};
 </script>
 
 <template>
@@ -166,19 +170,24 @@ const handleDeleteGroup = async (groupId: number) => {
     <template v-for="group in groups">
       <ServiceGroup
         v-if="group.services.length > 0 || isEditMode"
+        :id="group.id"
         :edit="isEditMode"
         :title="group.id == null ? 'Keine Gruppe' : group.title"
         @edit="handleEditGroup(group.id, $event)"
         @delete="handleDeleteGroup(group.id)"
+        @move="afterMove()"
       >
         <template v-for="service in group.services">
           <EditServiceWrapper
             v-if="service.enabled || isEditMode"
+            :draggable="isEditMode"
+            :id="service.id"
             :edit="isEditMode"
             @edit="editService(service)"
             @delete="handleDeleteService(service)"
           >
             <Service
+              :id="'service' + service.id"
               :title="service.title"
               :description="service.description"
               :link="service.link"

@@ -1,13 +1,13 @@
 const sqlite3 = require("sqlite3").verbose();
-const path = require("path")
-const fs = require("fs")
+const path = require("path");
+const fs = require("fs");
 
-const dataFolder = path.join(__dirname, "data")
-const dbPath = path.join(dataFolder, "test.db")
+const dataFolder = path.join(__dirname, "data");
+const dbPath = path.join(dataFolder, "test.db");
 
 if (!fs.existsSync(dataFolder)) {
-    console.log("🗂️  Create data folder...");
-    fs.mkdirSync(dataFolder);
+  console.log("🗂️  Create data folder...");
+  fs.mkdirSync(dataFolder);
 }
 
 const openDB = () => new sqlite3.Database(dbPath);
@@ -132,7 +132,6 @@ CREATE TABLE IF NOT EXISTS tags (
     tag_id INTEGER NOT NULL
 );
 `);
-
 });
 
 const updateService = (
@@ -258,7 +257,7 @@ const allTags = () => {
       resolve(rows);
     });
   });
-}
+};
 
 const insertTag = ({ name, color }) => {
   const db = openDB();
@@ -279,6 +278,27 @@ VALUES
   db.close();
 };
 
+const allTagsForService = (serviceId) => {
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    db.all(
+      `
+SELECT t.id, t.name, t.color
+FROM tags t
+JOIN service_tags st ON t.id = st.tag_id
+WHERE st.service_id = ${serviceId};
+      `,
+      (err, rows) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(rows);
+      }
+    );
+  });
+};
+
 const tagToService = (tagId, serviceId) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -297,7 +317,6 @@ VALUES
   db.close();
 };
 
-
 module.exports = {
   db,
   insertService,
@@ -312,5 +331,6 @@ module.exports = {
   serviceToGroup,
   allTags,
   insertTag,
+  allTagsForService,
   tagToService,
 };

@@ -1,5 +1,11 @@
 const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
+export type ServiceTag = {
+  id: number;
+  name: string;
+  color: string;
+};
+
 export type GetServicesResponse = {
   id: number;
   title: string;
@@ -9,6 +15,7 @@ export type GetServicesResponse = {
   icon_wrap: boolean;
   enabled: boolean;
   groupId: number;
+  tags: ServiceTag[];
 };
 
 export const getServices = async () => {

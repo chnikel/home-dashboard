@@ -193,6 +193,7 @@ const afterMove = async () => {
               :link="service.link"
               :icon_url="service.icon_url"
               :icon_wrap="service.icon_wrap"
+              :tags="service.tags"
             />
           </EditServiceWrapper>
         </template>

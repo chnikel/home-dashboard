@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { ServiceTag } from "../api";
+
 defineProps<{
   title: string;
   description: string;
   link: string;
   icon_url: string;
   icon_wrap: boolean;
+  tags: ServiceTag[];
 }>();
 </script>
 
@@ -29,11 +32,12 @@ defineProps<{
         {{ title }}
       </h3>
       <p class="text-sm text-neutral-400 line-clamp-1">{{ description }}</p>
-      <!-- <span
-        class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+      <span
+        v-for="tag in tags"
+        :class="`bg-${tag.color}-100 text-${tag.color}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-${tag.color}-900 dark:text-${tag.color}-300`"
       >
-        dwa
-      </span> -->
+        {{ tag.name }}
+      </span>
     </div>
   </a>
 </template>

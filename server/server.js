@@ -15,19 +15,32 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "../dist")));
 
-app.get("/services", async (req, res) => {
+const getServices = async () => {
   const data = await db.allServices();
 
-  const services = data.map((entry) => ({
-    id: entry.id,
-    title: entry.title,
-    description: entry.description,
-    link: entry.link,
-    icon_url: entry.icon_url,
-    icon_wrap: entry.icon_wrap ? true : false,
-    enabled: entry.status_enabled ? true : false,
-    groupId: entry.group_id,
-  }));
+  const services = await Promise.all(
+    data.map(async (entry) => {
+      const tags = await db.allTagsForService(entry.id);
+
+      return {
+        id: entry.id,
+        title: entry.title,
+        description: entry.description,
+        link: entry.link,
+        icon_url: entry.icon_url,
+        icon_wrap: entry.icon_wrap ? true : false,
+        enabled: entry.status_enabled ? true : false,
+        groupId: entry.group_id,
+        tags,
+      };
+    })
+  );
+
+  return services;
+};
+
+app.get("/services", async (req, res) => {
+  const services = await getServices();
 
   const groupBy = req.query.groupBy;
 
@@ -120,17 +133,7 @@ app.get("/groups", async (req, res) => {
     return;
   }
 
-  const rawServices = await db.allServices();
-  const services = rawServices.map((entry) => ({
-    id: entry.id,
-    title: entry.title,
-    description: entry.description,
-    link: entry.link,
-    icon_url: entry.icon_url,
-    icon_wrap: entry.icon_wrap ? true : false,
-    enabled: entry.status_enabled ? true : false,
-    groupId: entry.group_id,
-  }));
+  const services = await getServices();
 
   const servicesGrouped = services.reduce((acc, service) => {
     (acc[service.groupId] ??= []).push(service);

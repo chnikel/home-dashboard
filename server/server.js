@@ -179,6 +179,18 @@ app.delete("/groups/:id", (req, res) => {
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
+app.get("/tags", async (req, res) => {
+  const data = await db.allTags();
+
+  const tags = data.map((entry) => ({
+    id: entry.id,
+    name: entry.name,
+    color: entry.color,
+  }));
+
+  res.json(tags);
+});
+
 app.post("/tags", (req, res) => {
   const data = {
     name: req.body.name,

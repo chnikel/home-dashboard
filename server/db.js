@@ -239,6 +239,19 @@ WHERE id = ${id};
   db.close();
 };
 
+const allTags = () => {
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    db.all("SELECT id, name, color FROM tags", (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(rows);
+    });
+  });
+}
+
 const insertTag = ({ name, color }) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -270,5 +283,6 @@ module.exports = {
   deleteGroup,
   clearGroup,
   serviceToGroup,
+  allTags,
   insertTag,
 };

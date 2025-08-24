@@ -132,76 +132,80 @@ const afterMove = async () => {
 
 <template>
   <div class="h-screen p-3">
-    <div class="space-x-2 mb-6 flex justify-end">
-      <template v-if="isEditMode">
-        <button @click="addServiceDialog?.showModal()">
-          Service hinzufügen
-        </button>
-        <button @click="addGroupDialog?.showModal()">Gruppe hinzufügen</button>
-      </template>
-      <button
-        @click="toggleEdit()"
-        :class="{
-          '!bg-orange-500': isEditMode,
-        }"
-      >
-        {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
-      </button>
-    </div>
-
-    <dialog ref="add-group-dialog">
-      <GroupEditForm
-        method="dialog"
-        @submit="handleAddGroup($event)"
-      />
-    </dialog>
-
-    <dialog ref="add-service-dialog">
-      <ServiceEditForm
-        method="dialog"
-        @submit="handleAddService($event)"
-      />
-    </dialog>
-
-    <dialog ref="edit-service-dialog">
-      <ServiceEditForm
-        method="dialog"
-        :initial="editData || undefined"
-        @submit="handleEditService($event)"
-      />
-    </dialog>
-
-    <template v-for="group in groups">
-      <ServiceGroup
-        v-if="group.services.length > 0 || isEditMode"
-        :id="group.id"
-        :edit="isEditMode"
-        :title="group.id == null ? 'Keine Gruppe' : group.title"
-        @edit="handleEditGroup(group.id, $event)"
-        @delete="handleDeleteGroup(group.id)"
-        @move="afterMove()"
-      >
-        <template v-for="service in group.services">
-          <EditServiceWrapper
-            v-if="service.enabled || isEditMode"
-            :draggable="isEditMode"
-            :id="service.id"
-            :edit="isEditMode"
-            @edit="editService(service)"
-            @delete="handleDeleteService(service)"
-          >
-            <Service
-              :id="'service' + service.id"
-              :title="service.title"
-              :description="service.description"
-              :link="service.link"
-              :icon_url="service.icon_url"
-              :icon_wrap="service.icon_wrap"
-              :tags="service.tags"
-            />
-          </EditServiceWrapper>
+    <div class="container mx-auto">
+      <div class="space-x-2 mb-6 flex justify-end">
+        <template v-if="isEditMode">
+          <button @click="addServiceDialog?.showModal()">
+            Service hinzufügen
+          </button>
+          <button @click="addGroupDialog?.showModal()">
+            Gruppe hinzufügen
+          </button>
         </template>
-      </ServiceGroup>
-    </template>
+        <button
+          @click="toggleEdit()"
+          :class="{
+            '!bg-orange-500': isEditMode,
+          }"
+        >
+          {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
+        </button>
+      </div>
+
+      <dialog ref="add-group-dialog">
+        <GroupEditForm
+          method="dialog"
+          @submit="handleAddGroup($event)"
+        />
+      </dialog>
+
+      <dialog ref="add-service-dialog">
+        <ServiceEditForm
+          method="dialog"
+          @submit="handleAddService($event)"
+        />
+      </dialog>
+
+      <dialog ref="edit-service-dialog">
+        <ServiceEditForm
+          method="dialog"
+          :initial="editData || undefined"
+          @submit="handleEditService($event)"
+        />
+      </dialog>
+
+      <template v-for="group in groups">
+        <ServiceGroup
+          v-if="group.services.length > 0 || isEditMode"
+          :id="group.id"
+          :edit="isEditMode"
+          :title="group.id == null ? 'Keine Gruppe' : group.title"
+          @edit="handleEditGroup(group.id, $event)"
+          @delete="handleDeleteGroup(group.id)"
+          @move="afterMove()"
+        >
+          <template v-for="service in group.services">
+            <EditServiceWrapper
+              v-if="service.enabled || isEditMode"
+              :draggable="isEditMode"
+              :id="service.id"
+              :edit="isEditMode"
+              @edit="editService(service)"
+              @delete="handleDeleteService(service)"
+            >
+              <Service
+                :id="'service' + service.id"
+                :title="service.title"
+                :description="service.description"
+                :link="service.link"
+                :icon_url="service.icon_url"
+                :icon_wrap="service.icon_wrap"
+                :tags="service.tags"
+              />
+            </EditServiceWrapper>
+          </template>
+        </ServiceGroup>
+      </template>
+    </div>
   </div>
 </template>

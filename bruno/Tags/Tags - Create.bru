@@ -1,0 +1,18 @@
+meta {
+  name: Tags - Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/tags
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "automation",
+    "color": "#93c5fd"
+  }
+}

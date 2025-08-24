@@ -116,6 +116,15 @@ CREATE TABLE IF NOT EXISTS groups (
     title VARCHAR(255) NOT NULL
 );
 `);
+
+  db.run(`
+CREATE TABLE IF NOT EXISTS tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    color TEXT NOT NULL
+);
+`);
+
 });
 
 const updateService = (
@@ -230,6 +239,25 @@ WHERE id = ${id};
   db.close();
 };
 
+const insertTag = ({ name, color }) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+INSERT INTO tags 
+(name, color)
+VALUES
+(
+  '${name}',
+  '${color}'
+);
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
 module.exports = {
   db,
   insertService,
@@ -242,4 +270,5 @@ module.exports = {
   deleteGroup,
   clearGroup,
   serviceToGroup,
+  insertTag,
 };

@@ -179,6 +179,17 @@ app.delete("/groups/:id", (req, res) => {
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
+app.post("/tags", (req, res) => {
+  const data = {
+    name: req.body.name,
+    color: req.body.color,
+  };
+
+  db.insertTag(data);
+
+  res.json({ message: "Tag erfolgreich hinzugefügt" });
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });

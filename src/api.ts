@@ -1,4 +1,4 @@
-const host = ""
+const host = import.meta.env.VITE_FRONTEND_HOST || ""
 
 export type GetServicesResponse = {
   id: number;

@@ -32,30 +32,30 @@ watch(props, (newProps) => {
   };
 });
 
-const initialFormData: SubmitData = {
+const initialFormData = (): SubmitData => ({
   title: "",
   description: "",
   link: "",
   icon_url: "",
   icon_wrap: false,
   enabled: true,
-};
+});
 
-const form = ref<SubmitData>(initialFormData);
+const form = ref<SubmitData>(initialFormData());
 
 const emit = defineEmits<{
   (e: "submit", data: SubmitData): void;
 }>();
 
-const onSubmit = () => {
+const onSubmit = (event: MouseEvent) => {
   emit("submit", { ...form.value });
 
-  form.value = initialFormData;
+  form.value = initialFormData();
 };
 
 const onCancel = () => {
-  form.value = initialFormData;
-}
+  form.value = initialFormData();
+};
 
 const groupOptions = ref<{ label: string; value: number }[]>([]);
 

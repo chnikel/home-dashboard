@@ -19,11 +19,11 @@ watch(props, (newProps) => {
   };
 });
 
-const initialFormData: AddGroupSubmitData = {
+const initialFormData = (): AddGroupSubmitData => ({
   title: "",
-};
+});
 
-const form = ref<AddGroupSubmitData>(initialFormData);
+const form = ref<AddGroupSubmitData>(initialFormData());
 
 const emit = defineEmits<{
   (e: "submit", data: AddGroupSubmitData): void;
@@ -32,11 +32,11 @@ const emit = defineEmits<{
 const onSubmit = () => {
   emit("submit", { ...form.value });
 
-  form.value = initialFormData;
+  form.value = initialFormData();
 };
 
 const onCancel = () => {
-  form.value = initialFormData;
+  form.value = initialFormData();
 };
 </script>
 

@@ -13,7 +13,7 @@ const onDragStart = (event: DragEvent) => {
 
 <template>
   <div
-    @dragstart="onDragStart($event)"
+    @dragstart="edit && onDragStart($event)"
     class="relative group border"
     :class="{
       'border-orange-500 rounded-2xl': edit,

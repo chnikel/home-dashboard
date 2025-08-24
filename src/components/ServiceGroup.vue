@@ -21,37 +21,53 @@ const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
 const groupData = ref<AddGroupSubmitData | null>(null);
 
 const onEdit = (data: AddGroupSubmitData) => {
-  emit('edit', data)
-}
+  emit("edit", data);
+};
 
 const editGroup = () => {
   groupData.value = {
     title: props.title,
   };
 
-  editGroupDialog.value?.showModal()
+  editGroupDialog.value?.showModal();
 };
 
-const onDrop =async(event: DragEvent) => {
- const serviceId = event.dataTransfer?.getData("text/plain");
- console.log(serviceId);
+const onDragOver = (event: DragEvent) => {
+  event.preventDefault();
 
- if (!serviceId) {
-  console.log("serviceId nicht gefunden");
-  
-  return
- }
- await moveService(serviceId, props.id?.toString() || null)
+  isOver.value = true;
+};
 
- emit("move")
- 
-}
+const onDrop = async (event: DragEvent) => {
+  const serviceId = event.dataTransfer?.getData("text/plain");
+
+  if (!serviceId) {
+    console.log("serviceId nicht gefunden");
+    return;
+  }
+
+  await moveService(serviceId, props.id?.toString() || null);
+
+  emit("move");
+
+  isOver.value = false;
+};
+
+const isOver = ref(false);
 </script>
 
 <template>
-  <div 
-  @dragover.prevent
-  @drop="onDrop($event)" class="text-white">
+  <div
+    @drop="edit && onDrop($event)"
+    @dragover="edit && onDragOver($event)"
+    @dragleave="edit && (isOver = false)"
+    @dragend="edit && (isOver = false)"
+    class="text-white"
+    :class="{
+      'outline-2 outline-offset-4 rounded outline-blue-500 z-10': isOver,
+      '': !isOver,
+    }"
+  >
     <EditGroupWrapper
       :edit="edit"
       @edit="editGroup()"
@@ -61,7 +77,6 @@ const onDrop =async(event: DragEvent) => {
         {{ title }}
       </h2>
     </EditGroupWrapper>
-
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4"
     >

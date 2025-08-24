@@ -1,5 +1,16 @@
 const sqlite3 = require("sqlite3").verbose();
-const openDB = () => new sqlite3.Database("test.db");
+const path = require("path")
+const fs = require("fs")
+
+const dataFolder = path.join(__dirname, "data")
+const dbPath = path.join(dataFolder, "test.db")
+
+if (!fs.existsSync(dataFolder)) {
+    console.log("🗂️  Create data folder...");
+    fs.mkdirSync(dataFolder);
+}
+
+const openDB = () => new sqlite3.Database(dbPath);
 
 const allServices = async () => {
   return new Promise((resolve, reject) => {

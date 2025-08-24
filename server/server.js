@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const app = express();
 const port = 3000;
 
@@ -8,13 +9,11 @@ const db = require("./db");
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:3000", "http://localhost:5173"],
   })
 );
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(express.static(path.join(__dirname, "../dist")));
 
 app.get("/services", async (req, res) => {
   const data = await db.allServices();
@@ -178,6 +177,10 @@ app.delete("/groups/:id", (req, res) => {
   db.clearGroup(id);
 
   res.json({ message: "Gruppe erfolgreich gelöscht" });
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });
 
 app.listen(port, () => {

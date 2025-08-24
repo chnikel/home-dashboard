@@ -1,3 +1,5 @@
+const host = ""
+
 export type GetServicesResponse = {
   id: number;
   title: string;
@@ -10,7 +12,7 @@ export type GetServicesResponse = {
 };
 
 export const getServices = async () => {
-  const response = await fetch("http://localhost:3000/services");
+  const response = await fetch(`${host}/services`);
 
   const services = await response.json();
 
@@ -30,7 +32,7 @@ export type AddServiceRequest = {
 export type AddServiceResponse = {};
 
 export const addService = async (data: AddServiceRequest) => {
-  const response = await fetch("http://localhost:3000/services", {
+  const response = await fetch(`${host}/services`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -46,7 +48,7 @@ export const addService = async (data: AddServiceRequest) => {
 export type EditServiceResponse = {};
 
 export const updateService = async (id: number, data: AddServiceRequest) => {
-  const response = await fetch(`http://localhost:3000/services/${id}`, {
+  const response = await fetch(`${host}/services/${id}`, {
     method: "put",
     headers: {
       "Content-Type": "application/json",
@@ -62,7 +64,7 @@ export const updateService = async (id: number, data: AddServiceRequest) => {
 export type DeleteServiceResponse = {};
 
 export const deleteService = async (id: number) => {
-  const response = await fetch(`http://localhost:3000/services/${id}`, {
+  const response = await fetch(`${host}/services/${id}`, {
     method: "delete",
   });
 
@@ -77,7 +79,7 @@ export type GetGroupsResponse = {
 };
 
 export const getGroups = async () => {
-  const response = await fetch("http://localhost:3000/groups?services=true");
+  const response = await fetch(`${host}/groups?services=true`);
 
   const services = await response.json();
 
@@ -89,7 +91,7 @@ export type GetServiceGroupsResponse = GetGroupsResponse & {
 };
 
 export const getServiceGroups = async () => {
-  const response = await fetch("http://localhost:3000/groups?services=true");
+  const response = await fetch(`${host}/groups?services=true`);
 
   const services = await response.json();
 
@@ -103,7 +105,7 @@ export type AddGroupRequest = {
 export type AddGroupResponse = {};
 
 export const addGroup = async (data: AddGroupRequest) => {
-  const response = await fetch("http://localhost:3000/groups", {
+  const response = await fetch(`${host}/groups`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -119,7 +121,7 @@ export const addGroup = async (data: AddGroupRequest) => {
 export type UpdateGroupResponse = {};
 
 export const updateGroup = async (id: number, data: AddGroupRequest) => {
-  const response = await fetch(`http://localhost:3000/groups/${id}`, {
+  const response = await fetch(`${host}/groups/${id}`, {
     method: "put",
     headers: {
       "Content-Type": "application/json",
@@ -135,7 +137,7 @@ export const updateGroup = async (id: number, data: AddGroupRequest) => {
 export type DeleteGroupResponse = {};
 
 export const deleteGroup = async (id: number) => {
-  const response = await fetch(`http://localhost:3000/groups/${id}`, {
+  const response = await fetch(`${host}/groups/${id}`, {
     method: "delete",
   });
 

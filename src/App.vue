@@ -99,7 +99,7 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
   } catch (error) {
     console.log(error);
   }
-  
+
   groups.value = await getServiceGroups();
 };
 
@@ -163,29 +163,31 @@ const handleDeleteGroup = async (groupId: number) => {
       />
     </dialog>
 
-    <ServiceGroup
-      v-for="group in groups"
-      :edit="isEditMode"
-      :title="group.id == null ? 'Keine Gruppe' : group.title"
-      @edit="handleEditGroup(group.id, $event)"
-      @delete="handleDeleteGroup(group.id)"
-    >
-      <template v-for="service in group.services">
-        <EditServiceWrapper
-          v-if="service.enabled || isEditMode"
-          :edit="isEditMode"
-          @edit="editService(service)"
-          @delete="handleDeleteService(service)"
-        >
-          <Service
-            :title="service.title"
-            :description="service.description"
-            :link="service.link"
-            :icon_url="service.icon_url"
-            :icon_wrap="service.icon_wrap"
-          />
-        </EditServiceWrapper>
-      </template>
-    </ServiceGroup>
+    <template v-for="group in groups">
+      <ServiceGroup
+        v-if="group.services.length > 0 || isEditMode"
+        :edit="isEditMode"
+        :title="group.id == null ? 'Keine Gruppe' : group.title"
+        @edit="handleEditGroup(group.id, $event)"
+        @delete="handleDeleteGroup(group.id)"
+      >
+        <template v-for="service in group.services">
+          <EditServiceWrapper
+            v-if="service.enabled || isEditMode"
+            :edit="isEditMode"
+            @edit="editService(service)"
+            @delete="handleDeleteService(service)"
+          >
+            <Service
+              :title="service.title"
+              :description="service.description"
+              :link="service.link"
+              :icon_url="service.icon_url"
+              :icon_wrap="service.icon_wrap"
+            />
+          </EditServiceWrapper>
+        </template>
+      </ServiceGroup>
+    </template>
   </div>
 </template>

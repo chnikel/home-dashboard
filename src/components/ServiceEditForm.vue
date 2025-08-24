@@ -47,7 +47,7 @@ const emit = defineEmits<{
   (e: "submit", data: SubmitData): void;
 }>();
 
-const onSubmit = (event: MouseEvent) => {
+const onSubmit = () => {
   emit("submit", { ...form.value });
 
   form.value = initialFormData();

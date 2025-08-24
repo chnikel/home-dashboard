@@ -57,7 +57,9 @@ const onDrop =async(event: DragEvent) => {
       @edit="editGroup()"
       @delete="$emit('delete')"
     >
-      <h2 class="text-2xl font-light py-2 px-4">{{ title || '<missing title>' }}</h2>
+      <h2 class="text-2xl font-light py-2 px-4">
+        {{ title }}
+      </h2>
     </EditGroupWrapper>
 
     <div

@@ -4,6 +4,7 @@ import Service from "./components/Service.vue";
 import {
   addGroup,
   addService,
+  addTag,
   deleteGroup,
   deleteService,
   getServiceGroups,
@@ -20,6 +21,9 @@ import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
 import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
 import GroupEditForm from "./components/GroupEditForm.vue";
+import TagEditForm, {
+  type AddTagSubmitData,
+} from "./components/TagEditForm.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -128,6 +132,18 @@ const handleDeleteGroup = async (groupId: number) => {
 const afterMove = async () => {
   groups.value = await getServiceGroups();
 };
+
+const addTagDialog = useTemplateRef<HTMLDialogElement>("add-tag-dialog");
+
+const handleAddTag = async (data: AddTagSubmitData) => {
+  try {
+    await addTag(data);
+  } catch (error) {
+    console.log(error);
+  }
+
+  groups.value = await getServiceGroups();
+};
 </script>
 
 <template>
@@ -140,6 +156,9 @@ const afterMove = async () => {
           </button>
           <button @click="addGroupDialog?.showModal()">
             Gruppe hinzufügen
+          </button>
+          <button @click="addTagDialog?.showModal()">
+            Tag hinzufügen
           </button>
         </template>
         <button
@@ -171,6 +190,13 @@ const afterMove = async () => {
           method="dialog"
           :initial="editData || undefined"
           @submit="handleEditService($event)"
+        />
+      </dialog>
+
+      <dialog ref="add-tag-dialog">
+        <TagEditForm
+          method="dialog"
+          @submit="handleAddTag($event)"
         />
       </dialog>
 

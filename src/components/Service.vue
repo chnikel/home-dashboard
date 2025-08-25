@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
+import Tag from "./Tag.vue";
 
 defineProps<{
   title: string;
@@ -32,12 +33,11 @@ defineProps<{
         {{ title }}
       </h3>
       <p class="text-sm text-neutral-400 line-clamp-1">{{ description }}</p>
-      <span
+      <Tag
         v-for="tag in tags"
-        :class="`bg-${tag.color}-100 text-${tag.color}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-${tag.color}-900 dark:text-${tag.color}-300`"
-      >
-        {{ tag.name }}
-      </span>
+        :name="tag.name"
+        :color="tag.color"
+      />
     </div>
   </a>
 </template>

@@ -34,6 +34,7 @@ export type AddServiceRequest = {
   icon_wrap: boolean;
   enabled: boolean;
   groupId?: number;
+  tags: number[]
 };
 
 export type AddServiceResponse = {};

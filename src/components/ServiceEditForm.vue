@@ -4,7 +4,6 @@ import {
   getGroups,
   getTags,
   type GetTagsResponse,
-  type ServiceTag,
 } from "../api";
 import Tag from "./Tag.vue";
 import TagSelectForm, { type SelectTagSubmitData } from "./TagSelectForm.vue";
@@ -17,7 +16,7 @@ export type SubmitData = {
   icon_wrap: boolean;
   enabled: boolean;
   groupId?: number;
-  tags: Omit<ServiceTag, "id">[];
+  tags: number[];
 };
 
 const props = defineProps<{
@@ -95,7 +94,7 @@ const handleAddTag = (data: SelectTagSubmitData) => {
     return;
   }
 
-  form.value.tags = [foundTag, ...form.value.tags];
+  form.value.tags = [foundTag.id, ...form.value.tags];
 };
 </script>
 
@@ -176,11 +175,12 @@ const handleAddTag = (data: SelectTagSubmitData) => {
       <label>
         Tags
         <div>
-          <Tag
+          <!-- <Tag
             v-for="tag in form.tags"
             :name="tag.name"
             :color="tag.color"
-          />
+          /> -->
+          <div v-for="tag in form.tags">{{ tag }}</div>
         </div>
       </label>
     </div>

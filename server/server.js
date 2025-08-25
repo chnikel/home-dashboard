@@ -104,6 +104,12 @@ app.put("/services/:id", (req, res) => {
 
   db.updateService(id, data);
 
+  const tags = req.body.tags || [];
+
+  tags.forEach((tagId) => {
+    db.tagToService(tagId, serviceId);
+  });
+
   res.json({ message: "Service erfolgreich aktualisiert" });
 });
 

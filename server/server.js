@@ -57,7 +57,7 @@ app.get("/services", async (req, res) => {
   res.json(services);
 });
 
-app.post("/services", (req, res) => {
+app.post("/services", async (req, res) => {
   const data = {
     title: req.body.title,
     description: req.body.description,
@@ -65,11 +65,16 @@ app.post("/services", (req, res) => {
     icon_url: req.body.icon_url,
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
-    tags: [],
     groupId: req.body.groupId,
   };
 
-  db.insertService(data);
+  const serviceId = await db.insertService(data);
+
+  const tags = req.body.tags || [];
+
+  tags.forEach((tagId) => {
+    db.tagToService(tagId, serviceId);
+  });
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
 });

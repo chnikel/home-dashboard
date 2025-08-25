@@ -11,7 +11,7 @@ const emit = defineEmits<{
   <div
     class="relative group"
     :class="{
-      'outline outline-orange-500 rounded-2xl': edit,
+      'outline outline-gray-500 outline-dashed rounded-2xl': edit,
     }"
   >
     <div

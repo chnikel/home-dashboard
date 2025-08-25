@@ -191,3 +191,17 @@ export const addTag = async (data: AddTagRequest) => {
 
   return services as AddTagResponse;
 };
+
+export type GetTagsResponse = {
+  id: number;
+  name: string;
+  color: string;
+};
+
+export const getTags = async () => {
+  const response = await fetch(`${host}/tags`);
+
+  const services = await response.json();
+
+  return services as GetTagsResponse[];
+};

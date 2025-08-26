@@ -263,9 +263,10 @@ const allTags = () => {
 };
 
 const insertTag = ({ name, color }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 INSERT INTO tags 
 (name, color)
 VALUES
@@ -274,11 +275,18 @@ VALUES
   '${color}'
 );
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const allTagsForService = (serviceId) => {

@@ -221,15 +221,21 @@ app.get("/tags", async (req, res) => {
   res.json(tags);
 });
 
-app.post("/tags", (req, res) => {
+app.post("/tags", async (req, res) => {
   const data = {
     name: req.body.name,
     color: req.body.color,
   };
 
-  db.insertTag(data);
-
-  res.json({ message: "Tag erfolgreich hinzugefügt" });
+  await db
+    .insertTag(data)
+    .then(() => {
+      res.json({ message: "Tag erfolgreich hinzugefügt" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({ message: "Es ist ein Fehler aufgetreten" });
+    });
 });
 
 app.post("/tags/:name/service/:service", (req, res) => {

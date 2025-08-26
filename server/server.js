@@ -210,11 +210,11 @@ app.post("/tags", (req, res) => {
   res.json({ message: "Tag erfolgreich hinzugefügt" });
 });
 
-app.post("/tags/:id/service/:service", (req, res) => {
-  const id = req.params.id;
+app.post("/tags/:name/service/:service", (req, res) => {
+  const name = req.params.name;
   const serviceId = req.params.service;
 
-  db.tagToService(id, serviceId);
+  db.tagToService(name, serviceId);
 
   res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
 });

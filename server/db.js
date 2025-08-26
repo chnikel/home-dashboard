@@ -16,7 +16,7 @@ const allServices = async () => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     db.all(
-      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, tags, group_id FROM services",
+      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, group_id FROM services",
       (err, rows) => {
         if (err) {
           reject(err);

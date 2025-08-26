@@ -5,6 +5,7 @@ import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
 import { moveService } from "../api";
 
 const props = defineProps<{
+  compact?: boolean;
   id: number;
   edit: boolean;
   title: string;
@@ -78,7 +79,12 @@ const isOver = ref(false);
       </h2>
     </EditGroupWrapper>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4"
+      class=""
+      :class="{
+        'flex flex-wrap gap-3': compact,
+        'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4':
+          !compact,
+      }"
     >
       <slot />
     </div>

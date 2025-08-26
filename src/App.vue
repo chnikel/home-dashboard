@@ -166,10 +166,13 @@ const handleAddTag = async (data: AddTagSubmitData) => {
 
   groups.value = await getServiceGroups();
 };
+
+const compactMode = ref(false);
 </script>
 
 <template>
   <div class="h-screen p-3">
+    <button @click="compactMode = !compactMode">compactMode</button>
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end">
         <template v-if="isEditMode">
@@ -223,6 +226,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
+          :compact="compactMode"
           :id="group.id"
           :edit="isEditMode"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
@@ -240,6 +244,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
               @delete="handleDeleteService(service)"
             >
               <Service
+                :compact="compactMode"
                 :id="'service' + service.id"
                 :title="service.title"
                 :description="service.description"

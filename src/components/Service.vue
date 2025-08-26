@@ -2,6 +2,7 @@
 import type { ServiceTag } from "../api";
 
 defineProps<{
+  compact?: boolean
   title: string;
   description: string;
   link: string;
@@ -15,6 +16,9 @@ defineProps<{
   <a
     :href="link"
     class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    :class="{
+      'w-min': compact
+    }"
   >
     <div
       class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"
@@ -27,7 +31,7 @@ defineProps<{
         :src="icon_url"
       />
     </div>
-    <div>
+    <div v-if="!compact">
       <h3 class="text-lg font-semibold line-clamp-1 flex gap-2 items-center">
         {{ title }}
       </h3>

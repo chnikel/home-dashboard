@@ -34,13 +34,15 @@ const classes = {
   stone: "bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-300",
 };
 
+export type TagColors = keyof typeof classes
+
 const emit = defineEmits<{
   (e: "action"): void;
 }>();
 
 const props = defineProps<{
   name: string;
-  color: keyof typeof classes;
+  color: TagColors;
   action?: boolean;
 }>();
 

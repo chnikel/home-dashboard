@@ -1,9 +1,11 @@
+import type { TagColors } from "./components/Tag.vue";
+
 const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
 export type ServiceTag = {
   id: number;
   name: string;
-  color: string;
+  color: TagColors;
 };
 
 export type GetServicesResponse = {
@@ -33,7 +35,7 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId: number|null;
+  groupId: number | null;
   tags: string[];
 };
 
@@ -196,7 +198,7 @@ export const addTag = async (data: AddTagRequest) => {
 export type GetTagsResponse = {
   id: number;
   name: string;
-  color: string;
+  color: TagColors;
 };
 
 export const getTags = async () => {

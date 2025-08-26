@@ -4,6 +4,7 @@ import Service from "./components/Service.vue";
 import {
   addGroup,
   addService,
+  addTag,
   deleteGroup,
   deleteService,
   getServiceGroups,
@@ -20,6 +21,9 @@ import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
 import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
 import GroupEditForm from "./components/GroupEditForm.vue";
+import TagEditForm, {
+  type AddTagSubmitData,
+} from "./components/TagEditForm.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -31,8 +35,19 @@ const addServiceDialog =
   useTemplateRef<HTMLDialogElement>("add-service-dialog");
 
 const handleAddService = async (data: SubmitData) => {
+  const tags = data.tags.map((t) => t.name);
+
   try {
-    await addService(data);
+    await addService({
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: data.groupId,
+      tags,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -59,6 +74,7 @@ const editService = (service: GetServicesResponse) => {
     icon_wrap: service.icon_wrap,
     enabled: service.enabled,
     groupId: service.groupId,
+    tags: service.tags,
   };
 
   editServiceDialog.value?.showModal();
@@ -69,9 +85,19 @@ const handleEditService = async (data: SubmitData) => {
     alert("Keine Service ID");
     return;
   }
+  const tags = data.tags.map((t) => t.name);
 
   try {
-    await updateService(editServiceId.value, data);
+    await updateService(editServiceId.value, {
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: data.groupId,
+      tags,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -128,6 +154,18 @@ const handleDeleteGroup = async (groupId: number) => {
 const afterMove = async () => {
   groups.value = await getServiceGroups();
 };
+
+const addTagDialog = useTemplateRef<HTMLDialogElement>("add-tag-dialog");
+
+const handleAddTag = async (data: AddTagSubmitData) => {
+  try {
+    await addTag(data);
+  } catch (error) {
+    console.log(error);
+  }
+
+  groups.value = await getServiceGroups();
+};
 </script>
 
 <template>
@@ -141,6 +179,7 @@ const afterMove = async () => {
           <button @click="addGroupDialog?.showModal()">
             Gruppe hinzufügen
           </button>
+          <button @click="addTagDialog?.showModal()">Tag hinzufügen</button>
         </template>
         <button
           @click="toggleEdit()"
@@ -171,6 +210,13 @@ const afterMove = async () => {
           method="dialog"
           :initial="editData || undefined"
           @submit="handleEditService($event)"
+        />
+      </dialog>
+
+      <dialog ref="add-tag-dialog">
+        <TagEditForm
+          method="dialog"
+          @submit="handleAddTag($event)"
         />
       </dialog>
 

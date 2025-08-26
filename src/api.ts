@@ -1,9 +1,11 @@
+import type { TagColors } from "./components/Tag.vue";
+
 const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
 export type ServiceTag = {
   id: number;
   name: string;
-  color: string;
+  color: TagColors;
 };
 
 export type GetServicesResponse = {
@@ -33,7 +35,8 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId?: number;
+  groupId: number | null;
+  tags: string[];
 };
 
 export type AddServiceResponse = {};
@@ -169,4 +172,39 @@ export const deleteGroup = async (id: number) => {
   const groups = await response.json();
 
   return groups as DeleteGroupResponse;
+};
+
+export type AddTagRequest = {
+  name: string;
+  color: string;
+};
+
+export type AddTagResponse = {};
+
+export const addTag = async (data: AddTagRequest) => {
+  const response = await fetch(`${host}/tags`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as AddTagResponse;
+};
+
+export type GetTagsResponse = {
+  id: number;
+  name: string;
+  color: TagColors;
+};
+
+export const getTags = async () => {
+  const response = await fetch(`${host}/tags`);
+
+  const services = await response.json();
+
+  return services as GetTagsResponse[];
 };

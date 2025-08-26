@@ -35,14 +35,14 @@ const insertService = ({
   icon_url,
   icon_wrap,
   status_enabled,
-  tags,
   groupId,
 }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 INSERT INTO services 
-(title, description, link, icon_url, icon_wrap, status_enabled, tags, group_id)
+(title, description, link, icon_url, icon_wrap, status_enabled, group_id)
 VALUES
 (
   '${title}',
@@ -51,15 +51,21 @@ VALUES
   '${icon_url}',
   ${icon_wrap},
   ${status_enabled},
-  '${tags}',
   ${groupId || null}
 );
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this.lastID);
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const serviceToGroup = (serviceId, groupId) => {
@@ -105,7 +111,6 @@ CREATE TABLE IF NOT EXISTS services (
     icon_url TEXT,
     icon_wrap BOOLEAN,
     status_enabled BOOLEAN,
-    tags TEXT,
     group_id INT
 );
 `);
@@ -136,20 +141,12 @@ CREATE TABLE IF NOT EXISTS tags (
 
 const updateService = (
   id,
-  {
-    title,
-    description,
-    link,
-    icon_url,
-    icon_wrap,
-    status_enabled,
-    tags,
-    groupId,
-  }
+  { title, description, link, icon_url, icon_wrap, status_enabled, groupId }
 ) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 UPDATE services
 SET 
     title = '${title}',
@@ -158,15 +155,21 @@ SET
     icon_url = '${icon_url}',
     icon_wrap = ${icon_wrap},
     status_enabled = ${status_enabled},
-    tags = '',
     group_id = ${groupId}
 WHERE id = ${id};
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const deleteService = (id) => {
@@ -260,9 +263,10 @@ const allTags = () => {
 };
 
 const insertTag = ({ name, color }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 INSERT INTO tags 
 (name, color)
 VALUES
@@ -271,11 +275,18 @@ VALUES
   '${color}'
 );
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const allTagsForService = (serviceId) => {
@@ -299,16 +310,31 @@ WHERE st.service_id = ${serviceId};
   });
 };
 
-const tagToService = (tagId, serviceId) => {
+const tagToService = (tag, serviceId) => {
   const db = openDB();
   const stmt = db.prepare(
     `
 INSERT INTO service_tags (service_id, tag_id)
 VALUES 
 (
-  ${tagId},
-  ${serviceId}
+  ${serviceId},
+  (SELECT id FROM tags WHERE name='${tag}')
 );
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
+const removeTagFromService = (tag, serviceId) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+DELETE FROM service_tags
+WHERE tag_id = (SELECT id FROM tags WHERE name = '${tag}')
+AND service_id = ${serviceId};
 `
   );
   stmt.run();
@@ -333,4 +359,5 @@ module.exports = {
   insertTag,
   allTagsForService,
   tagToService,
+  removeTagFromService,
 };

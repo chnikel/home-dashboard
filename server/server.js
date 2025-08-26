@@ -57,7 +57,7 @@ app.get("/services", async (req, res) => {
   res.json(services);
 });
 
-app.post("/services", (req, res) => {
+app.post("/services", async (req, res) => {
   const data = {
     title: req.body.title,
     description: req.body.description,
@@ -65,11 +65,16 @@ app.post("/services", (req, res) => {
     icon_url: req.body.icon_url,
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
-    tags: [],
     groupId: req.body.groupId,
   };
 
-  db.insertService(data);
+  const serviceId = await db.insertService(data);
+
+  const tags = req.body.tags || [];
+
+  tags.forEach((tag) => {
+    db.tagToService(tag, serviceId);
+  });
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
 });
@@ -83,8 +88,8 @@ app.post("/services/:id/group/:group", (req, res) => {
   res.json({ message: "Service erfolgreich der Gruppe zugewiesen" });
 });
 
-app.put("/services/:id", (req, res) => {
-  const id = req.params.id;
+app.put("/services/:id", async (req, res) => {
+  const serviceId = req.params.id;
 
   const data = {
     title: req.body.title,
@@ -93,11 +98,33 @@ app.put("/services/:id", (req, res) => {
     icon_url: req.body.icon_url,
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
-    tags: [],
     groupId: req.body.groupId,
   };
 
-  db.updateService(id, data);
+  await db.updateService(serviceId, data);
+
+  const updatedTags = req.body.tags || [];
+  const currentTags = await db.allTagsForService(serviceId);
+
+  updatedTags.forEach((tag) => {
+    const foundTag = currentTags.find((t) => t.name === tag);
+
+    if (foundTag) {
+      return;
+    }
+
+    db.tagToService(tag, serviceId);
+  });
+
+  currentTags.forEach((t) => {
+    const foundTag = updatedTags.find((tag) => tag === t.name);
+
+    if (foundTag) {
+      return;
+    }
+
+    db.removeTagFromService(t.name, serviceId);
+  });
 
   res.json({ message: "Service erfolgreich aktualisiert" });
 });
@@ -194,22 +221,37 @@ app.get("/tags", async (req, res) => {
   res.json(tags);
 });
 
-app.post("/tags", (req, res) => {
+app.post("/tags", async (req, res) => {
   const data = {
     name: req.body.name,
     color: req.body.color,
   };
 
-  db.insertTag(data);
-
-  res.json({ message: "Tag erfolgreich hinzugefügt" });
+  await db
+    .insertTag(data)
+    .then(() => {
+      res.json({ message: "Tag erfolgreich hinzugefügt" });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({ message: "Es ist ein Fehler aufgetreten" });
+    });
 });
 
-app.post("/tags/:id/service/:service", (req, res) => {
-  const id = req.params.id;
+app.post("/tags/:name/service/:service", (req, res) => {
+  const name = req.params.name;
   const serviceId = req.params.service;
 
-  db.tagToService(id, serviceId);
+  db.tagToService(name, serviceId);
+
+  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
+});
+
+app.delete("/tags/:name/service/:service", (req, res) => {
+  const name = req.params.name;
+  const serviceId = req.params.service;
+
+  db.removeTagFromService(name, serviceId);
 
   res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
 });

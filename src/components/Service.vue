@@ -17,7 +17,7 @@ defineProps<{
     class="px-3 py-3 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
   >
     <div
-      class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0"
+      class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"
       :class="{
         'p-2 border-neutral-600 border': !icon_wrap,
       }"

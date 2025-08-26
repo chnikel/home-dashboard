@@ -6,22 +6,11 @@ meta {
 
 delete {
   url: {{host}}/tags/:name/service/:service
-  body: json
+  body: none
   auth: inherit
 }
 
 params:path {
   name: test
   service: 1
-}
-
-body:json {
-  {
-    "title": "NGINX Proxy Manager",
-    "description": "Reverse proxy system",
-    "link": "http://192.168.178.23:811/login",
-    "icon_url": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nginx-proxy-manager.svg",
-    "icon_wrap": true,
-    "enabled": true
-  }
 }

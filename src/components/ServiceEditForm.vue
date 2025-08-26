@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import {
   getGroups,
   getTags,
@@ -80,12 +80,18 @@ onMounted(async () => {
 
 const initialSelectedTag = "";
 
-const availableTags = ref<GetTagsResponse[]>([]);
+const tags = ref<GetTagsResponse[]>([]);
 
 onMounted(async () => {
-  const tags = await getTags();
+  const _tags = await getTags();
 
-  availableTags.value = tags;
+  tags.value = _tags;
+});
+
+const availableTags = computed(() => {
+  const alreadySelectedTags = form.value.tags.map((t) => t.name);
+
+  return tags.value.filter((tag) => !alreadySelectedTags.includes(tag.name));
 });
 
 const selectedTag = ref(initialSelectedTag);

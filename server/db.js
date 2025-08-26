@@ -320,6 +320,21 @@ VALUES
   db.close();
 };
 
+const removeTagFromService = (tag, serviceId) => {
+  const db = openDB();
+  const stmt = db.prepare(
+    `
+DELETE FROM service_tags
+WHERE tag_id = (SELECT id FROM tags WHERE name = '${tag}')
+AND service_id = ${serviceId};
+`
+  );
+  stmt.run();
+  stmt.finalize();
+
+  db.close();
+};
+
 module.exports = {
   db,
   insertService,
@@ -336,4 +351,5 @@ module.exports = {
   insertTag,
   allTagsForService,
   tagToService,
+  removeTagFromService,
 };

@@ -35,8 +35,19 @@ const addServiceDialog =
   useTemplateRef<HTMLDialogElement>("add-service-dialog");
 
 const handleAddService = async (data: SubmitData) => {
+  const tags = data.tags.map((t) => t.name);
+
   try {
-    await addService(data);
+    await addService({
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: data.groupId,
+      tags,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -63,6 +74,7 @@ const editService = (service: GetServicesResponse) => {
     icon_wrap: service.icon_wrap,
     enabled: service.enabled,
     groupId: service.groupId,
+    tags: service.tags,
   };
 
   editServiceDialog.value?.showModal();
@@ -73,9 +85,19 @@ const handleEditService = async (data: SubmitData) => {
     alert("Keine Service ID");
     return;
   }
+  const tags = data.tags.map((t) => t.name);
 
   try {
-    await updateService(editServiceId.value, data);
+    await updateService(editServiceId.value, {
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: data.groupId,
+      tags,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -157,9 +179,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           <button @click="addGroupDialog?.showModal()">
             Gruppe hinzufügen
           </button>
-          <button @click="addTagDialog?.showModal()">
-            Tag hinzufügen
-          </button>
+          <button @click="addTagDialog?.showModal()">Tag hinzufügen</button>
         </template>
         <button
           @click="toggleEdit()"

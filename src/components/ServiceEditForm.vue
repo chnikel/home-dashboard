@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { getGroups } from "../api";
+import { getGroups, type ServiceTag } from "../api";
+import Tag from "./Tag.vue";
 
 export type SubmitData = {
   title: string;
@@ -9,7 +10,8 @@ export type SubmitData = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId?: number;
+  groupId: number | null;
+  tags: Omit<ServiceTag, "id">[];
 };
 
 const props = defineProps<{
@@ -29,6 +31,7 @@ watch(props, (newProps) => {
     icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
     enabled: props.initial?.enabled || form.value.enabled,
     groupId: props.initial?.groupId || form.value.groupId,
+    tags: props.initial?.tags || form.value.tags,
   };
 });
 
@@ -39,6 +42,8 @@ const initialFormData = (): SubmitData => ({
   icon_url: "",
   icon_wrap: false,
   enabled: true,
+  groupId: null,
+  tags: [],
 });
 
 const form = ref<SubmitData>(initialFormData());
@@ -67,6 +72,37 @@ onMounted(async () => {
     value: group.id,
   }));
 });
+
+const initialSelectedTag = "";
+
+const availableTags = [
+  {
+    name: "automation",
+    color: "blue",
+  },
+  {
+    name: "test",
+    color: "yellow",
+  },
+];
+
+const selectedTag = ref(initialSelectedTag);
+
+const addSelectedTag = () => {
+  const foundTag = availableTags.find((tag) => tag.name === selectedTag.value);
+
+  if (!foundTag) {
+    return;
+  }
+
+  form.value.tags.push(foundTag);
+
+  selectedTag.value = initialSelectedTag;
+};
+
+const handleTagRemove = (tag: string) => {
+  form.value.tags = form.value.tags.filter((t) => t.name != tag);
+};
 </script>
 
 <template>
@@ -142,6 +178,37 @@ onMounted(async () => {
       </label>
     </div>
 
+    <div>
+      <label>
+        Tags
+
+        <div class="pb-3">
+          <Tag
+            v-for="tag in form.tags"
+            :name="tag.name"
+            :color="tag.color"
+            :action="true"
+            @action="() => handleTagRemove(tag.name)"
+          />
+        </div>
+
+        <select v-model="selectedTag">
+          <option
+            v-for="option in availableTags"
+            :value="option.name"
+          >
+            {{ option.name }}
+          </option>
+        </select>
+        <button
+          type="button"
+          @click="addSelectedTag"
+        >
+          Tag hinzufügen
+        </button>
+      </label>
+    </div>
+
     <div class="space-x-2 mt-3">
       <button
         data-type="primary"
@@ -149,7 +216,12 @@ onMounted(async () => {
       >
         Speichern
       </button>
-      <button data-variant="outline" @click="onCancel()">Schließen</button>
+      <button
+        data-variant="outline"
+        @click="onCancel"
+      >
+        Schließen
+      </button>
     </div>
   </form>
 </template>

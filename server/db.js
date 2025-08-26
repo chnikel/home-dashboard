@@ -35,14 +35,14 @@ const insertService = ({
   icon_url,
   icon_wrap,
   status_enabled,
-  tags,
   groupId,
 }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 INSERT INTO services 
-(title, description, link, icon_url, icon_wrap, status_enabled, tags, group_id)
+(title, description, link, icon_url, icon_wrap, status_enabled, group_id)
 VALUES
 (
   '${title}',
@@ -51,15 +51,21 @@ VALUES
   '${icon_url}',
   ${icon_wrap},
   ${status_enabled},
-  '${tags}',
   ${groupId || null}
 );
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(this.lastID);
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const serviceToGroup = (serviceId, groupId) => {
@@ -105,7 +111,6 @@ CREATE TABLE IF NOT EXISTS services (
     icon_url TEXT,
     icon_wrap BOOLEAN,
     status_enabled BOOLEAN,
-    tags TEXT,
     group_id INT
 );
 `);
@@ -143,7 +148,6 @@ const updateService = (
     icon_url,
     icon_wrap,
     status_enabled,
-    tags,
     groupId,
   }
 ) => {
@@ -158,7 +162,6 @@ SET
     icon_url = '${icon_url}',
     icon_wrap = ${icon_wrap},
     status_enabled = ${status_enabled},
-    tags = '',
     group_id = ${groupId}
 WHERE id = ${id};
 `
@@ -299,15 +302,15 @@ WHERE st.service_id = ${serviceId};
   });
 };
 
-const tagToService = (tagId, serviceId) => {
+const tagToService = (tag, serviceId) => {
   const db = openDB();
   const stmt = db.prepare(
     `
 INSERT INTO service_tags (service_id, tag_id)
 VALUES 
 (
-  ${tagId},
-  ${serviceId}
+  ${serviceId},
+  (SELECT id FROM tags WHERE name='${tag}')
 );
 `
   );

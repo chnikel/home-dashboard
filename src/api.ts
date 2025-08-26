@@ -33,7 +33,8 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId?: number;
+  groupId: number|null;
+  tags: string[];
 };
 
 export type AddServiceResponse = {};

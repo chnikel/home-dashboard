@@ -34,15 +34,32 @@ const classes = {
   stone: "bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-300",
 };
 
-const props = defineProps<{ name: string; color: keyof typeof classes }>();
+const emit = defineEmits<{
+  (e: "action"): void;
+}>();
+
+const props = defineProps<{
+  name: string;
+  color: keyof typeof classes;
+  action?: boolean;
+}>();
 
 const colorClasses = computed(() => classes[props.color]);
 </script>
 
 <template>
-  <span
-    :class="`text-xs font-medium me-2 px-2.5 py-0.5 rounded ${colorClasses}`"
+  <div
+    :class="`inline-flex text-xs font-medium me-2 px-2.5 py-0.5 rounded ${colorClasses}`"
   >
-    {{ name }}
-  </span>
+    <div>{{ name }}</div>
+
+    <div
+      v-if="action"
+      @click="emit('action')"
+      class="ml-2 font-bold cursor-pointer"
+      type="button"
+    >
+      x
+    </div>
+  </div>
 </template>

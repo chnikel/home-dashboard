@@ -2,7 +2,7 @@
 import type { ServiceTag } from "../api";
 
 defineProps<{
-  compact?: boolean
+  compact?: boolean;
   title: string;
   description: string;
   link: string;
@@ -15,15 +15,18 @@ defineProps<{
 <template>
   <a
     :href="link"
-    class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    class="lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
     :class="{
-      'w-min': compact
+      'p-4': !compact,
+      'w-min': compact,
     }"
   >
     <div
-      class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"
+      class="bg-neutral-700/80 rounded-2xl shrink-0 self-center"
       :class="{
         'p-2 border-neutral-600 border': !icon_wrap,
+        'size-16': !compact,
+        'size-20': compact,
       }"
     >
       <img

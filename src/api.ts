@@ -170,3 +170,24 @@ export const deleteGroup = async (id: number) => {
 
   return groups as DeleteGroupResponse;
 };
+
+export type AddTagRequest = {
+  name: string;
+  color: string;
+};
+
+export type AddTagResponse = {};
+
+export const addTag = async (data: AddTagRequest) => {
+  const response = await fetch(`${host}/tags`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const services = await response.json();
+
+  return services as AddTagResponse;
+};

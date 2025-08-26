@@ -141,19 +141,12 @@ CREATE TABLE IF NOT EXISTS tags (
 
 const updateService = (
   id,
-  {
-    title,
-    description,
-    link,
-    icon_url,
-    icon_wrap,
-    status_enabled,
-    groupId,
-  }
+  { title, description, link, icon_url, icon_wrap, status_enabled, groupId }
 ) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
 UPDATE services
 SET 
     title = '${title}',
@@ -165,11 +158,18 @@ SET
     group_id = ${groupId}
 WHERE id = ${id};
 `
-  );
-  stmt.run();
-  stmt.finalize();
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+    stmt.finalize();
 
-  db.close();
+    db.close();
+  });
 };
 
 const deleteService = (id) => {

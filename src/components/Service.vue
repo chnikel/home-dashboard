@@ -14,7 +14,7 @@ defineProps<{
 <template>
   <a
     :href="link"
-    class="px-3 py-3 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
   >
     <div
       class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"

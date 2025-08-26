@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { getGroups, type ServiceTag } from "../api";
+import {
+  getGroups,
+  getTags,
+  type GetTagsResponse,
+  type ServiceTag,
+} from "../api";
 import Tag from "./Tag.vue";
 
 export type SubmitData = {
@@ -75,21 +80,20 @@ onMounted(async () => {
 
 const initialSelectedTag = "";
 
-const availableTags = [
-  {
-    name: "automation",
-    color: "blue",
-  },
-  {
-    name: "test",
-    color: "yellow",
-  },
-];
+const availableTags = ref<GetTagsResponse[]>([]);
+
+onMounted(async () => {
+  const tags = await getTags();
+
+  availableTags.value = tags;
+});
 
 const selectedTag = ref(initialSelectedTag);
 
 const addSelectedTag = () => {
-  const foundTag = availableTags.find((tag) => tag.name === selectedTag.value);
+  const foundTag = availableTags.value.find(
+    (tag) => tag.name === selectedTag.value
+  );
 
   if (!foundTag) {
     return;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 export type AddTagSubmitData = {
   name: string;
@@ -66,8 +66,6 @@ const colorOptions = [
   { label: "neutral", value: "neutral" },
   { label: "stone", value: "stone" },
 ];
-
-const colorClass = computed(() => `bg-${form.value.color}-500`);
 </script>
 
 <template>

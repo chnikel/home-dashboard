@@ -12,6 +12,51 @@ if (!fs.existsSync(dataFolder)) {
 
 const openDB = () => new sqlite3.Database(dbPath);
 
+function createTables() {
+  const db = openDB();
+  
+  db.serialize(() => {
+    console.log("🗂️  Create DB if not exists...");
+
+    db.run(`
+CREATE TABLE IF NOT EXISTS services (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    link TEXT,
+    icon_url TEXT,
+    icon_wrap BOOLEAN,
+    status_enabled BOOLEAN,
+    group_id INT
+);
+`);
+
+    db.run(`
+CREATE TABLE IF NOT EXISTS groups (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(255) NOT NULL
+);
+`);
+
+    db.run(`
+CREATE TABLE IF NOT EXISTS tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    color TEXT NOT NULL
+);
+`);
+
+    db.run(`
+  CREATE TABLE IF NOT EXISTS service_tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL
+);
+`);
+  });
+  db.close();
+}
+
 const allServices = async () => {
   return new Promise((resolve, reject) => {
     const db = openDB();
@@ -98,47 +143,6 @@ WHERE group_id = ${groupId};
   db.close();
 };
 
-const db = openDB();
-db.serialize(() => {
-  console.log("🗂️  Create DB if not exists...");
-
-  db.run(`
-CREATE TABLE IF NOT EXISTS services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    link TEXT,
-    icon_url TEXT,
-    icon_wrap BOOLEAN,
-    status_enabled BOOLEAN,
-    group_id INT
-);
-`);
-
-  db.run(`
-CREATE TABLE IF NOT EXISTS groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL
-);
-`);
-
-  db.run(`
-CREATE TABLE IF NOT EXISTS tags (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    color TEXT NOT NULL
-);
-`);
-
-  db.run(`
-  CREATE TABLE IF NOT EXISTS service_tags (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    service_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL
-);
-`);
-});
-
 const updateService = (
   id,
   { title, description, link, icon_url, icon_wrap, status_enabled, groupId }
@@ -185,8 +189,6 @@ WHERE id = ${id};
 
   db.close();
 };
-
-db.close();
 
 const allGroups = async () => {
   return new Promise((resolve, reject) => {
@@ -342,6 +344,8 @@ AND service_id = ${serviceId};
 
   db.close();
 };
+
+createTables();
 
 module.exports = {
   db,

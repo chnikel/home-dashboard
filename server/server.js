@@ -12,7 +12,10 @@ const port = 3000;
 import db from "./db.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { logger } from "./middlewares/logger.js";
-import tagsRouter from './routers/tags.router.js'
+import tagsRouter from "./routers/tags.router.js";
+import ServiceGroup from "./models/ServiceGroup.js";
+import { safeAwait } from "./utils/safe-await.js";
+import { groupBy } from "./utils/group-by.js";
 
 app.use(logger);
 app.use(express.json());
@@ -146,79 +149,91 @@ app.delete("/services/:id", (req, res) => {
   res.json({ message: "Service erfolgreich gelöscht" });
 });
 
-app.get("/groups", async (req, res) => {
+app.get("/groups", async (req, res, next) => {
   const includeServices = req.query.services == "true";
 
-  const rawGroups = await db.allGroups();
+  const [err, rawGroups] = await safeAwait(ServiceGroup.all());
+
+  if (err) {
+    next(err);
+    return;
+  }
 
   const groupsWithDefaultGroup = [
     ...rawGroups,
-    { id: null, title: "", services: [] },
+    new ServiceGroup({ id: null, title: "" }),
   ];
 
   if (!includeServices) {
-    const groups = groupsWithDefaultGroup.map((entry) => {
-      return {
-        id: entry.id,
-        title: entry.title,
-      };
-    });
-
-    res.json(groups);
-
+    res.json(groupsWithDefaultGroup);
     return;
   }
 
   const services = await getServices();
 
-  const servicesGrouped = services.reduce((acc, service) => {
-    (acc[service.groupId] ??= []).push(service);
-    return acc;
-  }, {});
+  const servicesGrouped = await groupBy(services, "groupId");
 
-  const groups = groupsWithDefaultGroup.map((entry) => {
-    return {
-      id: entry.id,
-      title: entry.title,
-      services: servicesGrouped[entry.id] || [],
-    };
+  const groups = groupsWithDefaultGroup.map((group) => {
+    group.services = servicesGrouped[group.id] || [];
+    return group;
   });
 
   res.json(groups);
 });
 
-app.post("/groups", (req, res) => {
+app.post("/groups", async (req, res) => {
   const data = {
     title: req.body.title,
   };
 
-  db.insertGroup(data);
+  const group = new ServiceGroup({
+    title: req.body.title,
+  });
+
+  const [err] = await safeAwait(group.save());
+
+  if (err) {
+    next();
+    return;
+  }
 
   res.json({ message: "Gruppe erfolgreich hinzugefügt" });
 });
 
-app.put("/groups/:id", (req, res) => {
-  const id = req.params.id;
-
-  const data = {
+app.put("/groups/:id", async (req, res) => {
+  const group = new ServiceGroup({
+    id: req.params.id,
     title: req.body.title,
-  };
+  });
 
-  db.updateGroup(id, data);
+  const [err] = await safeAwait(group.save());
+
+  if (err) {
+    next();
+    return;
+  }
 
   res.json({ message: "Gruppe erfolgreich aktualisiert" });
 });
 
-app.delete("/groups/:id", (req, res) => {
+app.delete("/groups/:id", async (req, res) => {
   const id = req.params.id;
 
-  db.deleteGroup(id);
+  const group = new ServiceGroup({ id });
+
+  const [err] = await safeAwait(group.delete());
+
+  if (err) {
+    next();
+    return;
+  }
+
   db.clearGroup(id);
 
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
-app.use(tagsRouter)
+app.use(tagsRouter);
 
 app.post("/tags/:name/service/:service", (req, res) => {
   const name = req.params.name;

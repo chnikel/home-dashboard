@@ -2,12 +2,12 @@ import _sqlite3 from "sqlite3";
 import path, { dirname } from "path";
 import fs from "fs";
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const sqlite3 = new _sqlite3.verbose()
+const sqlite3 = new _sqlite3.verbose();
 
 const dataFolder = path.join(__dirname, "data");
 const dbPath = path.join(dataFolder, "test.db");
@@ -197,67 +197,6 @@ WHERE id = ${id};
   db.close();
 };
 
-const allGroups = async () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all("SELECT id, title FROM groups", (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(rows);
-    });
-  });
-};
-
-const insertGroup = ({ title }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-INSERT INTO groups 
-(title)
-VALUES
-(
-  '${title}'
-);
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
-const updateGroup = (id, { title }) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-UPDATE groups
-SET 
-    title = '${title}'
-WHERE id = ${id};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
-const deleteGroup = (id) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-DELETE FROM groups
-WHERE id = ${id};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
 const allTagsForService = (serviceId) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
@@ -319,10 +258,6 @@ export default {
   allServices,
   updateService,
   deleteService,
-  allGroups,
-  insertGroup,
-  updateGroup,
-  deleteGroup,
   clearGroup,
   serviceToGroup,
   allTagsForService,

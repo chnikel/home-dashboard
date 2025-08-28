@@ -1,6 +1,13 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
-const fs = require("fs");
+import _sqlite3 from "sqlite3";
+import path, { dirname } from "path";
+import fs from "fs";
+
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const sqlite3 = new _sqlite3.verbose()
 
 const dataFolder = path.join(__dirname, "data");
 const dbPath = path.join(dataFolder, "test.db");
@@ -14,7 +21,7 @@ const openDB = () => new sqlite3.Database(dbPath);
 
 function createTables() {
   const db = openDB();
-  
+
   db.serialize(() => {
     console.log("🗂️  Create DB if not exists...");
 
@@ -347,8 +354,7 @@ AND service_id = ${serviceId};
 
 createTables();
 
-module.exports = {
-  db,
+export default {
   insertService,
   allServices,
   updateService,

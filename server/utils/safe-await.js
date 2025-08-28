@@ -7,4 +7,4 @@ async function safeAwait(promise) {
   }
 }
 
-module.exports.safeAwait = safeAwait;
+export { safeAwait };

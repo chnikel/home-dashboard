@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import path, { dirname } from "path";
-
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,10 +10,9 @@ const app = express();
 const port = 3000;
 
 import db from "./db.js";
-import ServiceTag from "./models/ServiceTag.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import { safeAwait } from "./utils/safe-await.js";
 import { logger } from "./middlewares/logger.js";
+import tagsRouter from './routers/tags.router.js'
 
 app.use(logger);
 app.use(express.json());
@@ -220,38 +218,7 @@ app.delete("/groups/:id", (req, res) => {
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
-app.get("/tags", async (req, res, next) => {
-  const [err, data] = await safeAwait(ServiceTag.all());
-
-  if (err) {
-    next(err);
-    return;
-  }
-
-  const tags = data.map((entry) => ({
-    id: entry.id,
-    name: entry.name,
-    color: entry.color,
-  }));
-
-  res.json(tags);
-});
-
-app.post("/tags", async (req, res, next) => {
-  const tag = new ServiceTag({
-    name: req.body.name,
-    color: req.body.color,
-  });
-
-  const [err] = await safeAwait(tag.save());
-
-  if (err) {
-    next({ message: "Tag existiert bereits" });
-    return;
-  }
-
-  res.json({ message: "Tag erfolgreich hinzugefügt" });
-});
+app.use(tagsRouter)
 
 app.post("/tags/:name/service/:service", (req, res) => {
   const name = req.params.name;

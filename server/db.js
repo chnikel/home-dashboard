@@ -64,62 +64,6 @@ CREATE TABLE IF NOT EXISTS tags (
   db.close();
 }
 
-const allServices = async () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all(
-      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, group_id FROM services",
-      (err, rows) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(rows);
-      }
-    );
-  });
-};
-
-const insertService = ({
-  title,
-  description,
-  link,
-  icon_url,
-  icon_wrap,
-  status_enabled,
-  groupId,
-}) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-INSERT INTO services 
-(title, description, link, icon_url, icon_wrap, status_enabled, group_id)
-VALUES
-(
-  '${title}',
-  '${description}',
-  '${link}',
-  '${icon_url}',
-  ${icon_wrap},
-  ${status_enabled},
-  ${groupId || null}
-);
-`
-    );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(this.lastID);
-    });
-    stmt.finalize();
-
-    db.close();
-  });
-};
-
 const serviceToGroup = (serviceId, groupId) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -221,8 +165,6 @@ WHERE st.service_id = ${serviceId};
 createTables();
 
 export default {
-  insertService,
-  allServices,
   updateService,
   deleteService,
   clearGroup,

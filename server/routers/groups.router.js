@@ -1,9 +1,10 @@
 import express from "express";
 import ServiceGroup from "../models/ServiceGroup.js";
 import { safeAwait } from "../utils/safe-await.js";
-import { getServices } from "../server.js";
 import { groupBy } from "../utils/group-by.js";
 import db from "../db.js";
+import Service from "../models/Service.js";
+import { getServices } from "../server.js";
 
 const router = express.Router();
 
@@ -16,11 +17,14 @@ router.get("/groups", async (req, res, next) => {
     next(err);
     return;
   }
+  console.log(rawGroups);
 
   const groupsWithDefaultGroup = [
     ...rawGroups,
     new ServiceGroup({ id: null, title: "" }),
   ];
+
+  
 
   if (!includeServices) {
     res.json(groupsWithDefaultGroup);

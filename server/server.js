@@ -10,6 +10,7 @@ import groupsRouter from "./routers/groups.router.js";
 import ServiceTag from "./models/ServiceTag.js";
 import { safeAwait } from "./utils/safe-await.js";
 import Tag from "./models/Tag.js";
+import Service from "./models/Service.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,23 +29,13 @@ app.use(
 app.use(express.static(path.join(__dirname, "../dist")));
 
 export const getServices = async () => {
-  const data = await db.allServices();
+  const data = await Service.all();
 
   const services = await Promise.all(
     data.map(async (entry) => {
-      const tags = await db.allTagsForService(entry.id);
+      entry.tags = await entry.getTags()
 
-      return {
-        id: entry.id,
-        title: entry.title,
-        description: entry.description,
-        link: entry.link,
-        icon_url: entry.icon_url,
-        icon_wrap: entry.icon_wrap ? true : false,
-        enabled: entry.status_enabled ? true : false,
-        groupId: entry.group_id,
-        tags,
-      };
+      return entry;
     })
   );
 
@@ -69,8 +60,8 @@ app.get("/services", async (req, res) => {
   res.json(services);
 });
 
-app.post("/services", async (req, res) => {
-  const data = {
+app.post("/services", async (req, res, next) => {
+  const service = new Service({
     title: req.body.title,
     description: req.body.description,
     link: req.body.link,
@@ -78,11 +69,18 @@ app.post("/services", async (req, res) => {
     icon_wrap: req.body.icon_wrap,
     status_enabled: req.body.enabled,
     groupId: req.body.groupId,
-  };
+  });
 
-  const serviceId = await db.insertService(data);
+  const [err, serviceId] = await safeAwait(service.save());
 
-  const tags = req.body.tags || [];
+  if (err) {
+    next();
+    return;
+  }
+
+  const tags = await Promise.all(
+    (req.body.tags || []).map((name) => Tag.fromName(name))
+  );
 
   tags.map(async (tag) => {
     const serviceTag = new ServiceTag({ serviceId, tag });

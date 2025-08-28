@@ -30,7 +30,11 @@ router.post("/tags", async (req, res, next) => {
   const [err] = await safeAwait(tag.save());
 
   if (err) {
-    next({ message: "Tag existiert bereits" });
+    next(
+      err.code === "SQLITE_CONSTRAINT"
+        ? { message: "Tag existiert bereits" }
+        : err
+    );
     return;
   }
 

@@ -2,18 +2,17 @@ import express from "express";
 import cors from "cors";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import db from "./db.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { logger } from "./middlewares/logger.js";
+import tagsRouter from "./routers/tags.router.js";
+import groupsRouter from "./routers/groups.router.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 const port = 3000;
-
-import db from "./db.js";
-import { errorHandler } from "./middlewares/errorHandler.js";
-import { logger } from "./middlewares/logger.js";
-import tagsRouter from "./routers/tags.router.js";
-import groupsRouter from "./routers/groups.router.js";
 
 app.use(logger);
 app.use(express.json());

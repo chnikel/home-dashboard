@@ -39,7 +39,7 @@ router.get("/groups", async (req, res, next) => {
   res.json(groups);
 });
 
-router.post("/groups", async (req, res) => {
+router.post("/groups", async (req, res, next) => {
   const data = {
     title: req.body.title,
   };
@@ -58,7 +58,7 @@ router.post("/groups", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich hinzugefügt" });
 });
 
-router.put("/groups/:id", async (req, res) => {
+router.put("/groups/:id", async (req, res, next) => {
   const group = new ServiceGroup({
     id: req.params.id,
     title: req.body.title,
@@ -74,7 +74,7 @@ router.put("/groups/:id", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich aktualisiert" });
 });
 
-router.delete("/groups/:id", async (req, res) => {
+router.delete("/groups/:id", async (req, res, next) => {
   const id = req.params.id;
 
   const group = new ServiceGroup({ id });

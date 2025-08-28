@@ -11,6 +11,7 @@ const app = express();
 const port = 3000;
 
 import db from "./db.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 app.use(express.json());
 app.use(
@@ -265,6 +266,8 @@ app.delete("/tags/:name/service/:service", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

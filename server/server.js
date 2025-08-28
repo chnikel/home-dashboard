@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import path, { dirname } from "path";
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,7 +11,9 @@ const app = express();
 const port = 3000;
 
 import db from "./db.js";
+import ServiceTag from "./models/ServiceTag.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { safeAwait } from "./utils/safe-await.js";
 import { logger } from "./middlewares/logger.js";
 
 app.use(logger);
@@ -218,8 +220,13 @@ app.delete("/groups/:id", (req, res) => {
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
-app.get("/tags", async (req, res) => {
-  const data = await db.allTags();
+app.get("/tags", async (req, res, next) => {
+  const [err, data] = await safeAwait(ServiceTag.all());
+
+  if (err) {
+    next(err);
+    return;
+  }
 
   const tags = data.map((entry) => ({
     id: entry.id,
@@ -230,21 +237,20 @@ app.get("/tags", async (req, res) => {
   res.json(tags);
 });
 
-app.post("/tags", async (req, res) => {
-  const data = {
+app.post("/tags", async (req, res, next) => {
+  const tag = new ServiceTag({
     name: req.body.name,
     color: req.body.color,
-  };
+  });
 
-  await db
-    .insertTag(data)
-    .then(() => {
-      res.json({ message: "Tag erfolgreich hinzugefügt" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({ message: "Es ist ein Fehler aufgetreten" });
-    });
+  const [err] = await safeAwait(tag.save());
+
+  if (err) {
+    next({ message: "Tag existiert bereits" });
+    return;
+  }
+
+  res.json({ message: "Tag erfolgreich hinzugefügt" });
 });
 
 app.post("/tags/:name/service/:service", (req, res) => {

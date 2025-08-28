@@ -17,7 +17,7 @@ if (!fs.existsSync(dataFolder)) {
   fs.mkdirSync(dataFolder);
 }
 
-const openDB = () => new sqlite3.Database(dbPath);
+export const openDB = () => new sqlite3.Database(dbPath);
 
 function createTables() {
   const db = openDB();
@@ -258,46 +258,6 @@ WHERE id = ${id};
   db.close();
 };
 
-const allTags = () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all("SELECT id, name, color FROM tags", (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(rows);
-    });
-  });
-};
-
-const insertTag = ({ name, color }) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-INSERT INTO tags 
-(name, color)
-VALUES
-(
-  '${name}',
-  '${color}'
-);
-`
-    );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-    stmt.finalize();
-
-    db.close();
-  });
-};
-
 const allTagsForService = (serviceId) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
@@ -365,8 +325,6 @@ export default {
   deleteGroup,
   clearGroup,
   serviceToGroup,
-  allTags,
-  insertTag,
   allTagsForService,
   tagToService,
   removeTagFromService,

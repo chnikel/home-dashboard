@@ -7,6 +7,7 @@ import {
   type ServiceTag,
 } from "../api";
 import Tag from "./Tag.vue";
+import Button from "./ui/button/Button.vue";
 
 export type SubmitData = {
   title: string;
@@ -210,28 +211,28 @@ const handleTagRemove = (tag: string) => {
             {{ option.name }}
           </option>
         </select>
-        <button
+        <Button
           type="button"
           @click="addSelectedTag"
         >
           Tag hinzufügen
-        </button>
+        </Button>
       </label>
     </div>
 
     <div class="space-x-2 mt-3">
-      <button
+      <Button
         data-type="primary"
         @click="onSubmit"
       >
         Speichern
-      </button>
-      <button
+      </Button>
+      <Button
         data-variant="outline"
         @click="onCancel"
       >
         Schließen
-      </button>
+      </Button>
     </div>
   </form>
 </template>

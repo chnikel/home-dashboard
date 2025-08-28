@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Button from "./ui/button/Button.vue";
+
 defineProps<{ edit: boolean }>();
 
 const emit = defineEmits<{
@@ -19,18 +21,18 @@ const emit = defineEmits<{
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
     >
       <div class="flex gap-3 justify-center items-center h-full">
-        <button
+        <Button
           data-variant="outline"
           @click="emit('edit')"
         >
           Bearbeiten
-        </button>
-        <button
+        </Button>
+        <Button
           data-type="danger"
           @click="emit('delete')"
         >
           Löschen
-        </button>
+        </Button>
       </div>
     </div>
     <slot />

@@ -24,6 +24,7 @@ import GroupEditForm from "./components/GroupEditForm.vue";
 import TagEditForm, {
   type AddTagSubmitData,
 } from "./components/TagEditForm.vue";
+import Button from "./components/ui/button/Button.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -173,22 +174,22 @@ const handleAddTag = async (data: AddTagSubmitData) => {
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end">
         <template v-if="isEditMode">
-          <button @click="addServiceDialog?.showModal()">
+          <Button @click="addServiceDialog?.showModal()">
             Service hinzufügen
-          </button>
-          <button @click="addGroupDialog?.showModal()">
+          </Button>
+          <Button @click="addGroupDialog?.showModal()">
             Gruppe hinzufügen
-          </button>
-          <button @click="addTagDialog?.showModal()">Tag hinzufügen</button>
+          </Button>
+          <Button @click="addTagDialog?.showModal()">Tag hinzufügen</Button>
         </template>
-        <button
+        <Button
           @click="toggleEdit()"
           :class="{
             '!bg-orange-500': isEditMode,
           }"
         >
           {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
-        </button>
+        </Button>
       </div>
 
       <dialog ref="add-group-dialog">

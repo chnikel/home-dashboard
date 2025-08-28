@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import Button from "./ui/button/Button.vue";
 
 export type AddTagSubmitData = {
   name: string;
@@ -96,18 +97,18 @@ const colorOptions = [
     </div>
 
     <div class="space-x-2 mt-3">
-      <button
+      <Button
         data-type="primary"
         @click="onSubmit"
       >
         Speichern
-      </button>
-      <button
+      </Button>
+      <Button
         data-variant="outline"
         @click="onCancel()"
       >
         Schließen
-      </button>
+      </Button>
     </div>
   </form>
 </template>

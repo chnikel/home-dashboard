@@ -1,9 +1,23 @@
 import { openDB } from "../db.js";
 
 class Tag {
-  constructor({ name, color }) {
+  constructor({ id, name, color }) {
     this.name = name;
     this.color = color;
+  }
+
+  load() {
+    return new Promise((resolve, reject) => {
+      const db = openDB();
+      db.get(`SELECT id, color FROM tags WHERE name = '${this.name}'`, (err, row) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(row);
+      });
+    });
   }
 
   save() {
@@ -44,6 +58,14 @@ VALUES
         resolve(rows);
       });
     });
+  }
+
+  static async fromName(name) {
+    const tag = new Tag({ name });
+    const entry = await tag.load();
+    tag.id = entry.id
+    tag.color = entry.color
+    return tag;
   }
 }
 

@@ -7,6 +7,9 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { logger } from "./middlewares/logger.js";
 import tagsRouter from "./routers/tags.router.js";
 import groupsRouter from "./routers/groups.router.js";
+import ServiceTag from "./models/ServiceTag.js";
+import { safeAwait } from "./utils/safe-await.js";
+import Tag from "./models/Tag.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -81,8 +84,13 @@ app.post("/services", async (req, res) => {
 
   const tags = req.body.tags || [];
 
-  tags.forEach((tag) => {
-    db.tagToService(tag, serviceId);
+  tags.map(async (tag) => {
+    const serviceTag = new ServiceTag({ serviceId, tag });
+
+    const [err] = await safeAwait(serviceTag.save());
+    if (err) {
+      console.log("UNHANDLED_ERROR", err);
+    }
   });
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
@@ -112,27 +120,47 @@ app.put("/services/:id", async (req, res) => {
 
   await db.updateService(serviceId, data);
 
-  const updatedTags = req.body.tags || [];
-  const currentTags = await db.allTagsForService(serviceId);
+  const updatedTags = await Promise.all(
+    (req.body.tags || []).map((name) => Tag.fromName(name))
+  );
+  const currentTags = (await db.allTagsForService(serviceId)).map(
+    (tag) => new Tag(tag)
+  );
 
-  updatedTags.forEach((tag) => {
-    const foundTag = currentTags.find((t) => t.name === tag);
+  await Promise.all(
+    updatedTags.map(async (tag) => {
+      const foundTag = currentTags.find((t) => {
+        return t.name === tag;
+      });
+
+      if (foundTag) {
+        return;
+      }
+
+      const serviceTag = new ServiceTag({ serviceId, tag });
+
+      const [err] = await safeAwait(serviceTag.save());
+      if (err) {
+        console.log("UNHANDLED_ERROR", err);
+      }
+    })
+  );
+
+  currentTags.map(async (tag) => {
+    const foundTag = currentTags.find((t) => {
+      return t.name === tag;
+    });
 
     if (foundTag) {
       return;
     }
 
-    db.tagToService(tag, serviceId);
-  });
+    const serviceTag = new ServiceTag({ serviceId, tag });
 
-  currentTags.forEach((t) => {
-    const foundTag = updatedTags.find((tag) => tag === t.name);
-
-    if (foundTag) {
-      return;
+    const [err] = await safeAwait(serviceTag.delete());
+    if (err) {
+      console.log("UNHANDLED_ERROR", err);
     }
-
-    db.removeTagFromService(t.name, serviceId);
   });
 
   res.json({ message: "Service erfolgreich aktualisiert" });
@@ -148,24 +176,6 @@ app.delete("/services/:id", (req, res) => {
 
 app.use(tagsRouter);
 app.use(groupsRouter);
-
-app.post("/tags/:name/service/:service", (req, res) => {
-  const name = req.params.name;
-  const serviceId = req.params.service;
-
-  db.tagToService(name, serviceId);
-
-  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
-});
-
-app.delete("/tags/:name/service/:service", (req, res) => {
-  const name = req.params.name;
-  const serviceId = req.params.service;
-
-  db.removeTagFromService(name, serviceId);
-
-  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
-});
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));

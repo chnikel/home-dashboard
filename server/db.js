@@ -218,39 +218,6 @@ WHERE st.service_id = ${serviceId};
   });
 };
 
-const tagToService = (tag, serviceId) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-INSERT INTO service_tags (service_id, tag_id)
-VALUES 
-(
-  ${serviceId},
-  (SELECT id FROM tags WHERE name='${tag}')
-);
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
-const removeTagFromService = (tag, serviceId) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-DELETE FROM service_tags
-WHERE tag_id = (SELECT id FROM tags WHERE name = '${tag}')
-AND service_id = ${serviceId};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
 createTables();
 
 export default {
@@ -261,6 +228,4 @@ export default {
   clearGroup,
   serviceToGroup,
   allTagsForService,
-  tagToService,
-  removeTagFromService,
 };

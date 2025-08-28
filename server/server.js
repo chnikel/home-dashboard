@@ -12,7 +12,9 @@ const port = 3000;
 
 import db from "./db.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { logger } from "./middlewares/logger.js";
 
+app.use(logger);
 app.use(express.json());
 app.use(
   cors({

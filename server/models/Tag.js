@@ -1,6 +1,6 @@
 import { openDB } from "../db.js";
 
-class ServiceTag {
+class Tag {
   constructor({ name, color }) {
     this.name = name;
     this.color = color;
@@ -47,4 +47,4 @@ VALUES
   }
 }
 
-export default ServiceTag;
+export default Tag;

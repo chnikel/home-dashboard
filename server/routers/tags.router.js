@@ -1,11 +1,11 @@
 import express from "express";
-import ServiceTag from "../models/ServiceTag.js";
+import Tag from "../models/Tag.js";
 import { safeAwait } from "../utils/safe-await.js";
 
 const router = express.Router();
 
 router.get("/tags", async (req, res, next) => {
-  const [err, data] = await safeAwait(ServiceTag.all());
+  const [err, data] = await safeAwait(Tag.all());
 
   if (err) {
     next(err);
@@ -22,7 +22,7 @@ router.get("/tags", async (req, res, next) => {
 });
 
 router.post("/tags", async (req, res, next) => {
-  const tag = new ServiceTag({
+  const tag = new Tag({
     name: req.body.name,
     color: req.body.color,
   });

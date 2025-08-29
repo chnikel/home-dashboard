@@ -32,9 +32,6 @@ onMounted(async () => {
   groups.value = await getServiceGroups();
 });
 
-const addServiceDialog =
-  useTemplateRef<HTMLDialogElement>("add-service-dialog");
-
 const handleAddService = async (data: SubmitData) => {
   const tags = data.tags.map((t) => t.name);
 
@@ -154,8 +151,6 @@ const afterMove = async () => {
   groups.value = await getServiceGroups();
 };
 
-const addTagDialog = useTemplateRef<HTMLDialogElement>("add-tag-dialog");
-
 const handleAddTag = async (data: AddTagSubmitData) => {
   try {
     await addTag(data);
@@ -172,9 +167,10 @@ const handleAddTag = async (data: AddTagSubmitData) => {
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end">
         <template v-if="isEditMode">
-          <Button @click="addServiceDialog?.showModal()">
-            Service hinzufügen
-          </Button>
+          <ServiceEditForm
+            method="dialog"
+            @submit="handleAddService($event)"
+          />
           <GroupEditForm
             method="dialog"
             @submit="handleAddGroup($event)"
@@ -193,21 +189,6 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
         </Button>
       </div>
-
-      <dialog ref="add-service-dialog">
-        <ServiceEditForm
-          method="dialog"
-          @submit="handleAddService($event)"
-        />
-      </dialog>
-
-      <dialog ref="edit-service-dialog">
-        <ServiceEditForm
-          method="dialog"
-          :initial="editData || undefined"
-          @submit="handleEditService($event)"
-        />
-      </dialog>
 
       <template v-for="group in groups">
         <ServiceGroup

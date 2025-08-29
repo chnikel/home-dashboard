@@ -1,13 +1,37 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
-  getGroups,
-  getTags,
-  type GetTagsResponse,
-  type ServiceTag,
-} from "../api";
-import Tag from "./Tag.vue";
-import Button from "./ui/button/Button.vue";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import SelectTrigger from "./ui/select/SelectTrigger.vue";
+import SelectValue from "./ui/select/SelectValue.vue";
+import SelectContent from "./ui/select/SelectContent.vue";
+import SelectGroup from "./ui/select/SelectGroup.vue";
+import Select from "./ui/select/Select.vue";
+import DialogClose from "./ui/dialog/DialogClose.vue";
+import type { ServiceTag } from "@/api";
+import Switch from "./ui/switch/Switch.vue";
+import Label from "./ui/label/Label.vue";
+import { useTags } from "@/composables/useFetchTags";
+import SelectItem from "./ui/select/SelectItem.vue";
 
 export type SubmitData = {
   title: string;
@@ -29,210 +53,252 @@ watch(props, (newProps) => {
     return;
   }
 
-  form.value = {
-    title: props.initial?.title || form.value.title,
-    description: props.initial?.description || form.value.description,
-    link: props.initial?.link || form.value.link,
-    icon_url: props.initial?.icon_url || form.value.icon_url,
-    icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
-    enabled: props.initial?.enabled || form.value.enabled,
-    groupId: props.initial?.groupId || form.value.groupId,
-    tags: props.initial?.tags || form.value.tags,
-  };
+  // form.value = {
+  //   title: props.initial?.title || form.value.title,
+  //   description: props.initial?.description || form.value.description,
+  //   link: props.initial?.link || form.value.link,
+  //   icon_url: props.initial?.icon_url || form.value.icon_url,
+  //   icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
+  //   enabled: props.initial?.enabled || form.value.enabled,
+  //   groupId: props.initial?.groupId || form.value.groupId,
+  //   tags: props.initial?.tags || form.value.tags,
+  // };
 });
-
-const initialFormData = (): SubmitData => ({
-  title: "",
-  description: "",
-  link: "",
-  icon_url: "",
-  icon_wrap: false,
-  enabled: true,
-  groupId: null,
-  tags: [],
-});
-
-const form = ref<SubmitData>(initialFormData());
 
 const emit = defineEmits<{
   (e: "submit", data: SubmitData): void;
 }>();
 
-const onSubmit = () => {
-  emit("submit", { ...form.value });
+const formSchema = toTypedSchema(
+  z.object({
+    title: z.string(),
+    description: z.string().optional().default(""),
+    link: z.string(),
+    icon_url: z.string().optional().default(""),
+    icon_wrap: z.boolean().default(false),
+    enabled: z.boolean().default(true),
+    groupId: z.number().optional(),
+    tags: z.array(z.string()).optional().default([]),
+  })
+);
 
-  form.value = initialFormData();
-};
+function onSubmit(values: any) {
+  emit("submit", values);
 
-const onCancel = () => {
-  form.value = initialFormData();
-};
+  isOpen.value = false;
+}
+const isOpen = ref(false);
 
-const groupOptions = ref<{ label: string; value: number }[]>([]);
-
-onMounted(async () => {
-  const groups = await getGroups();
-
-  groupOptions.value = groups.map((group) => ({
-    label: group.title,
-    value: group.id,
-  }));
-});
-
-const initialSelectedTag = "";
-
-const tags = ref<GetTagsResponse[]>([]);
-
-onMounted(async () => {
-  const _tags = await getTags();
-
-  tags.value = _tags;
-});
-
-const availableTags = computed(() => {
-  const alreadySelectedTags = form.value.tags.map((t) => t.name);
-
-  return tags.value.filter((tag) => !alreadySelectedTags.includes(tag.name));
-});
-
-const selectedTag = ref(initialSelectedTag);
-
-const addSelectedTag = () => {
-  const foundTag = availableTags.value.find(
-    (tag) => tag.name === selectedTag.value
-  );
-
-  if (!foundTag) {
-    return;
-  }
-
-  form.value.tags.push(foundTag);
-
-  selectedTag.value = initialSelectedTag;
-};
-
-const handleTagRemove = (tag: string) => {
-  form.value.tags = form.value.tags.filter((t) => t.name != tag);
-};
+const { tags } = useTags();
 </script>
 
 <template>
-  <form class="grid p-3">
-    <div>
-      <label>
-        Title
-        <input
-          type="text"
-          v-model="form.title"
-        />
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Description
-        <textarea v-model="form.description"></textarea>
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Link
-        <input
-          type="text"
-          v-model="form.link"
-        />
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Icon url
-        <input
-          type="text"
-          v-model="form.icon_url"
-        />
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Icon wrap
-        <input
-          type="checkbox"
-          v-model="form.icon_wrap"
-        />
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Enabled
-        <input
-          type="checkbox"
-          v-model="form.enabled"
-        />
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Group
-        <select v-model="form.groupId">
-          <option
-            v-for="option in groupOptions"
-            :value="option.value"
-          >
-            {{ option.label }}
-          </option>
-        </select>
-      </label>
-    </div>
-
-    <div>
-      <label>
-        Tags
-
-        <div class="pb-3">
-          <Tag
-            v-for="tag in form.tags"
-            :name="tag.name"
-            :color="tag.color"
-            :action="true"
-            @action="() => handleTagRemove(tag.name)"
-          />
-        </div>
-
-        <select v-model="selectedTag">
-          <option
-            v-for="option in availableTags"
-            :value="option.name"
-          >
-            {{ option.name }}
-          </option>
-        </select>
+  <Form
+    v-slot="{ handleSubmit }"
+    as=""
+    keep-values
+    :validation-schema="formSchema"
+  >
+    <Dialog :open="isOpen">
+      <DialogTrigger as-child>
         <Button
-          type="button"
-          @click="addSelectedTag"
+          variant="outline"
+          @click="isOpen = true"
         >
-          Tag hinzufügen
+          Service hinzufügen
         </Button>
-      </label>
-    </div>
+      </DialogTrigger>
+      <DialogContent class="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Service hinzufügen</DialogTitle>
+          <DialogDescription>
+            <!-- Make changes to your profile here. Click save when you're done. -->
+          </DialogDescription>
+        </DialogHeader>
 
-    <div class="space-x-2 mt-3">
-      <Button
-        data-type="primary"
-        @click="onSubmit"
-      >
-        Speichern
-      </Button>
-      <Button
-        data-variant="outline"
-        @click="onCancel"
-      >
-        Schließen
-      </Button>
-    </div>
-  </form>
+        <form
+          id="dialogForm"
+          class="space-y-3"
+          @submit="handleSubmit($event, onSubmit)"
+        >
+          <FormField
+            v-slot="{ componentField }"
+            name="title"
+          >
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder=""
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField
+            v-slot="{ componentField }"
+            name="description"
+          >
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder=""
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField }"
+            name="link"
+          >
+            <FormItem>
+              <FormLabel>Link</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder=""
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField }"
+            name="icon_url"
+          >
+            <FormItem>
+              <FormLabel>Icon url</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder=""
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ value, handleChange }"
+            name="icon_wrap"
+          >
+            <FormItem>
+              <FormControl>
+                <div class="flex items-center space-x-2">
+                  <Switch
+                    id="icon-wrap"
+                    :model-value="value"
+                    @update:model-value="handleChange"
+                  />
+                  <Label for="icon-wrap">Icon wrap</Label>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ value, handleChange }"
+            name="enabled"
+          >
+            <FormItem>
+              <FormControl>
+                <div class="flex items-center space-x-2">
+                  <Switch
+                    id="enabled"
+                    :model-value="value"
+                    @update:model-value="handleChange"
+                  />
+                  <Label for="enabled">Enabled</Label>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField }"
+            name="groupId"
+          >
+            <FormItem>
+              <FormLabel>Gruppe</FormLabel>
+
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger class="w-full">
+                    <SelectValue placeholder="Wähle eine Farbe für dein Tag" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <!-- <SelectItem
+                      v-for="tag in tags"
+                      :value="tag.id"
+                    >
+                      {{ tag.name }}
+                    </SelectItem> -->
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField }"
+            name="tags"
+          >
+            <FormItem>
+              <FormLabel>Tags</FormLabel>
+
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger class="w-full">
+                    <SelectValue placeholder="Wähle eine Farbe für dein Tag" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      v-for="tag in tags"
+                      :value="tag.id"
+                    >
+                      {{ tag.name }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+        </form>
+
+        <DialogFooter>
+          <Button
+            type="submit"
+            form="dialogForm"
+          >
+            Hinzufügen
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            @click="isOpen = false"
+          >
+            Abbrechen
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </Form>
 </template>

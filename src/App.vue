@@ -118,8 +118,6 @@ const handleDeleteService = async (service: GetServicesResponse) => {
   }
 };
 
-const addGroupDialog = useTemplateRef<HTMLDialogElement>("add-group-dialog");
-
 const handleAddGroup = async (data: AddGroupSubmitData) => {
   try {
     await addGroup(data);
@@ -177,9 +175,10 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           <Button @click="addServiceDialog?.showModal()">
             Service hinzufügen
           </Button>
-          <Button @click="addGroupDialog?.showModal()">
-            Gruppe hinzufügen
-          </Button>
+          <GroupEditForm
+            method="dialog"
+            @submit="handleAddGroup($event)"
+          />
           <TagEditForm
             method="dialog"
             @submit="handleAddTag($event)"
@@ -194,13 +193,6 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
         </Button>
       </div>
-
-      <dialog ref="add-group-dialog">
-        <GroupEditForm
-          method="dialog"
-          @submit="handleAddGroup($event)"
-        />
-      </dialog>
 
       <dialog ref="add-service-dialog">
         <ServiceEditForm

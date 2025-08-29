@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import Button from "./ui/button/Button.vue";
+import { watch } from "vue";
 
 export type AddTagSubmitData = {
   name: string;
@@ -16,32 +15,15 @@ watch(props, (newProps) => {
     return;
   }
 
-  form.value = {
-    name: props.initial?.name || form.value.name,
-    color: props.initial?.color || form.value.color,
-  };
+  // form.value = {
+  //   name: props.initial?.name || form.value.name,
+  //   color: props.initial?.color || form.value.color,
+  // };
 });
-
-const initialFormData = (): AddTagSubmitData => ({
-  name: "",
-  color: "",
-});
-
-const form = ref<AddTagSubmitData>(initialFormData());
 
 const emit = defineEmits<{
   (e: "submit", data: AddTagSubmitData): void;
 }>();
-
-const onSubmit = () => {
-  emit("submit", { ...form.value });
-
-  form.value = initialFormData();
-};
-
-const onCancel = () => {
-  form.value = initialFormData();
-};
 
 const colorOptions = [
   { label: "red", value: "red" },
@@ -67,48 +49,137 @@ const colorOptions = [
   { label: "neutral", value: "neutral" },
   { label: "stone", value: "stone" },
 ];
+
+import { toTypedSchema } from "@vee-validate/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import SelectTrigger from "./ui/select/SelectTrigger.vue";
+import SelectValue from "./ui/select/SelectValue.vue";
+import SelectContent from "./ui/select/SelectContent.vue";
+import SelectGroup from "./ui/select/SelectGroup.vue";
+import SelectItem from "./ui/select/SelectItem.vue";
+import Select from "./ui/select/Select.vue";
+import DialogClose from "./ui/dialog/DialogClose.vue";
+
+const formSchema = toTypedSchema(
+  z.object({
+    name: z.string(),
+    color: z.string(),
+  })
+);
+
+function onSubmit(values: any) {
+  emit("submit", values);
+}
 </script>
 
 <template>
-  <form class="grid p-3">
-    <div>
-      <label>
-        Name
-        <input
-          type="text"
-          v-model="form.name"
-        />
-      </label>
-    </div>
+  <Form
+    v-slot="{ handleSubmit }"
+    as=""
+    keep-values
+    :validation-schema="formSchema"
+  >
+    <Dialog>
+      <DialogTrigger as-child>
+        <Button variant="outline"> Tag hinzufügen </Button>
+      </DialogTrigger>
+      <DialogContent class="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Tag hinzufügen</DialogTitle>
+          <DialogDescription>
+            <!-- Make changes to your profile here. Click save when you're done. -->
+          </DialogDescription>
+        </DialogHeader>
 
-    <div>
-      <label>
-        Farbe
-
-        <select v-model="form.color">
-          <option
-            v-for="option in colorOptions"
-            :value="option.value"
+        <form
+          id="dialogForm"
+          class="space-y-3"
+          @submit="handleSubmit($event, onSubmit)"
+        >
+          <FormField
+            v-slot="{ componentField }"
+            name="name"
           >
-            {{ option.label }}
-          </option>
-        </select>
-      </label>
-    </div>
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder=""
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-    <div class="space-x-2 mt-3">
-      <Button
-        data-type="primary"
-        @click="onSubmit"
-      >
-        Speichern
-      </Button>
-      <Button
-        data-variant="outline"
-        @click="onCancel()"
-      >
-        Schließen
-      </Button>
-    </div>
-  </form>
+          <FormField
+            v-slot="{ componentField }"
+            name="color"
+          >
+            <FormItem>
+              <FormLabel>Color</FormLabel>
+
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger class="w-full">
+                    <SelectValue placeholder="Wähle eine Farbe für dein Tag" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      v-for="option in colorOptions"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+        </form>
+
+        <DialogFooter>
+          <DialogClose as-child>
+            <Button
+              type="submit"
+              form="dialogForm"
+            >
+              Hinzufügen
+            </Button>
+          </DialogClose>
+          <DialogClose as-child>
+            <Button
+              type="button"
+              variant="secondary"
+            >
+              Abbrechen
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </Form>
 </template>

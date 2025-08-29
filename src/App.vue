@@ -180,7 +180,10 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           <Button @click="addGroupDialog?.showModal()">
             Gruppe hinzufügen
           </Button>
-          <Button @click="addTagDialog?.showModal()">Tag hinzufügen</Button>
+          <TagEditForm
+            method="dialog"
+            @submit="handleAddTag($event)"
+          />
         </template>
         <Button
           @click="toggleEdit()"
@@ -211,13 +214,6 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           method="dialog"
           :initial="editData || undefined"
           @submit="handleEditService($event)"
-        />
-      </dialog>
-
-      <dialog ref="add-tag-dialog">
-        <TagEditForm
-          method="dialog"
-          @submit="handleAddTag($event)"
         />
       </dialog>
 

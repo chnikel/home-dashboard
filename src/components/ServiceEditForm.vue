@@ -26,12 +26,12 @@ import SelectValue from "./ui/select/SelectValue.vue";
 import SelectContent from "./ui/select/SelectContent.vue";
 import SelectGroup from "./ui/select/SelectGroup.vue";
 import Select from "./ui/select/Select.vue";
-import DialogClose from "./ui/dialog/DialogClose.vue";
 import type { ServiceTag } from "@/api";
 import Switch from "./ui/switch/Switch.vue";
 import Label from "./ui/label/Label.vue";
 import { useTags } from "@/composables/useFetchTags";
 import SelectItem from "./ui/select/SelectItem.vue";
+import { useGroups } from "@/composables/useFetchGroups";
 
 export type SubmitData = {
   title: string;
@@ -77,7 +77,7 @@ const formSchema = toTypedSchema(
     icon_url: z.string().optional().default(""),
     icon_wrap: z.boolean().default(false),
     enabled: z.boolean().default(true),
-    groupId: z.number().optional(),
+    groupId: z.string().optional().default(""),
     tags: z.array(z.string()).optional().default([]),
   })
 );
@@ -90,6 +90,7 @@ function onSubmit(values: any) {
 const isOpen = ref(false);
 
 const { tags } = useTags();
+const { groups } = useGroups();
 </script>
 
 <template>
@@ -241,12 +242,12 @@ const { tags } = useTags();
                 </FormControl>
                 <SelectContent>
                   <SelectGroup>
-                    <!-- <SelectItem
-                      v-for="tag in tags"
-                      :value="tag.id"
+                    <SelectItem
+                      v-for="group in groups"
+                      :value="group.id || '-1'"
                     >
-                      {{ tag.name }}
-                    </SelectItem> -->
+                      {{ group.title || "<Keine Gruppe>" }}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

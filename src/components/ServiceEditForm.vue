@@ -30,7 +30,7 @@ import type { ServiceTag } from "@/api";
 import Switch from "./ui/switch/Switch.vue";
 import Label from "./ui/label/Label.vue";
 import SelectItem from "./ui/select/SelectItem.vue";
-import { useGroups } from "@/composables/useFetchGroups";
+import { useGroups } from "@/composables/useGroups";
 
 export type SubmitData = {
   title: string;

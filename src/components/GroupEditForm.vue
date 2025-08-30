@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { ref } from "vue";
 
 export type AddGroupSubmitData = {
   title: string;
@@ -36,7 +36,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import DialogClose from "./ui/dialog/DialogClose.vue";
+
+const isOpen = ref(false);
 
 const formSchema = toTypedSchema(
   z.object({
@@ -46,6 +47,8 @@ const formSchema = toTypedSchema(
 
 function onSubmit(values: any) {
   emit("submit", values);
+
+  isOpen.value = false;
 }
 </script>
 
@@ -56,9 +59,11 @@ function onSubmit(values: any) {
     keep-values
     :validation-schema="formSchema"
   >
-    <Dialog>
+    <Dialog :open="isOpen">
       <DialogTrigger as-child>
-        <Button variant="outline"> {{ buttonText }} </Button>
+        <Button @click="isOpen = true">
+          {{ buttonText }}
+        </Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
@@ -92,22 +97,19 @@ function onSubmit(values: any) {
         </form>
 
         <DialogFooter>
-          <DialogClose as-child>
-            <Button
-              type="submit"
-              form="dialogForm"
-            >
-              {{ submitText }}
-            </Button>
-          </DialogClose>
-          <DialogClose as-child>
-            <Button
-              type="button"
-              variant="secondary"
-            >
-              Abbrechen
-            </Button>
-          </DialogClose>
+          <Button
+            type="submit"
+            form="dialogForm"
+          >
+            {{ submitText }}
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            @click="isOpen = false"
+          >
+            Abbrechen
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

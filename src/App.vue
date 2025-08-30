@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Button from "./components/ui/button/Button.vue";
+import GroupDialog from "./components/GroupDialog.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -174,6 +175,12 @@ const handleAddTag = async (data: AddTagSubmitData) => {
 
   groups.value = await getServiceGroups();
 };
+
+const onAddGroupSuccess = async () => {
+  groups.value = await getServiceGroups();
+};
+
+const showGroupDialog = ref(false);
 </script>
 
 <template>
@@ -203,7 +210,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
               Service hinzufügen
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem @click="addGroupDialog?.showModal()">
+            <DropdownMenuItem @click="showGroupDialog = true">
               Gruppe hinzufügen
             </DropdownMenuItem>
             <DropdownMenuItem @click="addTagDialog?.showModal()">
@@ -212,6 +219,12 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <GroupDialog
+        :open="showGroupDialog"
+        :handleClose="() => (showGroupDialog = false)"
+        @success="onAddGroupSuccess"
+      />
 
       <dialog ref="add-group-dialog">
         <GroupEditForm

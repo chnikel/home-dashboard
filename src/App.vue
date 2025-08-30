@@ -138,13 +138,7 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
   groups.value = await getServiceGroups();
 };
 
-const handleEditGroup = async (id: number, data: AddGroupRequest) => {
-  try {
-    await updateGroup(id, data);
-  } catch (error) {
-    console.log(error);
-  }
-
+const onEditSuccess = async () => {
   groups.value = await getServiceGroups();
 };
 
@@ -270,9 +264,9 @@ const showGroupDialog = ref(false);
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
           :id="group.id"
-          :edit="isEditMode"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
-          @edit="handleEditGroup(group.id, $event)"
+          :edit="isEditMode"
+          @edit="onEditSuccess()"
           @delete="handleDeleteGroup(group.id)"
           @move="afterMove()"
         >

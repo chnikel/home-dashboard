@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from "vue";
+import { ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
-import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
-import { moveService } from "../api";
+import { moveService, updateGroup } from "../api";
+import GroupDialog from "./GroupDialog.vue";
 
 const props = defineProps<{
   id: number;
@@ -11,26 +11,10 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "edit", data: AddGroupSubmitData): void;
+  (e: "edit"): void;
   (e: "delete"): void;
   (e: "move"): void;
 }>();
-
-const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
-
-const groupData = ref<AddGroupSubmitData | null>(null);
-
-const onEdit = (data: AddGroupSubmitData) => {
-  emit("edit", data);
-};
-
-const editGroup = () => {
-  groupData.value = {
-    title: props.title,
-  };
-
-  editGroupDialog.value?.showModal();
-};
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -54,6 +38,19 @@ const onDrop = async (event: DragEvent) => {
 };
 
 const isOver = ref(false);
+const showGroupDialog = ref(false);
+
+const onEditGroupSuccess = async (data: { title: string }) => {
+  try {
+    await updateGroup(props.id, {
+      title: data.title,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  emit("edit");
+};
 </script>
 
 <template>
@@ -70,7 +67,7 @@ const isOver = ref(false);
   >
     <EditGroupWrapper
       :edit="edit"
-      @edit="editGroup()"
+      @edit="showGroupDialog = true"
       @delete="$emit('delete')"
     >
       <h2 class="text-2xl font-light py-2 px-4">
@@ -84,11 +81,14 @@ const isOver = ref(false);
     </div>
   </div>
 
-  <dialog ref="edit-group-dialog">
-    <GroupEditForm
-      method="dialog"
-      :initial="groupData || undefined"
-      @submit="onEdit($event)"
-    />
-  </dialog>
+  <GroupDialog
+    :open="showGroupDialog"
+    :data="{
+      title: title,
+    }"
+    :handleClose="() => (showGroupDialog = false)"
+    @submit="onEditGroupSuccess"
+    title="Gruppe bearbeiten"
+    submitButton="Speichern"
+  />
 </template>

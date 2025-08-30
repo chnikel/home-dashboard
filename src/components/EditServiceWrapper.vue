@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Button from './ui/button/Button.vue';
+
 const props = defineProps<{ id: number; edit: boolean }>();
 
 const emit = defineEmits<{
@@ -25,18 +27,18 @@ const onDragStart = (event: DragEvent) => {
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
     >
       <div class="flex gap-3 justify-center items-center h-full">
-        <button
+        <Button
           data-variant="outline"
           @click="emit('edit')"
         >
           Bearbeiten
-        </button>
-        <button
-          data-type="danger"
+        </Button>
+        <Button
+          variant="destructive"
           @click="emit('delete')"
         >
           Löschen
-        </button>
+        </Button>
       </div>
     </div>
     <slot />

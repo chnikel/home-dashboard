@@ -24,6 +24,14 @@ import GroupEditForm from "./components/GroupEditForm.vue";
 import TagEditForm, {
   type AddTagSubmitData,
 } from "./components/TagEditForm.vue";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Button from "./components/ui/button/Button.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -172,23 +180,36 @@ const handleAddTag = async (data: AddTagSubmitData) => {
   <div class="h-screen p-3">
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end">
-        <template v-if="isEditMode">
-          <button @click="addServiceDialog?.showModal()">
-            Service hinzufügen
-          </button>
-          <button @click="addGroupDialog?.showModal()">
-            Gruppe hinzufügen
-          </button>
-          <button @click="addTagDialog?.showModal()">Tag hinzufügen</button>
-        </template>
-        <button
-          @click="toggleEdit()"
-          :class="{
-            '!bg-orange-500': isEditMode,
-          }"
+        <Button
+          v-if="isEditMode"
+          class="!bg-orange-500 text-white"
+          @click="isEditMode = false"
+          
         >
-          {{ isEditMode ? "Bearbeiten beenden" : "Bearbeiten" }}
-        </button>
+          Fertig
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button
+              variant="outline"
+              @click="isEditMode = true"
+            >
+              Bearbeiten
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem @click="addServiceDialog?.showModal()">
+              Service hinzufügen
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @click="addGroupDialog?.showModal()">
+              Gruppe hinzufügen
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="addTagDialog?.showModal()">
+              Tag hinzufügen
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <dialog ref="add-group-dialog">

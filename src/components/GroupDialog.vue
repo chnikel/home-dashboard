@@ -30,6 +30,8 @@ const props = defineProps<{
   data: {
     title: string;
   } | null;
+  title: string;
+  submitButton: string;
 }>();
 
 const formSchema = toTypedSchema(
@@ -63,7 +65,7 @@ async function onSubmit(values: any) {
     >
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Gruppe hinzufügen</DialogTitle>
+          <DialogTitle>{{ title }}</DialogTitle>
         </DialogHeader>
 
         <form
@@ -92,7 +94,7 @@ async function onSubmit(values: any) {
             type="submit"
             form="dialogForm"
           >
-            Hinzufügen
+            {{ submitButton }}
           </Button>
           <Button
             type="button"

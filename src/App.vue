@@ -233,6 +233,8 @@ const showGroupDialog = ref(false);
         :data="editData"
         :handleClose="() => (showGroupDialog = false)"
         @submit="onAddGroupSuccess"
+        title="Gruppe hinzufügen"
+        submitButton="Hinzufügen"
       />
 
       <dialog ref="add-group-dialog">

@@ -266,6 +266,8 @@ const showGroupDialog = ref(false);
           :id="group.id"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
           :edit="isEditMode"
+          :editable="!!group.id"
+          :deletable="!!group.id"
           @edit="onEditSuccess()"
           @delete="handleDeleteGroup(group.id)"
           @move="afterMove()"

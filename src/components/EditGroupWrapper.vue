@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import Button from './ui/button/Button.vue';
+import { inject } from "vue";
+import Button from "./ui/button/Button.vue";
 
 defineProps<{ edit: boolean }>();
+
+const editable = inject("editable");
+const deletable = inject("deletable");
 
 const emit = defineEmits<{
   (e: "edit"): void;
@@ -22,12 +26,14 @@ const emit = defineEmits<{
     >
       <div class="flex gap-3 justify-center items-center h-full">
         <Button
+          v-if="editable"
           data-variant="outline"
           @click="emit('edit')"
         >
           Bearbeiten
         </Button>
         <Button
+          v-if="deletable"
           variant="destructive"
           @click="emit('delete')"
         >

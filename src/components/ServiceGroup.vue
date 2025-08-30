@@ -3,12 +3,18 @@ import { ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
 import { moveService, updateGroup } from "../api";
 import GroupDialog from "./GroupDialog.vue";
+import { provide } from "vue";
 
 const props = defineProps<{
   id: number;
   edit: boolean;
   title: string;
+  editable?: boolean;
+  deletable?: boolean;
 }>();
+
+provide("editable", props.editable);
+provide("deletable", props.deletable);
 
 const emit = defineEmits<{
   (e: "edit"): void;

@@ -29,7 +29,6 @@ import Select from "./ui/select/Select.vue";
 import type { ServiceTag } from "@/api";
 import Switch from "./ui/switch/Switch.vue";
 import Label from "./ui/label/Label.vue";
-import { useTags } from "@/composables/useFetchTags";
 import SelectItem from "./ui/select/SelectItem.vue";
 import { useGroups } from "@/composables/useFetchGroups";
 
@@ -91,7 +90,6 @@ function onSubmit(values: any) {
 }
 const isOpen = ref(false);
 
-const { tags } = useTags();
 const { groups } = useGroups();
 </script>
 
@@ -248,34 +246,6 @@ const { groups } = useGroups();
                       :value="group.id || '-1'"
                     >
                       {{ group.title || "Keine Gruppe" }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          </FormField>
-
-          <FormField
-            v-slot="{ componentField }"
-            name="tags"
-          >
-            <FormItem>
-              <FormLabel>Tags</FormLabel>
-
-              <Select v-bind="componentField">
-                <FormControl>
-                  <SelectTrigger class="w-full">
-                    <SelectValue placeholder="Wähle eine Farbe für dein Tag" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem
-                      v-for="tag in tags"
-                      :value="tag.id"
-                    >
-                      {{ tag.name }}
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

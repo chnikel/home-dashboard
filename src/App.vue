@@ -176,7 +176,15 @@ const handleAddTag = async (data: AddTagSubmitData) => {
   groups.value = await getServiceGroups();
 };
 
-const onAddGroupSuccess = async () => {
+const onAddGroupSuccess = async (data: { title: string }) => {
+  try {
+    await addGroup({
+      title: data.title,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
   groups.value = await getServiceGroups();
 };
 
@@ -222,8 +230,9 @@ const showGroupDialog = ref(false);
 
       <GroupDialog
         :open="showGroupDialog"
+        :data="editData"
         :handleClose="() => (showGroupDialog = false)"
-        @success="onAddGroupSuccess"
+        @submit="onAddGroupSuccess"
       />
 
       <dialog ref="add-group-dialog">

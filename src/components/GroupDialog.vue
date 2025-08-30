@@ -14,13 +14,23 @@ import FormLabel from "./ui/form/FormLabel.vue";
 import FormControl from "./ui/form/FormControl.vue";
 import Input from "./ui/input/Input.vue";
 import { toTypedSchema } from "@vee-validate/zod";
-import { addGroup } from "@/api";
 
 const emit = defineEmits<{
-  (e: "success"): void;
-}>()
+  (
+    e: "submit",
+    data: {
+      title: string;
+    }
+  ): void;
+}>();
 
-const props = defineProps<{ open: boolean; handleClose: () => void }>();
+const props = defineProps<{
+  open: boolean;
+  handleClose: () => void;
+  data: {
+    title: string;
+  } | null;
+}>();
 
 const formSchema = toTypedSchema(
   z.object({
@@ -29,15 +39,9 @@ const formSchema = toTypedSchema(
 );
 
 async function onSubmit(values: any) {
-   try {
-    await addGroup({
-      title: values.title
-    });
-    
-    emit("success")
-  } catch (error) {
-    console.log(error);
-  }
+  emit("submit", {
+    title: values.title,
+  });
 
   props.handleClose();
 }
@@ -48,6 +52,9 @@ async function onSubmit(values: any) {
     v-slot="{ handleSubmit }"
     as=""
     :keep-values="false"
+    :initial-values="{
+      title: data?.title,
+    }"
     :validation-schema="formSchema"
   >
     <Dialog

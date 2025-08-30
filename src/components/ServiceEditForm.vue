@@ -246,7 +246,7 @@ const { groups } = useGroups();
                       v-for="group in groups"
                       :value="group.id || '-1'"
                     >
-                      {{ group.title || "<Keine Gruppe>" }}
+                      {{ group.title || "Keine Gruppe" }}
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

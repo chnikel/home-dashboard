@@ -118,7 +118,6 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           <ServiceEditForm
             buttonText="Service hinzufügen"
             submitText="Hinzufügen"
-            method="dialog"
             @submit="handleAddService($event)"
           />
           <GroupEditForm
@@ -126,10 +125,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
             submit-text="Hinzufügen"
             @submit="handleAddGroup($event)"
           />
-          <TagEditForm
-            method="dialog"
-            @submit="handleAddTag($event)"
-          />
+          <TagEditForm @submit="handleAddTag($event)" />
         </template>
         <Button
           @click="toggleEdit()"

@@ -88,13 +88,7 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
   groups.value = await getServiceGroups();
 };
 
-const handleEditGroup = async (id: number, data: AddGroupRequest) => {
-  try {
-    await updateGroup(id, data);
-  } catch (error) {
-    console.log(error);
-  }
-
+const handleEditGroup = async () => {
   groups.value = await getServiceGroups();
 };
 
@@ -137,7 +131,8 @@ const handleAddTag = async (data: AddTagSubmitData) => {
             @submit="handleAddService($event)"
           />
           <GroupEditForm
-            method="dialog"
+            button-text="Gruppe hinzufügen"
+            submit-text="Hinzufügen"
             @submit="handleAddGroup($event)"
           />
           <TagEditForm
@@ -158,10 +153,10 @@ const handleAddTag = async (data: AddTagSubmitData) => {
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
-          :id="group.id || -1"
+          :group="group"
           :edit="isEditMode"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
-          @edit="handleEditGroup(group.id || -1, $event)"
+          @edit="handleEditGroup()"
           @delete="handleDeleteGroup(group.id || -1)"
           @move="afterMove()"
         >

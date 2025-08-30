@@ -148,7 +148,7 @@ export const addGroup = async (data: AddGroupRequest) => {
 
 export type UpdateGroupResponse = {};
 
-export const updateGroup = async (id: number, data: AddGroupRequest) => {
+export const updateGroup = async (id: string, data: AddGroupRequest) => {
   const response = await fetch(`${host}/groups/${id}`, {
     method: "put",
     headers: {

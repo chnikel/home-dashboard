@@ -6,18 +6,10 @@ export type AddGroupSubmitData = {
 };
 
 const props = defineProps<{
+  buttonText: string;
+  submitText: string;
   initial?: Partial<AddGroupSubmitData>;
 }>();
-
-watch(props, (newProps) => {
-  if (!newProps.initial) {
-    return;
-  }
-
-  // form.value = {
-  //   title: props.initial?.title || form.value.title,
-  // };
-});
 
 const emit = defineEmits<{
   (e: "submit", data: AddGroupSubmitData): void;
@@ -48,7 +40,7 @@ import DialogClose from "./ui/dialog/DialogClose.vue";
 
 const formSchema = toTypedSchema(
   z.object({
-    title: z.string(),
+    title: z.string().default(props.initial?.title || ""),
   })
 );
 
@@ -66,11 +58,11 @@ function onSubmit(values: any) {
   >
     <Dialog>
       <DialogTrigger as-child>
-        <Button variant="outline"> Gruppe hinzufügen </Button>
+        <Button variant="outline"> {{ buttonText }} </Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Gruppe hinzufügen</DialogTitle>
+          <DialogTitle>{{ buttonText }}</DialogTitle>
           <DialogDescription>
             <!-- Make changes to your profile here. Click save when you're done. -->
           </DialogDescription>
@@ -105,7 +97,7 @@ function onSubmit(values: any) {
               type="submit"
               form="dialogForm"
             >
-              Hinzufügen
+              {{ submitText }}
             </Button>
           </DialogClose>
           <DialogClose as-child>

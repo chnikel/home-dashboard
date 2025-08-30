@@ -1,36 +1,19 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from "vue";
+import { ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
-import GroupEditForm, { type AddGroupSubmitData } from "./GroupEditForm.vue";
-import { moveService } from "../api";
+import { moveService, type GetGroupsResponse } from "../api";
 
 const props = defineProps<{
-  id: number;
+  group: GetGroupsResponse;
   edit: boolean;
   title: string;
 }>();
 
 const emit = defineEmits<{
-  (e: "edit", data: AddGroupSubmitData): void;
+  (e: "edit"): void;
   (e: "delete"): void;
   (e: "move"): void;
 }>();
-
-const editGroupDialog = useTemplateRef<HTMLDialogElement>("edit-group-dialog");
-
-const groupData = ref<AddGroupSubmitData | null>(null);
-
-const onEdit = (data: AddGroupSubmitData) => {
-  emit("edit", data);
-};
-
-const editGroup = () => {
-  groupData.value = {
-    title: props.title,
-  };
-
-  editGroupDialog.value?.showModal();
-};
 
 const onDragOver = (event: DragEvent) => {
   event.preventDefault();
@@ -46,7 +29,7 @@ const onDrop = async (event: DragEvent) => {
     return;
   }
 
-  await moveService(serviceId, props.id?.toString() || null);
+  await moveService(serviceId, props.group.id?.toString() || null);
 
   emit("move");
 
@@ -69,8 +52,9 @@ const isOver = ref(false);
     }"
   >
     <EditGroupWrapper
+      :group="group"
       :edit="edit"
-      @edit="editGroup()"
+      @edit="$emit('edit')"
       @delete="$emit('delete')"
     >
       <h2 class="text-2xl font-light py-2 px-4">
@@ -83,12 +67,4 @@ const isOver = ref(false);
       <slot />
     </div>
   </div>
-
-  <dialog ref="edit-group-dialog">
-    <GroupEditForm
-      method="dialog"
-      :initial="groupData || undefined"
-      @submit="onEdit($event)"
-    />
-  </dialog>
 </template>

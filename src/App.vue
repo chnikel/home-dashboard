@@ -8,9 +8,7 @@ import {
   deleteGroup,
   deleteService,
   getServiceGroups,
-  updateGroup,
   updateService,
-  type AddGroupRequest,
   type GetServiceGroupsResponse,
   type GetServicesResponse,
 } from "./api";
@@ -71,8 +69,6 @@ const editServiceDialog = useTemplateRef<HTMLDialogElement>(
   "edit-service-dialog"
 );
 
-const toggleEdit = () => (isEditMode.value = !isEditMode.value);
-
 const editService = (service: GetServicesResponse) => {
   editServiceId.value = service.id;
   editData.value = {
@@ -125,8 +121,6 @@ const handleDeleteService = async (service: GetServicesResponse) => {
     groups.value = await getServiceGroups();
   }
 };
-
-const addGroupDialog = useTemplateRef<HTMLDialogElement>("add-group-dialog");
 
 const handleAddGroup = async (data: AddGroupSubmitData) => {
   try {

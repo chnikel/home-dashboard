@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref } from "vue";
 import Service from "./components/Service.vue";
 import {
   addGroup,
@@ -8,9 +8,6 @@ import {
   deleteGroup,
   deleteService,
   getServiceGroups,
-  updateGroup,
-  updateService,
-  type AddGroupRequest,
   type GetServiceGroupsResponse,
   type GetServicesResponse,
 } from "./api";
@@ -54,15 +51,9 @@ const handleAddService = async (data: SubmitData) => {
 };
 
 const isEditMode = ref(false);
-const editServiceId = ref<number | null>(null);
-const editData = ref<SubmitData | null>(null);
-const editServiceDialog = useTemplateRef<HTMLDialogElement>(
-  "edit-service-dialog"
-);
-
 const toggleEdit = () => (isEditMode.value = !isEditMode.value);
 
-const editService = async (service: GetServicesResponse) => {
+const editService = async () => {
   groups.value = await getServiceGroups();
 };
 
@@ -166,7 +157,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
               :draggable="isEditMode"
               :service="service"
               :edit="isEditMode"
-              @edit="editService(service)"
+              @edit="editService()"
               @delete="handleDeleteService(service)"
             >
               <Service

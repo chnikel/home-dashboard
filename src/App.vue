@@ -193,11 +193,11 @@ const handleAddTag = async (data: AddTagSubmitData) => {
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
-          :id="group.id"
+          :id="group.id || -1"
           :edit="isEditMode"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
-          @edit="handleEditGroup(group.id, $event)"
-          @delete="handleDeleteGroup(group.id)"
+          @edit="handleEditGroup(group.id || -1, $event)"
+          @delete="handleDeleteGroup(group.id || -1)"
           @move="afterMove()"
         >
           <template v-for="service in group.services">

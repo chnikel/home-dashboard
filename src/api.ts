@@ -102,7 +102,7 @@ export const deleteService = async (id: number) => {
 };
 
 export type GetGroupsResponse = {
-  id: number;
+  id: number | null;
   title: string;
 };
 

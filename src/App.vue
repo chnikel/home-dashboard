@@ -62,44 +62,7 @@ const editServiceDialog = useTemplateRef<HTMLDialogElement>(
 
 const toggleEdit = () => (isEditMode.value = !isEditMode.value);
 
-const editService = (service: GetServicesResponse) => {
-  editServiceId.value = service.id;
-  editData.value = {
-    title: service.title,
-    description: service.description,
-    link: service.link,
-    icon_url: service.icon_url,
-    icon_wrap: service.icon_wrap,
-    enabled: service.enabled,
-    groupId: service.groupId,
-    tags: service.tags,
-  };
-
-  editServiceDialog.value?.showModal();
-};
-
-const handleEditService = async (data: SubmitData) => {
-  if (!editServiceId.value) {
-    alert("Keine Service ID");
-    return;
-  }
-  const tags = data.tags.map((t) => t.name);
-
-  try {
-    await updateService(editServiceId.value, {
-      title: data.title,
-      description: data.description,
-      link: data.link,
-      icon_url: data.icon_url,
-      icon_wrap: data.icon_wrap,
-      enabled: data.enabled,
-      groupId: data.groupId,
-      tags,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
+const editService = async (service: GetServicesResponse) => {
   groups.value = await getServiceGroups();
 };
 
@@ -168,6 +131,8 @@ const handleAddTag = async (data: AddTagSubmitData) => {
       <div class="space-x-2 mb-6 flex justify-end">
         <template v-if="isEditMode">
           <ServiceEditForm
+            buttonText="Service hinzufügen"
+            submitText="Hinzufügen"
             method="dialog"
             @submit="handleAddService($event)"
           />
@@ -204,7 +169,7 @@ const handleAddTag = async (data: AddTagSubmitData) => {
             <EditServiceWrapper
               v-if="service.enabled || isEditMode"
               :draggable="isEditMode"
-              :id="service.id"
+              :service="service"
               :edit="isEditMode"
               @edit="editService(service)"
               @delete="handleDeleteService(service)"

@@ -46,24 +46,9 @@ export type SubmitData = {
 
 const props = defineProps<{
   initial?: Partial<SubmitData>;
+  buttonText: string;
+  submitText: string;
 }>();
-
-watch(props, (newProps) => {
-  if (!newProps.initial) {
-    return;
-  }
-
-  // form.value = {
-  //   title: props.initial?.title || form.value.title,
-  //   description: props.initial?.description || form.value.description,
-  //   link: props.initial?.link || form.value.link,
-  //   icon_url: props.initial?.icon_url || form.value.icon_url,
-  //   icon_wrap: props.initial?.icon_wrap || form.value.icon_wrap,
-  //   enabled: props.initial?.enabled || form.value.enabled,
-  //   groupId: props.initial?.groupId || form.value.groupId,
-  //   tags: props.initial?.tags || form.value.tags,
-  // };
-});
 
 const emit = defineEmits<{
   (e: "submit", data: SubmitData): void;
@@ -71,14 +56,31 @@ const emit = defineEmits<{
 
 const formSchema = toTypedSchema(
   z.object({
-    title: z.string(),
-    description: z.string().optional().default(""),
-    link: z.string(),
-    icon_url: z.string().optional().default(""),
-    icon_wrap: z.boolean().default(false),
-    enabled: z.boolean().default(true),
-    groupId: z.string().optional().default(""),
-    tags: z.array(z.string()).optional().default([]),
+    title: z.string().default(props.initial?.title || ""),
+    description: z
+      .string()
+      .optional()
+      .default(props.initial?.description || ""),
+    link: z.string().default(props.initial?.link || ""),
+    icon_url: z
+      .string()
+      .optional()
+      .default(props.initial?.icon_url || ""),
+    icon_wrap: z.boolean().default(props.initial?.icon_wrap || false),
+    enabled: z.boolean().default(props.initial?.enabled || true),
+    groupId: z
+      .string()
+      .optional()
+      .default(props.initial?.groupId?.toString() || ""),
+    tags: z
+      .array(
+        z.object({
+          name: z.string(),
+          color: z.string(),
+        })
+      )
+      .optional()
+      .default(props.initial?.tags || []),
   })
 );
 
@@ -103,15 +105,14 @@ const { groups } = useGroups();
     <Dialog :open="isOpen">
       <DialogTrigger as-child>
         <Button
-          variant="outline"
           @click="isOpen = true"
         >
-          Service hinzufügen
+          {{ buttonText }}
         </Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Service hinzufügen</DialogTitle>
+          <DialogTitle>{{ buttonText }}</DialogTitle>
           <DialogDescription>
             <!-- Make changes to your profile here. Click save when you're done. -->
           </DialogDescription>
@@ -289,7 +290,7 @@ const { groups } = useGroups();
             type="submit"
             form="dialogForm"
           >
-            Hinzufügen
+            {{ submitText }}
           </Button>
           <Button
             type="button"

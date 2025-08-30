@@ -184,18 +184,19 @@ const handleAddTag = async (data: AddTagSubmitData) => {
           v-if="isEditMode"
           class="!bg-orange-500 text-white"
           @click="isEditMode = false"
-          
         >
           Fertig
         </Button>
+        <Button
+          v-if="!isEditMode"
+          variant="outline"
+          @click="isEditMode = true"
+        >
+          Bearbeiten
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button
-              variant="outline"
-              @click="isEditMode = true"
-            >
-              Bearbeiten
-            </Button>
+            <Button v-if="isEditMode"> Hinzufügen </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem @click="addServiceDialog?.showModal()">

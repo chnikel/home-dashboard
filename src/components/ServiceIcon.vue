@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  wrap: boolean;
-  url: string;
+  wrap?: boolean;
+  url?: string;
 }>();
 </script>
 

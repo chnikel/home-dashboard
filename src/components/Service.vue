@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
+import ServiceIcon from './ServiceIcon.vue'
 
 defineProps<{
   title: string;
@@ -16,17 +17,7 @@ defineProps<{
     :href="link"
     class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
   >
-    <div
-      class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"
-      :class="{
-        'p-2 border-neutral-600 border': !icon_wrap,
-      }"
-    >
-      <img
-        class="block h-full w-full"
-        :src="icon_url"
-      />
-    </div>
+    <ServiceIcon :wrap="icon_wrap" :url="icon_url" />
     <div>
       <h3 class="text-lg font-semibold line-clamp-1 flex gap-2 items-center">
         {{ title }}

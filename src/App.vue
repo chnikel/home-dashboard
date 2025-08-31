@@ -19,9 +19,6 @@ import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
 import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
 import GroupEditForm from "./components/GroupEditForm.vue";
-import TagEditForm, {
-  type AddTagSubmitData,
-} from "./components/TagEditForm.vue";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Button from "./components/ui/button/Button.vue";
 import GroupDialog from "./components/GroupDialog.vue";
+import TagDialog, { type TagDialogFormData } from "./components/TagDialog.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -152,11 +150,12 @@ const afterMove = async () => {
   groups.value = await getServiceGroups();
 };
 
-const addTagDialog = useTemplateRef<HTMLDialogElement>("add-tag-dialog");
-
-const handleAddTag = async (data: AddTagSubmitData) => {
+const onAddTagSuccess = async (data: TagDialogFormData) => {
   try {
-    await addTag(data);
+    await addTag({
+      name: data.name,
+      color: data.color,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -177,6 +176,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
 };
 
 const showGroupDialog = ref(false);
+const showTagDialog = ref(false);
 </script>
 
 <template>
@@ -209,7 +209,7 @@ const showGroupDialog = ref(false);
             <DropdownMenuItem @click="showGroupDialog = true">
               Gruppe hinzufügen
             </DropdownMenuItem>
-            <DropdownMenuItem @click="addTagDialog?.showModal()">
+            <DropdownMenuItem @click="showTagDialog = true">
               Tag hinzufügen
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -222,6 +222,14 @@ const showGroupDialog = ref(false);
         :handleClose="() => (showGroupDialog = false)"
         @submit="onAddGroupSuccess"
         title="Gruppe hinzufügen"
+        submitButton="Hinzufügen"
+      />
+
+      <TagDialog
+        :open="showTagDialog"
+        :handleClose="() => (showTagDialog = false)"
+        @submit="onAddTagSuccess"
+        title="Tag hinzufügen"
         submitButton="Hinzufügen"
       />
 
@@ -244,13 +252,6 @@ const showGroupDialog = ref(false);
           method="dialog"
           :initial="editData || undefined"
           @submit="handleEditService($event)"
-        />
-      </dialog>
-
-      <dialog ref="add-tag-dialog">
-        <TagEditForm
-          method="dialog"
-          @submit="handleAddTag($event)"
         />
       </dialog>
 

@@ -14,39 +14,64 @@ import FormLabel from "./ui/form/FormLabel.vue";
 import FormControl from "./ui/form/FormControl.vue";
 import Input from "./ui/input/Input.vue";
 import { toTypedSchema } from "@vee-validate/zod";
+import { type TagColors } from "./Tag.vue";
+import ColorItem from './ColorItem.vue'
+
+const TagDialogFormData = z.object({
+  name: z.string(),
+  color: z.string(),
+});
+
+export type TagDialogFormData = z.infer<typeof TagDialogFormData>;
 
 const emit = defineEmits<{
-  (
-    e: "submit",
-    data: {
-      title: string;
-    }
-  ): void;
+  (e: "submit", data: TagDialogFormData): void;
 }>();
 
 const props = defineProps<{
   open: boolean;
   handleClose: () => void;
-  data?: {
-    title: string;
-  } | null;
+  data?: Partial<TagDialogFormData> | null;
   title: string;
   submitButton: string;
 }>();
 
-const formSchema = toTypedSchema(
-  z.object({
-    title: z.string(),
-  })
-);
+const formSchema = toTypedSchema(TagDialogFormData);
 
 async function onSubmit(values: any) {
+  const data = values as TagDialogFormData;
   emit("submit", {
-    title: values.title,
+    name: data.name,
+    color: data.color,
   });
 
   props.handleClose();
 }
+
+const validColors: TagColors[] = [
+  "red",
+  "orange",
+  "amber",
+  "yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  "blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose",
+  "slate",
+  "gray",
+  "zinc",
+  "neutral",
+  "stone",
+];
 </script>
 
 <template>
@@ -55,7 +80,7 @@ async function onSubmit(values: any) {
     as=""
     :keep-values="false"
     :initial-values="{
-      title: data?.title,
+      name: data?.name,
     }"
     :validation-schema="formSchema"
   >
@@ -71,13 +96,14 @@ async function onSubmit(values: any) {
         <form
           id="dialogForm"
           @submit="handleSubmit($event, onSubmit)"
+          class="space-y-3"
         >
           <FormField
             v-slot="{ componentField }"
-            name="title"
+            name="name"
           >
             <FormItem>
-              <FormLabel>Gruppenname</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -88,9 +114,29 @@ async function onSubmit(values: any) {
             </FormItem>
           </FormField>
 
-
-          
-
+          <FormField
+            v-slot="{ value, setValue }"
+            name="color"
+          >
+            <FormItem>
+              <FormLabel>Farbe</FormLabel>
+              <FormControl>
+                <div class="flex gap-1 flex-wrap">
+                  <template v-for="color in validColors">
+                    <ColorItem
+                      class="cursor-pointer border rounded"
+                      :class="{
+                        'border-primary': color === value,
+                        'border-transparent': color !== value,
+                      }"
+                      :color="color"
+                      @click="setValue(color)"
+                    />
+                  </template>
+                </div>
+              </FormControl>
+            </FormItem>
+          </FormField>
         </form>
 
         <DialogFooter>

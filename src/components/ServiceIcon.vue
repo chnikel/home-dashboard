@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <div
-    class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center"
+    class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center overflow-hidden"
     :class="{
       'p-2 border-neutral-600 border': !wrap,
     }"

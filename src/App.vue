@@ -29,36 +29,15 @@ import {
 import Button from "./components/ui/button/Button.vue";
 import GroupDialog from "./components/GroupDialog.vue";
 import TagDialog, { type TagDialogFormData } from "./components/TagDialog.vue";
+import ServiceDialog, {
+  type ServiceDialogFormData,
+} from "./components/ServiceDialog.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 onMounted(async () => {
   groups.value = await getServiceGroups();
 });
-
-const addServiceDialog =
-  useTemplateRef<HTMLDialogElement>("add-service-dialog");
-
-const handleAddService = async (data: SubmitData) => {
-  const tags = data.tags.map((t) => t.name);
-
-  try {
-    await addService({
-      title: data.title,
-      description: data.description,
-      link: data.link,
-      icon_url: data.icon_url,
-      icon_wrap: data.icon_wrap,
-      enabled: data.enabled,
-      groupId: data.groupId,
-      tags,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
-  groups.value = await getServiceGroups();
-};
 
 const isEditMode = ref(false);
 const editServiceId = ref<number | null>(null);
@@ -163,6 +142,25 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
   groups.value = await getServiceGroups();
 };
 
+const onAddService = async (data: ServiceDialogFormData) => {
+  try {
+    await addService({
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: null,
+      tags: [],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  groups.value = await getServiceGroups();
+};
+
 const onAddGroupSuccess = async (data: { title: string }) => {
   try {
     await addGroup({
@@ -175,6 +173,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
   groups.value = await getServiceGroups();
 };
 
+const showServiceGroupDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
 </script>
@@ -202,7 +201,7 @@ const showTagDialog = ref(false);
             <Button v-if="isEditMode"> Hinzufügen </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem @click="addServiceDialog?.showModal()">
+            <DropdownMenuItem @click="showServiceGroupDialog = true">
               Service hinzufügen
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -215,6 +214,14 @@ const showTagDialog = ref(false);
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <ServiceDialog
+        :open="showServiceGroupDialog"
+        :handleClose="() => (showServiceGroupDialog = false)"
+        @submit="onAddService"
+        title="Service hinzufügen"
+        submitButton="Hinzufügen"
+      />
 
       <GroupDialog
         :open="showGroupDialog"
@@ -237,13 +244,6 @@ const showTagDialog = ref(false);
         <GroupEditForm
           method="dialog"
           @submit="handleAddGroup($event)"
-        />
-      </dialog>
-
-      <dialog ref="add-service-dialog">
-        <ServiceEditForm
-          method="dialog"
-          @submit="handleAddService($event)"
         />
       </dialog>
 

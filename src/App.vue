@@ -173,7 +173,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
   groups.value = await getServiceGroups();
 };
 
-const showServiceGroupDialog = ref(false);
+const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
 </script>
@@ -201,7 +201,7 @@ const showTagDialog = ref(false);
             <Button v-if="isEditMode"> Hinzufügen </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem @click="showServiceGroupDialog = true">
+            <DropdownMenuItem @click="showServiceDialog = true">
               Service hinzufügen
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -216,8 +216,8 @@ const showTagDialog = ref(false);
       </div>
 
       <ServiceDialog
-        :open="showServiceGroupDialog"
-        :handleClose="() => (showServiceGroupDialog = false)"
+        :open="showServiceDialog"
+        :handleClose="() => (showServiceDialog = false)"
         @submit="onAddService"
         title="Service hinzufügen"
         submitButton="Hinzufügen"

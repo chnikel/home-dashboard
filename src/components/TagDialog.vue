@@ -14,8 +14,8 @@ import FormLabel from "./ui/form/FormLabel.vue";
 import FormControl from "./ui/form/FormControl.vue";
 import Input from "./ui/input/Input.vue";
 import { toTypedSchema } from "@vee-validate/zod";
-import { type TagColors } from "./Tag.vue";
-import ColorItem from './ColorItem.vue'
+import Tag, { type TagColors } from "./Tag.vue";
+import ColorItem from "./ColorItem.vue";
 
 const TagDialogFormData = z.object({
   name: z.string(),
@@ -76,7 +76,7 @@ const validColors: TagColors[] = [
 
 <template>
   <Form
-    v-slot="{ handleSubmit }"
+    v-slot="{ handleSubmit, values }"
     as=""
     :keep-values="false"
     :initial-values="{
@@ -92,6 +92,14 @@ const validColors: TagColors[] = [
         <DialogHeader>
           <DialogTitle>{{ title }}</DialogTitle>
         </DialogHeader>
+
+        <div class="h-6">
+          <Tag
+            v-if="values.name"
+            :name="values.name"
+            :color="values.color"
+          />
+        </div>
 
         <form
           id="dialogForm"

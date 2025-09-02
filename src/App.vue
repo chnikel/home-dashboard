@@ -33,9 +33,10 @@ import { store } from "./store";
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 async function refreshGroups() {
-  groups.value = await getServiceGroups();
-
-  store.groups = groups.value.map((group) => {
+  const fetchedGroups = await getServiceGroups();
+  
+  groups.value = fetchedGroups;
+  store.groups = fetchedGroups.map((group) => {
     return {
       id: group.id,
       title: group.title,
@@ -44,14 +45,14 @@ async function refreshGroups() {
 }
 
 onMounted(async () => {
-  refreshGroups()
+  refreshGroups();
 });
 
 const isEditMode = ref(false);
 const editData = ref<ServiceDialogFormData | null>(null);
 
 const onEditServiceSuccess = async () => {
-  refreshGroups()
+  refreshGroups();
 };
 
 const handleDeleteService = async (service: GetServicesResponse) => {
@@ -62,7 +63,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       console.log(error);
     }
 
-    refreshGroups()
+    refreshGroups();
   }
 };
 
@@ -73,11 +74,11 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
     console.log(error);
   }
 
-  refreshGroups()
+  refreshGroups();
 };
 
 const onEditSuccess = async () => {
-  refreshGroups()
+  refreshGroups();
 };
 
 const handleDeleteGroup = async (groupId: number) => {
@@ -88,12 +89,12 @@ const handleDeleteGroup = async (groupId: number) => {
       console.log(error);
     }
 
-    refreshGroups()
+    refreshGroups();
   }
 };
 
 const afterMove = async () => {
-  refreshGroups()
+  refreshGroups();
 };
 
 const onAddTagSuccess = async (data: TagDialogFormData) => {
@@ -106,7 +107,7 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
     console.log(error);
   }
 
-  refreshGroups()
+  refreshGroups();
 };
 
 const onAddService = async (data: ServiceDialogFormData) => {
@@ -125,7 +126,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
     console.log(error);
   }
 
-  refreshGroups()
+  refreshGroups();
 };
 
 const onAddGroupSuccess = async (data: { title: string }) => {
@@ -137,7 +138,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
     console.log(error);
   }
 
-  refreshGroups()
+  refreshGroups();
 };
 
 const showServiceDialog = ref(false);
@@ -220,8 +221,6 @@ const showTagDialog = ref(false);
           :id="group.id"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
           :edit="isEditMode"
-          :editable="!!group.id"
-          :deletable="!!group.id"
           @edit="onEditSuccess()"
           @delete="handleDeleteGroup(group.id)"
           @move="afterMove()"

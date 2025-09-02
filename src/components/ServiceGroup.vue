@@ -9,12 +9,10 @@ const props = defineProps<{
   id: number;
   edit: boolean;
   title: string;
-  editable?: boolean;
-  deletable?: boolean;
 }>();
 
-provide("editable", props.editable);
-provide("deletable", props.deletable);
+provide("editable", !!props.id);
+provide("deletable", !!props.id);
 
 const emit = defineEmits<{
   (e: "edit"): void;

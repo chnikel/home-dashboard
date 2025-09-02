@@ -30,7 +30,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       icon_url: data.icon_url,
       icon_wrap: data.icon_wrap,
       enabled: data.enabled,
-      groupId: null,
+      groupId: data.groupId,
       tags: [],
     });
   } catch (error) {

@@ -1,6 +1,6 @@
 import type { TagColors } from "./components/Tag.vue";
 
-const host = import.meta.env.VITE_FRONTEND_HOST || "";
+export const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
 export type ServiceTag = {
   id: number;
@@ -35,7 +35,7 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId: number | null;
+  groupId?: number | null;
   tags: string[];
 };
 

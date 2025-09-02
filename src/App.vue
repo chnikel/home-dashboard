@@ -28,11 +28,19 @@ import TagDialog, { type TagDialogFormData } from "./components/TagDialog.vue";
 import ServiceDialog, {
   type ServiceDialogFormData,
 } from "./components/ServiceDialog.vue";
+import { store } from "./store";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 onMounted(async () => {
   groups.value = await getServiceGroups();
+
+  store.groups = groups.value.map((group) => {
+    return {
+      id: group.id,
+      title: group.title,
+    };
+  });
 });
 
 const isEditMode = ref(false);

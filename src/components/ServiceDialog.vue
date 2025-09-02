@@ -18,6 +18,15 @@ import Textarea from "./ui/textarea/Textarea.vue";
 import Switch from "./ui/switch/Switch.vue";
 import FormDescription from "./ui/form/FormDescription.vue";
 import ServiceIcon from "./ServiceIcon.vue";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { store } from "@/store";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -26,6 +35,7 @@ const ServiceDialogFormData = z.object({
   icon_url: z.string().optional().default(""),
   icon_wrap: z.boolean().optional().default(false),
   enabled: z.boolean().default(true),
+  groupId: z.number().optional().nullable(),
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -46,14 +56,7 @@ const formSchema = toTypedSchema(ServiceDialogFormData);
 
 async function onSubmit(values: any) {
   const data = values as ServiceDialogFormData;
-  emit("submit", {
-    title: data.title,
-    description: data.description,
-    link: data.link,
-    icon_url: data.icon_url,
-    icon_wrap: data.icon_wrap,
-    enabled: data.enabled,
-  });
+  emit("submit", data);
 
   props.handleClose();
 }
@@ -64,14 +67,19 @@ async function onSubmit(values: any) {
     v-slot="{ handleSubmit, values }"
     as=""
     :keep-values="false"
-    :initial-values="data ? {
-      title: data?.title,
-      description: data?.description,
-      link: data?.link,
-      icon_url: data?.icon_url,
-      icon_wrap: data?.icon_wrap,
-      enabled: data?.enabled ?? true,
-    }: undefined"
+    :initial-values="
+      data
+        ? {
+            title: data?.title,
+            description: data?.description,
+            link: data?.link,
+            icon_url: data?.icon_url,
+            icon_wrap: data?.icon_wrap,
+            enabled: data?.enabled ?? true,
+            groupId: data?.groupId,
+          }
+        : undefined
+    "
     :validation-schema="formSchema"
   >
     <Dialog
@@ -193,6 +201,34 @@ async function onSubmit(values: any) {
                   :model-value="value"
                   @update:model-value="handleChange"
                 />
+              </FormControl>
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField, value }"
+            name="groupId"
+          >
+            <FormItem>
+              <FormLabel>Gruppe {{ value }}</FormLabel>
+              <FormControl>
+                <Select v-bind="componentField">
+                  <FormControl>
+                    <SelectTrigger class="w-full">
+                      <SelectValue placeholder="" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem
+                        v-for="group in store.groups"
+                        :value="group.id"
+                      >
+                        {{ group.title || "Keine Gruppe" }}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </FormControl>
             </FormItem>
           </FormField>

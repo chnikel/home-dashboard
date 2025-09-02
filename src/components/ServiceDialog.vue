@@ -206,11 +206,11 @@ async function onSubmit(values: any) {
           </FormField>
 
           <FormField
-            v-slot="{ componentField, value }"
+            v-slot="{ componentField }"
             name="groupId"
           >
             <FormItem>
-              <FormLabel>Gruppe {{ value }}</FormLabel>
+              <FormLabel>Gruppe</FormLabel>
               <FormControl>
                 <Select v-bind="componentField">
                   <FormControl>

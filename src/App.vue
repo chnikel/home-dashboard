@@ -32,7 +32,7 @@ import { store } from "./store";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
-onMounted(async () => {
+async function refreshGroups() {
   groups.value = await getServiceGroups();
 
   store.groups = groups.value.map((group) => {
@@ -41,13 +41,17 @@ onMounted(async () => {
       title: group.title,
     };
   });
+}
+
+onMounted(async () => {
+  refreshGroups()
 });
 
 const isEditMode = ref(false);
 const editData = ref<ServiceDialogFormData | null>(null);
 
 const onEditServiceSuccess = async () => {
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const handleDeleteService = async (service: GetServicesResponse) => {
@@ -58,7 +62,7 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       console.log(error);
     }
 
-    groups.value = await getServiceGroups();
+    refreshGroups()
   }
 };
 
@@ -69,11 +73,11 @@ const handleAddGroup = async (data: AddGroupSubmitData) => {
     console.log(error);
   }
 
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const onEditSuccess = async () => {
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const handleDeleteGroup = async (groupId: number) => {
@@ -84,12 +88,12 @@ const handleDeleteGroup = async (groupId: number) => {
       console.log(error);
     }
 
-    groups.value = await getServiceGroups();
+    refreshGroups()
   }
 };
 
 const afterMove = async () => {
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const onAddTagSuccess = async (data: TagDialogFormData) => {
@@ -102,7 +106,7 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
     console.log(error);
   }
 
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const onAddService = async (data: ServiceDialogFormData) => {
@@ -121,7 +125,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
     console.log(error);
   }
 
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const onAddGroupSuccess = async (data: { title: string }) => {
@@ -133,7 +137,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
     console.log(error);
   }
 
-  groups.value = await getServiceGroups();
+  refreshGroups()
 };
 
 const showServiceDialog = ref(false);

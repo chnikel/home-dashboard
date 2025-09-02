@@ -70,16 +70,16 @@ const onEditService = async (data: ServiceDialogFormData) => {
       </div>
     </div>
     <slot />
-  </div>
 
-  <template v-if="showEditServiceDialog">
-    <ServiceDialog
-      :open="showEditServiceDialog"
-      :handleClose="() => (showEditServiceDialog = false)"
-      :data="service"
-      @submit="onEditService"
-      title="Service bearbeiten"
-      submitButton="Speichern"
-    />
-  </template>
+    <template v-if="showEditServiceDialog">
+      <ServiceDialog
+        :open="showEditServiceDialog"
+        :handleClose="() => (showEditServiceDialog = false)"
+        :data="service"
+        @submit="onEditService"
+        title="Service bearbeiten"
+        submitButton="Speichern"
+      />
+    </template>
+  </div>
 </template>

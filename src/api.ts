@@ -57,7 +57,7 @@ export const addService = async (data: AddServiceRequest) => {
 
 export type EditServiceResponse = {};
 
-export const updateService = async (id: number, data: AddServiceRequest) => {
+export const updateService = async (id: string, data: AddServiceRequest) => {
   const response = await fetch(`${host}/services/${id}`, {
     method: "put",
     headers: {

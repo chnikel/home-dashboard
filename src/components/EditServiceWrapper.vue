@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import Button from './ui/button/Button.vue';
+import { ref } from "vue";
+import Button from "./ui/button/Button.vue";
+import { updateService, type GetServicesResponse } from "@/api";
+import type { ServiceDialogFormData } from "./ServiceDialog.vue";
+import ServiceDialog from "./ServiceDialog.vue";
 
-const props = defineProps<{ id: number; edit: boolean }>();
+const props = defineProps<{
+  id: number;
+  edit: boolean;
+  service: GetServicesResponse;
+}>();
 
 const emit = defineEmits<{
   (e: "edit"): void;
@@ -10,6 +18,26 @@ const emit = defineEmits<{
 
 const onDragStart = (event: DragEvent) => {
   event.dataTransfer?.setData("text/plain", props.id.toString());
+};
+const showEditServiceDialog = ref(false);
+
+const onEditService = async (data: ServiceDialogFormData) => {
+  try {
+    await updateService(props.service.id.toString(), {
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: null,
+      tags: [],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  emit("edit");
 };
 </script>
 
@@ -29,7 +57,7 @@ const onDragStart = (event: DragEvent) => {
       <div class="flex gap-3 justify-center items-center h-full">
         <Button
           data-variant="outline"
-          @click="emit('edit')"
+          @click="showEditServiceDialog = true"
         >
           Bearbeiten
         </Button>
@@ -43,4 +71,15 @@ const onDragStart = (event: DragEvent) => {
     </div>
     <slot />
   </div>
+
+  <template v-if="showEditServiceDialog">
+    <ServiceDialog
+      :open="showEditServiceDialog"
+      :handleClose="() => (showEditServiceDialog = false)"
+      :data="service"
+      @submit="onEditService"
+      title="Service bearbeiten"
+      submitButton="Speichern"
+    />
+  </template>
 </template>

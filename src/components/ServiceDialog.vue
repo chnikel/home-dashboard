@@ -64,14 +64,14 @@ async function onSubmit(values: any) {
     v-slot="{ handleSubmit, values }"
     as=""
     :keep-values="false"
-    :initial-values="{
+    :initial-values="data ? {
       title: data?.title,
       description: data?.description,
       link: data?.link,
       icon_url: data?.icon_url,
       icon_wrap: data?.icon_wrap,
       enabled: data?.enabled ?? true,
-    }"
+    }: undefined"
     :validation-schema="formSchema"
   >
     <Dialog

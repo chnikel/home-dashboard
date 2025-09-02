@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from "vue";
+import { onMounted, ref } from "vue";
 import Service from "./components/Service.vue";
 import {
   addGroup,
@@ -8,13 +8,9 @@ import {
   deleteGroup,
   deleteService,
   getServiceGroups,
-  updateService,
   type GetServiceGroupsResponse,
   type GetServicesResponse,
 } from "./api";
-import ServiceEditForm, {
-  type SubmitData,
-} from "./components/ServiceEditForm.vue";
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
 import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
@@ -40,50 +36,9 @@ onMounted(async () => {
 });
 
 const isEditMode = ref(false);
-const editServiceId = ref<number | null>(null);
-const editData = ref<SubmitData | null>(null);
-const editServiceDialog = useTemplateRef<HTMLDialogElement>(
-  "edit-service-dialog"
-);
+const editData = ref<ServiceDialogFormData | null>(null);
 
-const editService = (service: GetServicesResponse) => {
-  editServiceId.value = service.id;
-  editData.value = {
-    title: service.title,
-    description: service.description,
-    link: service.link,
-    icon_url: service.icon_url,
-    icon_wrap: service.icon_wrap,
-    enabled: service.enabled,
-    groupId: service.groupId,
-    tags: service.tags,
-  };
-
-  editServiceDialog.value?.showModal();
-};
-
-const handleEditService = async (data: SubmitData) => {
-  if (!editServiceId.value) {
-    alert("Keine Service ID");
-    return;
-  }
-  const tags = data.tags.map((t) => t.name);
-
-  try {
-    await updateService(editServiceId.value, {
-      title: data.title,
-      description: data.description,
-      link: data.link,
-      icon_url: data.icon_url,
-      icon_wrap: data.icon_wrap,
-      enabled: data.enabled,
-      groupId: data.groupId,
-      tags,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
+const onEditServiceSuccess = async () => {
   groups.value = await getServiceGroups();
 };
 
@@ -247,14 +202,6 @@ const showTagDialog = ref(false);
         />
       </dialog>
 
-      <dialog ref="edit-service-dialog">
-        <ServiceEditForm
-          method="dialog"
-          :initial="editData || undefined"
-          @submit="handleEditService($event)"
-        />
-      </dialog>
-
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
@@ -272,8 +219,9 @@ const showTagDialog = ref(false);
               v-if="service.enabled || isEditMode"
               :draggable="isEditMode"
               :id="service.id"
+              :service="service"
               :edit="isEditMode"
-              @edit="editService(service)"
+              @edit="onEditServiceSuccess()"
               @delete="handleDeleteService(service)"
             >
               <Service

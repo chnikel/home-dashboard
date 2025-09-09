@@ -27,12 +27,13 @@ import ServiceDialog, {
   type ServiceDialogFormData,
 } from "./components/ServiceDialog.vue";
 import { store } from "./store";
+import { useUrlSearchParams } from "@vueuse/core";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 async function refreshGroups() {
   const fetchedGroups = await getServiceGroups();
-  
+
   groups.value = fetchedGroups;
   store.groups = fetchedGroups.map((group) => {
     return {
@@ -132,6 +133,10 @@ const onAddGroupSuccess = async (data: { title: string }) => {
 const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
+
+const params = useUrlSearchParams("history");
+
+const compactMode = ref(params.compact === "1");
 </script>
 
 <template>
@@ -199,6 +204,7 @@ const showTagDialog = ref(false);
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
+          :compact="compactMode"
           :id="group.id"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
           :edit="isEditMode"
@@ -217,6 +223,7 @@ const showTagDialog = ref(false);
               @delete="handleDeleteService(service)"
             >
               <Service
+                :compact="compactMode"
                 :id="'service' + service.id"
                 :title="service.title"
                 :description="service.description"

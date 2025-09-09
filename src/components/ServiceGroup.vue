@@ -6,6 +6,7 @@ import GroupDialog from "./GroupDialog.vue";
 import { provide } from "vue";
 
 const props = defineProps<{
+  compact?: boolean;
   id: number;
   edit: boolean;
   title: string;
@@ -74,12 +75,23 @@ const onEditGroupSuccess = async (data: { title: string }) => {
       @edit="showGroupDialog = true"
       @delete="$emit('delete')"
     >
-      <h2 class="text-2xl font-light py-2 px-4">
+      <h2
+        class="text-2xl font-light"
+        :class="{
+          'px-4 py-2': !compact,
+          'py-4': compact,
+        }"
+      >
         {{ title }}
       </h2>
     </EditGroupWrapper>
     <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4"
+      class=""
+      :class="{
+        'flex flex-wrap gap-1': compact,
+        'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 lg:gap-2 lg:gap-y-4':
+          !compact,
+      }"
     >
       <slot />
     </div>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
-import ServiceIcon from './ServiceIcon.vue'
+import ServiceIcon from "./ServiceIcon.vue";
 
 defineProps<{
+  compact?: boolean;
   title: string;
   description: string;
   link: string;
@@ -15,10 +16,14 @@ defineProps<{
 <template>
   <a
     :href="link"
-    class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    class="lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    :class="{
+      'w-min': compact,
+      'p-4': !compact,
+    }"
   >
     <ServiceIcon :wrap="icon_wrap" :url="icon_url" />
-    <div>
+    <div v-if="!compact">
       <h3 class="text-lg font-semibold line-clamp-1 flex gap-2 items-center">
         {{ title }}
       </h3>

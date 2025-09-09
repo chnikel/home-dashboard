@@ -208,13 +208,6 @@ const showTagDialog = ref(false);
         submitButton="Hinzufügen"
       />
 
-      <dialog ref="add-group-dialog">
-        <GroupEditForm
-          method="dialog"
-          @submit="handleAddGroup($event)"
-        />
-      </dialog>
-
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"

@@ -132,10 +132,13 @@ const onAddGroupSuccess = async (data: { title: string }) => {
 const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
+
+const compactMode = ref(false);
 </script>
 
 <template>
   <div class="h-screen p-3">
+    <button @click="compactMode = !compactMode">compactMode</button>
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end absolute right-6 top-6 z-30">
         <Button
@@ -199,6 +202,7 @@ const showTagDialog = ref(false);
       <template v-for="group in groups">
         <ServiceGroup
           v-if="group.services.length > 0 || isEditMode"
+          :compact="compactMode"
           :id="group.id"
           :title="group.id == null ? 'Keine Gruppe' : group.title"
           :edit="isEditMode"
@@ -217,6 +221,7 @@ const showTagDialog = ref(false);
               @delete="handleDeleteService(service)"
             >
               <Service
+                :compact="compactMode"
                 :id="'service' + service.id"
                 :title="service.title"
                 :description="service.description"

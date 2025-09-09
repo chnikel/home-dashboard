@@ -27,12 +27,13 @@ import ServiceDialog, {
   type ServiceDialogFormData,
 } from "./components/ServiceDialog.vue";
 import { store } from "./store";
+import { useUrlSearchParams } from "@vueuse/core";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
 async function refreshGroups() {
   const fetchedGroups = await getServiceGroups();
-  
+
   groups.value = fetchedGroups;
   store.groups = fetchedGroups.map((group) => {
     return {
@@ -133,12 +134,13 @@ const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
 
-const compactMode = ref(false);
+const params = useUrlSearchParams("history");
+
+const compactMode = ref(params.compact === "1");
 </script>
 
 <template>
   <div class="h-screen p-3">
-    <button @click="compactMode = !compactMode">compactMode</button>
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end absolute right-6 top-6 z-30">
         <Button

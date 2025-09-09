@@ -67,9 +67,6 @@ const validColors: TagColors[] = [
   "pink",
   "rose",
   "slate",
-  "gray",
-  "zinc",
-  "neutral",
   "stone",
 ];
 </script>

@@ -76,9 +76,10 @@ const onEditGroupSuccess = async (data: { title: string }) => {
       @delete="$emit('delete')"
     >
       <h2
-        class="text-2xl font-light py-2"
+        class="text-2xl font-light"
         :class="{
-          'px-4': !compact,
+          'px-4 py-2': !compact,
+          'py-4': compact,
         }"
       >
         {{ title }}

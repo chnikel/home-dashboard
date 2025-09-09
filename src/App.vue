@@ -13,8 +13,6 @@ import {
 } from "./api";
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
 import ServiceGroup from "./components/ServiceGroup.vue";
-import type { AddGroupSubmitData } from "./components/GroupEditForm.vue";
-import GroupEditForm from "./components/GroupEditForm.vue";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,16 +63,6 @@ const handleDeleteService = async (service: GetServicesResponse) => {
 
     refreshGroups();
   }
-};
-
-const handleAddGroup = async (data: AddGroupSubmitData) => {
-  try {
-    await addGroup(data);
-  } catch (error) {
-    console.log(error);
-  }
-
-  refreshGroups();
 };
 
 const onEditSuccess = async () => {

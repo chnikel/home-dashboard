@@ -1,6 +1,6 @@
 import type { TagColors } from "./components/Tag.vue";
 
-const host = import.meta.env.VITE_FRONTEND_HOST || "";
+export const host = import.meta.env.VITE_FRONTEND_HOST || "";
 
 export type ServiceTag = {
   id: number;
@@ -35,7 +35,7 @@ export type AddServiceRequest = {
   icon_url: string;
   icon_wrap: boolean;
   enabled: boolean;
-  groupId: number | null;
+  groupId?: number | null;
   tags: string[];
 };
 
@@ -57,7 +57,7 @@ export const addService = async (data: AddServiceRequest) => {
 
 export type EditServiceResponse = {};
 
-export const updateService = async (id: number, data: AddServiceRequest) => {
+export const updateService = async (id: string, data: AddServiceRequest) => {
   const response = await fetch(`${host}/services/${id}`, {
     method: "put",
     headers: {

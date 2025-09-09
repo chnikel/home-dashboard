@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { inject } from "vue";
+import Button from "./ui/button/Button.vue";
+
 defineProps<{ edit: boolean }>();
+
+const editable = inject("editable");
+const deletable = inject("deletable");
 
 const emit = defineEmits<{
   (e: "edit"): void;
@@ -19,18 +25,20 @@ const emit = defineEmits<{
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
     >
       <div class="flex gap-3 justify-center items-center h-full">
-        <button
+        <Button
+          v-if="editable"
           data-variant="outline"
           @click="emit('edit')"
         >
           Bearbeiten
-        </button>
-        <button
-          data-type="danger"
+        </Button>
+        <Button
+          v-if="deletable"
+          variant="destructive"
           @click="emit('delete')"
         >
           Löschen
-        </button>
+        </Button>
       </div>
     </div>
     <slot />

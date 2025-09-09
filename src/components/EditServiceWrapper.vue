@@ -1,5 +1,15 @@
 <script setup lang="ts">
-const props = defineProps<{ id: number; edit: boolean }>();
+import { ref } from "vue";
+import Button from "./ui/button/Button.vue";
+import { updateService, type GetServicesResponse } from "@/api";
+import type { ServiceDialogFormData } from "./ServiceDialog.vue";
+import ServiceDialog from "./ServiceDialog.vue";
+
+const props = defineProps<{
+  id: number;
+  edit: boolean;
+  service: GetServicesResponse;
+}>();
 
 const emit = defineEmits<{
   (e: "edit"): void;
@@ -8,6 +18,26 @@ const emit = defineEmits<{
 
 const onDragStart = (event: DragEvent) => {
   event.dataTransfer?.setData("text/plain", props.id.toString());
+};
+const showEditServiceDialog = ref(false);
+
+const onEditService = async (data: ServiceDialogFormData) => {
+  try {
+    await updateService(props.service.id.toString(), {
+      title: data.title,
+      description: data.description,
+      link: data.link,
+      icon_url: data.icon_url,
+      icon_wrap: data.icon_wrap,
+      enabled: data.enabled,
+      groupId: data.groupId,
+      tags: [],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  emit("edit");
 };
 </script>
 
@@ -25,20 +55,31 @@ const onDragStart = (event: DragEvent) => {
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
     >
       <div class="flex gap-3 justify-center items-center h-full">
-        <button
+        <Button
           data-variant="outline"
-          @click="emit('edit')"
+          @click="showEditServiceDialog = true"
         >
           Bearbeiten
-        </button>
-        <button
-          data-type="danger"
+        </Button>
+        <Button
+          variant="destructive"
           @click="emit('delete')"
         >
           Löschen
-        </button>
+        </Button>
       </div>
     </div>
     <slot />
+
+    <template v-if="showEditServiceDialog">
+      <ServiceDialog
+        :open="showEditServiceDialog"
+        :handleClose="() => (showEditServiceDialog = false)"
+        :data="service"
+        @submit="onEditService"
+        title="Service bearbeiten"
+        submitButton="Speichern"
+      />
+    </template>
   </div>
 </template>

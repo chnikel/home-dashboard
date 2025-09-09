@@ -16,9 +16,10 @@ defineProps<{
 <template>
   <a
     :href="link"
-    class="p-4 lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
+    class="lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl"
     :class="{
       'w-min': compact,
+      'p-4': !compact,
     }"
   >
     <ServiceIcon :wrap="icon_wrap" :url="icon_url" />

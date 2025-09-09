@@ -75,7 +75,12 @@ const onEditGroupSuccess = async (data: { title: string }) => {
       @edit="showGroupDialog = true"
       @delete="$emit('delete')"
     >
-      <h2 class="text-2xl font-light py-2 px-4">
+      <h2
+        class="text-2xl font-light py-2"
+        :class="{
+          'px-4': !compact,
+        }"
+      >
         {{ title }}
       </h2>
     </EditGroupWrapper>

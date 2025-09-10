@@ -167,7 +167,7 @@ async function onSubmit(values: any) {
                 Tip: Nutze
                 <a
                   class="underline"
-                  href="https://dashboardicons.com/icons"
+                  :href="`https://dashboardicons.com/icons?q=${values.title}`"
                   target="_blank"
                   >dashboardicons.com</a
                 >

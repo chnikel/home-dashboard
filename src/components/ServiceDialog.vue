@@ -149,7 +149,7 @@ const onSubmit = form.handleSubmit((values) => {
               <div class="flex items-center gap-2">
                 <ServiceIcon
                   :url="value"
-                  :wrap="value.icon_wrap"
+                  :wrap="value?.icon_wrap"
                 />
                 <Input
                   type="text"
@@ -163,7 +163,7 @@ const onSubmit = form.handleSubmit((values) => {
               Tip: Nutze
               <a
                 class="underline"
-                :href="`https://dashboardicons.com/icons?q=${value.title}`"
+                :href="`https://dashboardicons.com/icons?q=${value?.title}`"
                 target="_blank"
                 >dashboardicons.com</a
               >

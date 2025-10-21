@@ -198,7 +198,7 @@ function handleTagRemove(id: number) {
               <div class="flex items-center gap-2">
                 <ServiceIcon
                   :url="value"
-                  :wrap="value?.icon_wrap"
+                  :wrap="form.values.icon_wrap"
                 />
                 <Input
                   type="text"
@@ -212,7 +212,7 @@ function handleTagRemove(id: number) {
               Tip: Nutze
               <a
                 class="underline"
-                :href="`https://dashboardicons.com/icons?q=${value?.title}`"
+                :href="`https://dashboardicons.com/icons?q=${form.values.title}`"
                 target="_blank"
                 >dashboardicons.com</a
               >

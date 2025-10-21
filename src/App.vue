@@ -28,6 +28,7 @@ import ServiceDialog, {
 } from "./components/ServiceDialog.vue";
 import { findTag, store } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
+import { FilePlusIcon, GroupIcon, TagIcon } from "lucide-vue-next";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -172,14 +173,14 @@ const compactMode = ref(params.compact === "1");
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem @click="showServiceDialog = true">
-              Service hinzufügen
+              <FilePlusIcon /> Service hinzufügen
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem @click="showGroupDialog = true">
-              Gruppe hinzufügen
+              <GroupIcon /> Gruppe hinzufügen
             </DropdownMenuItem>
             <DropdownMenuItem @click="showTagDialog = true">
-              Tag hinzufügen
+              <TagIcon /> Tag hinzufügen
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

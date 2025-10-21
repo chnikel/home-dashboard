@@ -45,7 +45,6 @@ import {
 import ContextMenuSub from "./components/ui/context-menu/ContextMenuSub.vue";
 import ContextMenuSubTrigger from "./components/ui/context-menu/ContextMenuSubTrigger.vue";
 import ContextMenuSubContent from "./components/ui/context-menu/ContextMenuSubContent.vue";
-import ContextMenuShortcut from "./components/ui/context-menu/ContextMenuShortcut.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 

@@ -152,7 +152,7 @@ const compactMode = ref(params.compact === "1");
 <template>
   <div class="h-screen p-3">
     <div class="container mx-auto">
-      <div class="space-x-2 mb-6 flex justify-end absolute right-6 top-6 z-30">
+      <div class="space-x-2 mb-6 flex justify-end sticky right-6 top-6 z-30">
         <Button
           v-if="isEditMode"
           class="!bg-orange-500 text-white"

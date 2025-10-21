@@ -31,6 +31,7 @@ import { useForm } from "vee-validate";
 import { computed, onBeforeMount, ref } from "vue";
 import Tag from "./Tag.vue";
 import type { GetTagsResponse } from "@/api";
+import { ExternalLinkIcon } from "lucide-vue-next";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -211,11 +212,13 @@ function handleTagRemove(id: number) {
             <FormDescription>
               Tip: Nutze
               <a
-                class="underline"
+                class="inline-flex items-center gap-0.5 hover:text-white"
                 :href="`https://dashboardicons.com/icons?q=${form.values.title}`"
                 target="_blank"
-                >dashboardicons.com</a
               >
+                <span class="underline">dashboardicons.com</span>
+                <ExternalLinkIcon :size="16" />
+              </a>
             </FormDescription>
           </FormItem>
         </FormField>

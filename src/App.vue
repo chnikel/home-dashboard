@@ -28,7 +28,24 @@ import ServiceDialog, {
 } from "./components/ServiceDialog.vue";
 import { findTag, store } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
-import { FilePlusIcon, GroupIcon, TagIcon } from "lucide-vue-next";
+import {
+  FilePlusIcon,
+  GroupIcon,
+  LayoutGridIcon,
+  LayoutListIcon,
+  TagIcon,
+} from "lucide-vue-next";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import ContextMenuSub from "./components/ui/context-menu/ContextMenuSub.vue";
+import ContextMenuSubTrigger from "./components/ui/context-menu/ContextMenuSubTrigger.vue";
+import ContextMenuSubContent from "./components/ui/context-menu/ContextMenuSubContent.vue";
+import ContextMenuShortcut from "./components/ui/context-menu/ContextMenuShortcut.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -150,103 +167,151 @@ const compactMode = ref(params.compact === "1");
 </script>
 
 <template>
-  <div class="h-screen p-3">
-    <div class="container mx-auto">
-      <div class="space-x-2 mb-6 flex justify-end sticky right-6 top-6 z-30">
-        <Button
-          v-if="isEditMode"
-          class="!bg-orange-500 text-white"
-          @click="isEditMode = false"
-        >
-          Fertig
-        </Button>
-        <Button
-          v-if="!isEditMode"
-          variant="outline"
-          @click="isEditMode = true"
-        >
-          Bearbeiten
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button v-if="isEditMode"> Hinzufügen </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem @click="showServiceDialog = true">
-              <FilePlusIcon /> Service hinzufügen
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem @click="showGroupDialog = true">
-              <GroupIcon /> Gruppe hinzufügen
-            </DropdownMenuItem>
-            <DropdownMenuItem @click="showTagDialog = true">
-              <TagIcon /> Tag hinzufügen
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <ServiceDialog
-        :open="showServiceDialog"
-        :handleClose="() => (showServiceDialog = false)"
-        @submit="onAddService"
-        title="Service hinzufügen"
-        submitButton="Hinzufügen"
-      />
-
-      <GroupDialog
-        :open="showGroupDialog"
-        :data="editData"
-        :handleClose="() => (showGroupDialog = false)"
-        @submit="onAddGroupSuccess"
-        title="Gruppe hinzufügen"
-        submitButton="Hinzufügen"
-      />
-
-      <TagDialog
-        :open="showTagDialog"
-        :handleClose="() => (showTagDialog = false)"
-        @submit="onAddTagSuccess"
-        title="Tag hinzufügen"
-        submitButton="Hinzufügen"
-      />
-
-      <template v-for="group in groups">
-        <ServiceGroup
-          v-if="group.services.length > 0 || isEditMode"
-          :compact="compactMode"
-          :id="group.id"
-          :title="group.id == null ? 'Keine Gruppe' : group.title"
-          :edit="isEditMode"
-          @edit="onEditSuccess()"
-          @delete="handleDeleteGroup(group.id)"
-          @move="afterMove()"
-        >
-          <template v-for="service in group.services">
-            <EditServiceWrapper
-              v-if="service.enabled || isEditMode"
-              :draggable="isEditMode"
-              :id="service.id"
-              :service="service"
-              :edit="isEditMode"
-              @edit="onEditServiceSuccess()"
-              @delete="handleDeleteService(service)"
+  <ContextMenu>
+    <ContextMenuTrigger>
+      <div class="h-screen p-3">
+        <div class="container mx-auto">
+          <div
+            class="space-x-2 mb-6 flex justify-end sticky right-6 top-6 z-30"
+          >
+            <Button
+              v-if="isEditMode"
+              class="!bg-orange-500 text-white"
+              @click="isEditMode = false"
             >
-              <Service
-                :compact="compactMode"
-                :id="'service' + service.id"
-                :title="service.title"
-                :description="service.description"
-                :link="service.link"
-                :icon_url="service.icon_url"
-                :icon_wrap="service.icon_wrap"
-                :tags="service.tags"
-                :isEnabled="service.enabled"
-              />
-            </EditServiceWrapper>
+              Fertig
+            </Button>
+            <Button
+              v-if="!isEditMode"
+              variant="outline"
+              @click="isEditMode = true"
+            >
+              Bearbeiten
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button v-if="isEditMode"> Hinzufügen </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem @click="showServiceDialog = true">
+                  <FilePlusIcon /> Service hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem @click="showGroupDialog = true">
+                  <GroupIcon /> Gruppe hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="showTagDialog = true">
+                  <TagIcon /> Tag hinzufügen
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <ServiceDialog
+            :open="showServiceDialog"
+            :handleClose="() => (showServiceDialog = false)"
+            @submit="onAddService"
+            title="Service hinzufügen"
+            submitButton="Hinzufügen"
+          />
+
+          <GroupDialog
+            :open="showGroupDialog"
+            :data="editData"
+            :handleClose="() => (showGroupDialog = false)"
+            @submit="onAddGroupSuccess"
+            title="Gruppe hinzufügen"
+            submitButton="Hinzufügen"
+          />
+
+          <TagDialog
+            :open="showTagDialog"
+            :handleClose="() => (showTagDialog = false)"
+            @submit="onAddTagSuccess"
+            title="Tag hinzufügen"
+            submitButton="Hinzufügen"
+          />
+
+          <template v-for="group in groups">
+            <ServiceGroup
+              v-if="group.services.length > 0 || isEditMode"
+              :compact="compactMode"
+              :id="group.id"
+              :title="group.id == null ? 'Keine Gruppe' : group.title"
+              :edit="isEditMode"
+              @edit="onEditSuccess()"
+              @delete="handleDeleteGroup(group.id)"
+              @move="afterMove()"
+            >
+              <template v-for="service in group.services">
+                <EditServiceWrapper
+                  v-if="service.enabled || isEditMode"
+                  :draggable="isEditMode"
+                  :id="service.id"
+                  :service="service"
+                  :edit="isEditMode"
+                  @edit="onEditServiceSuccess()"
+                  @delete="handleDeleteService(service)"
+                >
+                  <Service
+                    :compact="compactMode"
+                    :id="'service' + service.id"
+                    :title="service.title"
+                    :description="service.description"
+                    :link="service.link"
+                    :icon_url="service.icon_url"
+                    :icon_wrap="service.icon_wrap"
+                    :tags="service.tags"
+                    :isEnabled="service.enabled"
+                  />
+                </EditServiceWrapper>
+              </template>
+            </ServiceGroup>
           </template>
-        </ServiceGroup>
-      </template>
-    </div>
-  </div>
+        </div>
+      </div>
+    </ContextMenuTrigger>
+    <ContextMenuContent>
+      <ContextMenuSub>
+        <ContextMenuSubTrigger inset> Hinzufügen </ContextMenuSubTrigger>
+        <ContextMenuSubContent class="w-48">
+          <ContextMenuItem @click="showServiceDialog = true">
+            <FilePlusIcon /> Service
+          </ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem @click="showGroupDialog = true">
+            <GroupIcon /> Gruppe
+          </ContextMenuItem>
+          <ContextMenuItem @click="showTagDialog = true">
+            <TagIcon /> Tag
+          </ContextMenuItem>
+        </ContextMenuSubContent>
+      </ContextMenuSub>
+
+      <ContextMenuSeparator />
+
+      <ContextMenuItem
+        inset
+        @click="isEditMode = !isEditMode"
+      >
+        <template v-if="isEditMode"> Leave Edit Mode </template>
+        <template v-else> Edit Mode </template>
+      </ContextMenuItem>
+
+      <ContextMenuSeparator />
+
+      <ContextMenuItem
+        @click="compactMode = false"
+        :disabled="!compactMode"
+      >
+        <LayoutListIcon /> Normal View
+      </ContextMenuItem>
+      <ContextMenuItem
+        @click="compactMode = true"
+        :disabled="compactMode"
+      >
+        <LayoutGridIcon /> Compact View
+      </ContextMenuItem>
+    </ContextMenuContent>
+  </ContextMenu>
 </template>

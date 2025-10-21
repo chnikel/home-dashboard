@@ -2,11 +2,6 @@ import _sqlite3 from "sqlite3";
 import path from "path";
 import fs from "fs";
 
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename);
-
 const sqlite3 = _sqlite3.verbose();
 
 const dataFolder = path.join(__dirname, "data");
@@ -67,6 +62,7 @@ VALUES
         reject(err);
         return;
       }
+      // @ts-ignore
       resolve(this.lastID);
     });
     stmt.finalize();

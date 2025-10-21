@@ -2,11 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
-import db from "./db.ts"
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename);
+import db from "./db"
 
 const app = express();
 const port = 3000;

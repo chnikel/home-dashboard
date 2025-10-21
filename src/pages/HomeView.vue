@@ -28,7 +28,12 @@ import ServiceDialog, {
 } from "../components/ServiceDialog.vue";
 import { findTag, store } from "../store";
 import { useUrlSearchParams } from "@vueuse/core";
-import { FilePlusIcon, GroupIcon, TagIcon } from "lucide-vue-next";
+import {
+  FilePlusIcon,
+  GroupIcon,
+  SettingsIcon,
+  TagIcon,
+} from "lucide-vue-next";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -154,36 +159,47 @@ const compactMode = ref(params.compact === "1");
     <div class="container mx-auto">
       <div class="space-x-2 mb-6 flex justify-end sticky right-6 top-6 z-30">
         <Button
-          v-if="isEditMode"
-          class="!bg-orange-500 text-white"
-          @click="isEditMode = false"
-        >
-          Fertig
-        </Button>
-        <Button
           v-if="!isEditMode"
           variant="outline"
           @click="isEditMode = true"
         >
           Bearbeiten
         </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button v-if="isEditMode"> Hinzufügen </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem @click="showServiceDialog = true">
-              <FilePlusIcon /> Service hinzufügen
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem @click="showGroupDialog = true">
-              <GroupIcon /> Gruppe hinzufügen
-            </DropdownMenuItem>
-            <DropdownMenuItem @click="showTagDialog = true">
-              <TagIcon /> Tag hinzufügen
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <template v-if="isEditMode">
+          <Button
+            class="!bg-orange-500 text-white"
+            @click="isEditMode = false"
+          >
+            Fertig
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button> Hinzufügen </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem @click="showServiceDialog = true">
+                <FilePlusIcon /> Service hinzufügen
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem @click="showGroupDialog = true">
+                <GroupIcon /> Gruppe hinzufügen
+              </DropdownMenuItem>
+              <DropdownMenuItem @click="showTagDialog = true">
+                <TagIcon /> Tag hinzufügen
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <RouterLink
+            class="cursor-pointer"
+            to="/settings"
+          >
+            <Button variant="outline">
+              <SettingsIcon />
+            </Button>
+          </RouterLink>
+        </template>
       </div>
 
       <ServiceDialog

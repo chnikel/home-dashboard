@@ -25,10 +25,10 @@ const emit = defineEmits<{
       <slot />
     </ContextMenuTrigger>
     <ContextMenuContent>
-      <ContextMenuItem @click="emit('edit')"><PenIcon /> Edit</ContextMenuItem>
+      <ContextMenuItem @click="emit('edit')"><PenIcon /> Bearbeiten</ContextMenuItem>
       <ContextMenuItem disabled>
-        <template v-if="isEnabled"> <EyeOffIcon /> Disable </template>
-        <template v-else> <EyeIcon /> Enable </template>
+        <template v-if="isEnabled"> <EyeOffIcon /> Verstecken </template>
+        <template v-else> <EyeIcon /> Anzeigen </template>
       </ContextMenuItem>
 
       <ContextMenuSeparator />
@@ -36,7 +36,7 @@ const emit = defineEmits<{
       <ContextMenuItem
         variant="destructive"
         @click="emit('delete')"
-        > <Trash2Icon /> Delete</ContextMenuItem
+        > <Trash2Icon /> Löschen</ContextMenuItem
       >
     </ContextMenuContent>
   </ContextMenu>

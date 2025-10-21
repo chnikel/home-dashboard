@@ -293,8 +293,8 @@ const compactMode = ref(params.compact === "1");
         inset
         @click="isEditMode = !isEditMode"
       >
-        <template v-if="isEditMode"> Leave Edit Mode </template>
-        <template v-else> Edit Mode </template>
+        <template v-if="isEditMode"> Bearbeiten beenden </template>
+        <template v-else> Bearbeiten </template>
       </ContextMenuItem>
 
       <ContextMenuSeparator />

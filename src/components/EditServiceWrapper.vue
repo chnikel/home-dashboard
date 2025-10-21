@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import Button from "./ui/button/Button.vue";
 import { updateService, type GetServicesResponse } from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
+import { findTag } from "@/store";
 
 const props = defineProps<{
   id: number;
@@ -16,12 +17,34 @@ const emit = defineEmits<{
   (e: "delete"): void;
 }>();
 
+const data = computed<Partial<ServiceDialogFormData>>(() => {
+  return {
+    title: props.service.title,
+    description: props.service.description,
+    link: props.service.link,
+    icon_url: props.service.icon_url,
+    icon_wrap: props.service.icon_wrap,
+    enabled: props.service.enabled ?? true,
+    groupId: props.service.groupId,
+    tagIds: props.service.tags.map((t) => t.id),
+  };
+});
+
 const onDragStart = (event: DragEvent) => {
   event.dataTransfer?.setData("text/plain", props.id.toString());
 };
 const showEditServiceDialog = ref(false);
 
 const onEditService = async (data: ServiceDialogFormData) => {
+  const tags = (data.tagIds || []).reduce<string[]>((acc, id) => {
+    const tag = findTag(id);
+    if (tag) {
+      acc.push(tag.name);
+    }
+
+    return acc;
+  }, []);
+
   try {
     await updateService(props.service.id.toString(), {
       title: data.title,
@@ -31,7 +54,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       icon_wrap: data.icon_wrap,
       enabled: data.enabled,
       groupId: data.groupId,
-      tags: [],
+      tags,
     });
   } catch (error) {
     console.log(error);
@@ -75,7 +98,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       <ServiceDialog
         :open="showEditServiceDialog"
         :handleClose="() => (showEditServiceDialog = false)"
-        :data="service"
+        :data="data"
         @submit="onEditService"
         title="Service bearbeiten"
         submitButton="Speichern"

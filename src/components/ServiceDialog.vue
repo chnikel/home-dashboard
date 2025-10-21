@@ -26,8 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { store } from "@/store";
+import { findTag, store, updateLocalTags } from "@/store";
 import { useForm } from "vee-validate";
+import { computed, onBeforeMount, ref } from "vue";
+import Tag from "./Tag.vue";
+import type { GetTagsResponse } from "@/api";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -37,6 +40,7 @@ const ServiceDialogFormData = z.object({
   icon_wrap: z.boolean().optional().default(false),
   enabled: z.boolean().default(true),
   groupId: z.number().optional().nullable(),
+  tagIds: z.array(z.number()).optional(),
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -66,6 +70,7 @@ const form = useForm({
         icon_wrap: props.data?.icon_wrap,
         enabled: props.data?.enabled ?? true,
         groupId: props.data?.groupId,
+        tagIds: props.data?.tagIds,
       }
     : undefined,
 });
@@ -75,6 +80,50 @@ const onSubmit = form.handleSubmit((values) => {
 
   props.handleClose();
 });
+
+onBeforeMount(() => {
+  updateLocalTags();
+});
+
+const filteredTags = computed(() => {
+  return store.tags.filter((tag) => {
+    return !(form.values.tagIds || []).includes(tag.id);
+  });
+});
+
+const tags = computed(() => {
+  const tagIds = form.values.tagIds || [];
+  return tagIds.reduce<GetTagsResponse[]>((acc, id) => {
+    const tag = findTag(id);
+    if (tag) {
+      acc.push(tag);
+    }
+
+    return acc;
+  }, []);
+});
+
+const tagToAdd = ref("");
+
+function onTagChange() {
+  const tagId = Number(tagToAdd.value);
+  const currentTagIds = form.values.tagIds || [];
+  const tag = findTag(tagId);
+
+  if (tag) {
+    form.setFieldValue("tagIds", [...currentTagIds, tagId]);
+  }
+
+  tagToAdd.value = "";
+}
+
+function handleTagRemove(id: number) {
+  const currentTagIds = form.values.tagIds || [];
+  form.setFieldValue(
+    "tagIds",
+    currentTagIds.filter((tagId) => tagId !== id)
+  );
+}
 </script>
 
 <template>
@@ -197,6 +246,48 @@ const onSubmit = form.handleSubmit((values) => {
                 :model-value="value"
                 @update:model-value="handleChange"
               />
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ value }"
+          name="tagIds"
+        >
+          <FormItem>
+            <FormLabel>Tags</FormLabel>
+
+            <div>
+              <Tag
+                v-for="tag in tags"
+                :name="tag.name"
+                :color="tag.color"
+                :action="true"
+                @action="() => handleTagRemove(tag.id)"
+              />
+            </div>
+
+            <FormControl>
+              <Select
+                v-model="tagToAdd"
+                @update:model-value="onTagChange"
+              >
+                <FormControl>
+                  <SelectTrigger class="w-full">
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      v-for="group in filteredTags"
+                      :value="group.id"
+                    >
+                      {{ group.name }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </FormControl>
           </FormItem>
         </FormField>

@@ -26,7 +26,7 @@ import TagDialog, { type TagDialogFormData } from "./components/TagDialog.vue";
 import ServiceDialog, {
   type ServiceDialogFormData,
 } from "./components/ServiceDialog.vue";
-import { store } from "./store";
+import { findTag, store } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
@@ -100,6 +100,15 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
 };
 
 const onAddService = async (data: ServiceDialogFormData) => {
+  const tags = (data.tagIds || []).reduce<string[]>((acc, id) => {
+    const tag = findTag(id);
+    if (tag) {
+      acc.push(tag.name);
+    }
+
+    return acc;
+  }, []);
+
   try {
     await addService({
       title: data.title,
@@ -109,7 +118,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
       icon_wrap: data.icon_wrap,
       enabled: data.enabled,
       groupId: data.groupId,
-      tags: [],
+      tags,
     });
   } catch (error) {
     console.log(error);

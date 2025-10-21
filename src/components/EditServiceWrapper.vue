@@ -5,6 +5,7 @@ import { updateService, type GetServicesResponse } from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
 import { findTag } from "@/store";
+import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
 
 const props = defineProps<{
   id: number;
@@ -73,26 +74,34 @@ const onEditService = async (data: ServiceDialogFormData) => {
       'border-transparent': !edit,
     }"
   >
-    <div
-      v-if="edit"
-      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1 z-10"
+    <ServiceContextMenuWrapper
+      :isEnabled="service.enabled"
+      @toggle-visibility=""
+      @edit="showEditServiceDialog = true"
+      @delete="emit('delete')"
     >
-      <div class="flex gap-3 justify-center items-center h-full">
-        <Button
-          data-variant="outline"
-          @click="showEditServiceDialog = true"
-        >
-          Bearbeiten
-        </Button>
-        <Button
-          variant="destructive"
-          @click="emit('delete')"
-        >
-          Löschen
-        </Button>
+      <div
+        v-if="edit"
+        class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1 z-10"
+      >
+        <div class="flex gap-3 justify-center items-center h-full">
+          <Button
+            data-variant="outline"
+            @click="showEditServiceDialog = true"
+          >
+            Bearbeiten
+          </Button>
+          <Button
+            variant="destructive"
+            @click="emit('delete')"
+          >
+            Löschen
+          </Button>
+        </div>
       </div>
-    </div>
-    <slot />
+
+      <slot />
+    </ServiceContextMenuWrapper>
 
     <template v-if="showEditServiceDialog">
       <ServiceDialog

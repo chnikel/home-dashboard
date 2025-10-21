@@ -45,6 +45,7 @@ import {
 import ContextMenuSub from "./components/ui/context-menu/ContextMenuSub.vue";
 import ContextMenuSubTrigger from "./components/ui/context-menu/ContextMenuSubTrigger.vue";
 import ContextMenuSubContent from "./components/ui/context-menu/ContextMenuSubContent.vue";
+import Input from "./components/ui/input/Input.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
 
@@ -163,6 +164,8 @@ const showTagDialog = ref(false);
 const params = useUrlSearchParams("history");
 
 const compactMode = ref(params.compact === "1");
+
+const searchText = ref("");
 </script>
 
 <template>
@@ -170,9 +173,12 @@ const compactMode = ref(params.compact === "1");
     <ContextMenuTrigger>
       <div class="h-screen p-3">
         <div class="container mx-auto">
-          <div
-            class="space-x-2 mb-6 flex justify-end sticky right-6 top-6 z-30"
-          >
+          <div class="pl-3 space-x-2 mb-6 flex sticky right-6 top-6 z-30">
+            <Input
+              v-model="searchText"
+              placeholder="Search name, description or tag:"
+            />
+
             <Button
               v-if="isEditMode"
               class="!bg-orange-500 text-white"
@@ -246,7 +252,21 @@ const compactMode = ref(params.compact === "1");
               @delete="handleDeleteGroup(group.id)"
               @move="afterMove()"
             >
-              <template v-for="service in group.services">
+              <template
+                v-for="service in group.services.filter((service) => {
+                  if (searchText.includes('tag:')) {
+                    return service.tags.some((tag) =>
+                      tag.name
+                        .toLowerCase()
+                        .includes(searchText.replace('tag:', '').toLowerCase())
+                    );
+                  }
+
+                  return (service.title + ' ' + service.description)
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+                })"
+              >
                 <EditServiceWrapper
                   v-if="service.enabled || isEditMode"
                   :draggable="isEditMode"

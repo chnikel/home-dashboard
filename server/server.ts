@@ -1,10 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
+import express from "express";
+import cors from "cors";
+import path from "path";
+
+import db from "./db.ts"
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const port = 3000;
-
-const db = require("./db");
 
 app.use(express.json());
 app.use(
@@ -16,10 +21,10 @@ app.use(
 app.use(express.static(path.join(__dirname, "../dist")));
 
 const getServices = async () => {
-  const data = await db.allServices();
+  const data = await db.allServices() as any;
 
   const services = await Promise.all(
-    data.map(async (entry) => {
+    data.map(async (entry: any) => {
       const tags = await db.allTagsForService(entry.id);
 
       return {
@@ -45,8 +50,8 @@ app.get("/services", async (req, res) => {
   const groupBy = req.query.groupBy;
 
   if (groupBy) {
-    const servicesGrouped = services.reduce((acc, service) => {
-      (acc[service[groupBy]] ??= []).push(service);
+    const servicesGrouped = services.reduce((acc: any, service: any) => {
+      (acc[service[groupBy as any]] ??= []).push(service);
       return acc;
     }, {});
 
@@ -68,11 +73,11 @@ app.post("/services", async (req, res) => {
     groupId: req.body.groupId,
   };
 
-  const serviceId = await db.insertService(data);
+  const serviceId = await db.insertService(data) as string;
 
   const tags = req.body.tags || [];
 
-  tags.forEach((tag) => {
+  tags.forEach((tag: any) => {
     db.tagToService(tag, serviceId);
   });
 
@@ -104,10 +109,10 @@ app.put("/services/:id", async (req, res) => {
   await db.updateService(serviceId, data);
 
   const updatedTags = req.body.tags || [];
-  const currentTags = await db.allTagsForService(serviceId);
+  const currentTags = await db.allTagsForService(serviceId) as any;
 
-  updatedTags.forEach((tag) => {
-    const foundTag = currentTags.find((t) => t.name === tag);
+  updatedTags.forEach((tag: any) => {
+    const foundTag = currentTags.find((t: any) => t.name === tag);
 
     if (foundTag) {
       return;
@@ -116,8 +121,8 @@ app.put("/services/:id", async (req, res) => {
     db.tagToService(tag, serviceId);
   });
 
-  currentTags.forEach((t) => {
-    const foundTag = updatedTags.find((tag) => tag === t.name);
+  currentTags.forEach((t: any) => {
+    const foundTag = updatedTags.find((tag: any) => tag === t.name);
 
     if (foundTag) {
       return;
@@ -156,7 +161,7 @@ app.delete("/services/:id", (req, res) => {
 app.get("/groups", async (req, res) => {
   const includeServices = req.query.services == "true";
 
-  const rawGroups = await db.allGroups();
+  const rawGroups = await db.allGroups() as any;
 
   const groupsWithDefaultGroup = [
     ...rawGroups,
@@ -178,7 +183,7 @@ app.get("/groups", async (req, res) => {
 
   const services = await getServices();
 
-  const servicesGrouped = services.reduce((acc, service) => {
+  const servicesGrouped = services.reduce((acc: any, service: any) => {
     (acc[service.groupId] ??= []).push(service);
     return acc;
   }, {});
@@ -226,9 +231,9 @@ app.delete("/groups/:id", (req, res) => {
 });
 
 app.get("/tags", async (req, res) => {
-  const data = await db.allTags();
+  const data = await db.allTags() as any;
 
-  const tags = data.map((entry) => ({
+  const tags = data.map((entry: any) => ({
     id: entry.id,
     name: entry.name,
     color: entry.color,
@@ -248,7 +253,7 @@ app.post("/tags", async (req, res) => {
     .then(() => {
       res.json({ message: "Tag erfolgreich hinzugefügt" });
     })
-    .catch((err) => {
+    .catch((err: any) => {
       console.log(err);
       res.json({ message: "Es ist ein Fehler aufgetreten" });
     });

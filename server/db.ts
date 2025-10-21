@@ -1,6 +1,13 @@
-const sqlite3 = require("sqlite3").verbose();
-const path = require("path");
-const fs = require("fs");
+import _sqlite3 from "sqlite3";
+import path from "path";
+import fs from "fs";
+
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename);
+
+const sqlite3 = _sqlite3.verbose();
 
 const dataFolder = path.join(__dirname, "data");
 const dbPath = path.join(dataFolder, "test.db");
@@ -36,7 +43,7 @@ const insertService = ({
   icon_wrap,
   status_enabled,
   groupId,
-}) => {
+}: any) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     const stmt = db.prepare(
@@ -68,7 +75,7 @@ VALUES
   });
 };
 
-const serviceToGroup = (serviceId, groupId) => {
+const serviceToGroup = (serviceId: string, groupId: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -83,7 +90,7 @@ WHERE id = ${serviceId};
   db.close();
 };
 
-const clearGroup = (groupId) => {
+const clearGroup = (groupId: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -140,8 +147,8 @@ CREATE TABLE IF NOT EXISTS tags (
 });
 
 const updateService = (
-  id,
-  { title, description, link, icon_url, icon_wrap, status_enabled, groupId }
+  id: string,
+  { title, description, link, icon_url, icon_wrap, status_enabled, groupId }: any
 ) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
@@ -164,7 +171,7 @@ WHERE id = ${id};
         reject(err);
         return;
       }
-      resolve();
+      resolve(null);
     });
     stmt.finalize();
 
@@ -172,7 +179,7 @@ WHERE id = ${id};
   });
 };
 
-const toggleService = (id, enabled) => {
+const toggleService = (id: string, enabled: boolean) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     const stmt = db.prepare(
@@ -188,7 +195,7 @@ WHERE id = ${id};
         reject(err);
         return;
       }
-      resolve();
+      resolve(null);
     });
     stmt.finalize();
 
@@ -196,7 +203,7 @@ WHERE id = ${id};
   });
 };
 
-const deleteService = (id) => {
+const deleteService = (id: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -225,7 +232,7 @@ const allGroups = async () => {
   });
 };
 
-const insertGroup = ({ title }) => {
+const insertGroup = ({ title }: any) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -243,7 +250,7 @@ VALUES
   db.close();
 };
 
-const updateGroup = (id, { title }) => {
+const updateGroup = (id: string, { title }: any) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -259,7 +266,7 @@ WHERE id = ${id};
   db.close();
 };
 
-const deleteGroup = (id) => {
+const deleteGroup = (id: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -286,7 +293,7 @@ const allTags = () => {
   });
 };
 
-const insertTag = ({ name, color }) => {
+const insertTag = ({ name, color }: any) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     const stmt = db.prepare(
@@ -305,7 +312,7 @@ VALUES
         reject(err);
         return;
       }
-      resolve();
+      resolve(null);
     });
     stmt.finalize();
 
@@ -313,7 +320,7 @@ VALUES
   });
 };
 
-const allTagsForService = (serviceId) => {
+const allTagsForService = (serviceId: string) => {
   return new Promise((resolve, reject) => {
     const db = openDB();
     db.all(
@@ -334,7 +341,7 @@ WHERE st.service_id = ${serviceId};
   });
 };
 
-const tagToService = (tag, serviceId) => {
+const tagToService = (tag: string, serviceId: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -352,7 +359,7 @@ VALUES
   db.close();
 };
 
-const removeTagFromService = (tag, serviceId) => {
+const removeTagFromService = (tag: string, serviceId: string) => {
   const db = openDB();
   const stmt = db.prepare(
     `
@@ -367,7 +374,7 @@ AND service_id = ${serviceId};
   db.close();
 };
 
-module.exports = {
+export default {
   db,
   insertService,
   allServices,

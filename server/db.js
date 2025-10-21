@@ -172,6 +172,30 @@ WHERE id = ${id};
   });
 };
 
+const toggleService = (id, enabled) => {
+  return new Promise((resolve, reject) => {
+    const db = openDB();
+    const stmt = db.prepare(
+      `
+UPDATE services
+SET 
+    status_enabled = ${enabled}
+WHERE id = ${id};
+`
+    );
+    stmt.run(function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+    stmt.finalize();
+
+    db.close();
+  });
+};
+
 const deleteService = (id) => {
   const db = openDB();
   const stmt = db.prepare(
@@ -348,6 +372,7 @@ module.exports = {
   insertService,
   allServices,
   updateService,
+  toggleService,
   deleteService,
   allGroups,
   insertGroup,

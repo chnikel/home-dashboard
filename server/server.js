@@ -129,6 +129,22 @@ app.put("/services/:id", async (req, res) => {
   res.json({ message: "Service erfolgreich aktualisiert" });
 });
 
+app.post("/services/:id/disable", (req, res) => {
+  const id = req.params.id;
+
+  db.toggleService(id, false);
+
+  res.json({ message: "Service erfolgreich deaktiviert" });
+});
+
+app.post("/services/:id/enable", (req, res) => {
+  const id = req.params.id;
+
+  db.toggleService(id, true);
+
+  res.json({ message: "Service erfolgreich aktiviert" });
+});
+
 app.delete("/services/:id", (req, res) => {
   const id = req.params.id;
 

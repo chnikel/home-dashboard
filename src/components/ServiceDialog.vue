@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { store } from "@/store";
+import { useForm } from "vee-validate";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -54,203 +55,193 @@ const props = defineProps<{
 
 const formSchema = toTypedSchema(ServiceDialogFormData);
 
-async function onSubmit(values: any) {
-  const data = values as ServiceDialogFormData;
-  emit("submit", data);
+const form = useForm({
+  validationSchema: formSchema,
+  initialValues: props.data
+    ? {
+        title: props.data?.title,
+        description: props.data?.description,
+        link: props.data?.link,
+        icon_url: props.data?.icon_url,
+        icon_wrap: props.data?.icon_wrap,
+        enabled: props.data?.enabled ?? true,
+        groupId: props.data?.groupId,
+      }
+    : undefined,
+});
+
+const onSubmit = form.handleSubmit((values) => {
+  emit("submit", values as ServiceDialogFormData);
 
   props.handleClose();
-}
+});
 </script>
 
 <template>
-  <Form
-    v-slot="{ handleSubmit, values }"
-    as=""
-    :keep-values="false"
-    :initial-values="
-      data
-        ? {
-            title: data?.title,
-            description: data?.description,
-            link: data?.link,
-            icon_url: data?.icon_url,
-            icon_wrap: data?.icon_wrap,
-            enabled: data?.enabled ?? true,
-            groupId: data?.groupId,
-          }
-        : undefined
-    "
-    :validation-schema="formSchema"
+  <Dialog
+    :open="open"
+    @update:open="handleClose"
   >
-    <Dialog
-      :open="open"
-      @update:open="handleClose"
-    >
-      <DialogContent class="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{{ title }}</DialogTitle>
-        </DialogHeader>
+    <DialogContent class="sm:max-w-[425px]">
+      <DialogHeader>
+        <DialogTitle>{{ title }}</DialogTitle>
+      </DialogHeader>
 
-        <form
-          id="dialogForm"
-          @submit="handleSubmit($event, onSubmit)"
-          class="space-y-3"
+      <form
+        id="dialogForm"
+        @submit="onSubmit"
+        class="space-y-3"
+      >
+        <FormField
+          v-slot="{ componentField }"
+          name="title"
         >
-          <FormField
-            v-slot="{ componentField }"
-            name="title"
-          >
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                autocomplete="off"
+                v-bind="componentField"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField }"
+          name="description"
+        >
+          <FormItem>
+            <FormLabel>Beschreibung</FormLabel>
+            <FormControl>
+              <Textarea
+                autocomplete="off"
+                v-bind="componentField"
+              ></Textarea>
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField }"
+          name="link"
+        >
+          <FormItem>
+            <FormLabel>Link</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                autocomplete="off"
+                v-bind="componentField"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField, value }"
+          name="icon_url"
+        >
+          <FormItem>
+            <FormLabel>Icon</FormLabel>
+            <FormControl>
+              <div class="flex items-center gap-2">
+                <ServiceIcon
+                  :url="value"
+                  :wrap="value.icon_wrap"
+                />
                 <Input
                   type="text"
                   autocomplete="off"
+                  placeholder="URL"
                   v-bind="componentField"
                 />
-              </FormControl>
-            </FormItem>
-          </FormField>
+              </div>
+            </FormControl>
+            <FormDescription>
+              Tip: Nutze
+              <a
+                class="underline"
+                :href="`https://dashboardicons.com/icons?q=${value.title}`"
+                target="_blank"
+                >dashboardicons.com</a
+              >
+            </FormDescription>
+          </FormItem>
+        </FormField>
 
-          <FormField
-            v-slot="{ componentField }"
-            name="description"
-          >
-            <FormItem>
-              <FormLabel>Beschreibung</FormLabel>
-              <FormControl>
-                <Textarea
-                  autocomplete="off"
-                  v-bind="componentField"
-                ></Textarea>
-              </FormControl>
-            </FormItem>
-          </FormField>
+        <FormField
+          v-slot="{ value, handleChange }"
+          name="icon_wrap"
+        >
+          <FormItem>
+            <FormLabel>Icon wrap</FormLabel>
+            <FormControl>
+              <Switch
+                :model-value="value"
+                @update:model-value="handleChange"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
 
-          <FormField
-            v-slot="{ componentField }"
-            name="link"
-          >
-            <FormItem>
-              <FormLabel>Link</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  autocomplete="off"
-                  v-bind="componentField"
-                />
-              </FormControl>
-            </FormItem>
-          </FormField>
+        <FormField
+          v-slot="{ value, handleChange }"
+          name="enabled"
+        >
+          <FormItem>
+            <FormLabel>Enabled</FormLabel>
+            <FormControl>
+              <Switch
+                :model-value="value"
+                @update:model-value="handleChange"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
 
-          <FormField
-            v-slot="{ componentField, value }"
-            name="icon_url"
-          >
-            <FormItem>
-              <FormLabel>Icon</FormLabel>
-              <FormControl>
-                <div class="flex items-center gap-2">
-                  <ServiceIcon
-                    :url="value"
-                    :wrap="values.icon_wrap"
-                  />
-                  <Input
-                    type="text"
-                    autocomplete="off"
-                    placeholder="URL"
-                    v-bind="componentField"
-                  />
-                </div>
-              </FormControl>
-              <FormDescription>
-                Tip: Nutze
-                <a
-                  class="underline"
-                  :href="`https://dashboardicons.com/icons?q=${values.title}`"
-                  target="_blank"
-                  >dashboardicons.com</a
-                >
-              </FormDescription>
-            </FormItem>
-          </FormField>
-
-          <FormField
-            v-slot="{ value, handleChange }"
-            name="icon_wrap"
-          >
-            <FormItem>
-              <FormLabel>Icon wrap</FormLabel>
-              <FormControl>
-                <Switch
-                  :model-value="value"
-                  @update:model-value="handleChange"
-                />
-              </FormControl>
-            </FormItem>
-          </FormField>
-
-          <FormField
-            v-slot="{ value, handleChange }"
-            name="enabled"
-          >
-            <FormItem>
-              <FormLabel>Enabled</FormLabel>
-              <FormControl>
-                <Switch
-                  :model-value="value"
-                  @update:model-value="handleChange"
-                />
-              </FormControl>
-            </FormItem>
-          </FormField>
-
-          <FormField
-            v-slot="{ componentField }"
-            name="groupId"
-          >
-            <FormItem>
-              <FormLabel>Gruppe</FormLabel>
-              <FormControl>
-                <Select v-bind="componentField">
-                  <FormControl>
-                    <SelectTrigger class="w-full">
-                      <SelectValue placeholder="" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem
-                        v-for="group in store.groups"
-                        :value="group.id"
-                      >
-                        {{ group.title || "Keine Gruppe" }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          </FormField>
-        </form>
+        <FormField
+          v-slot="{ componentField }"
+          name="groupId"
+        >
+          <FormItem>
+            <FormLabel>Gruppe</FormLabel>
+            <FormControl>
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger class="w-full">
+                    <SelectValue placeholder="" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      v-for="group in store.groups"
+                      :value="group.id"
+                    >
+                      {{ group.title || "Keine Gruppe" }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </FormControl>
+          </FormItem>
+        </FormField>
 
         <DialogFooter>
-          <Button
-            type="submit"
-            form="dialogForm"
-          >
+          <Button type="submit">
             {{ submitButton }}
           </Button>
           <Button
             type="button"
             variant="secondary"
-            form="dialogForm"
             @click="handleClose"
           >
             Schließen
           </Button>
         </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  </Form>
+      </form>
+    </DialogContent>
+  </Dialog>
 </template>

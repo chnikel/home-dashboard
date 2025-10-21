@@ -277,10 +277,13 @@ function handleTagRemove(id: number) {
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem
-                      v-for="group in filteredTags"
-                      :value="group.id"
+                      v-for="tag in filteredTags"
+                      :value="tag.id"
                     >
-                      {{ group.name }}
+                      <Tag
+                        :name="tag.name"
+                        :color="tag.color"
+                      />
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

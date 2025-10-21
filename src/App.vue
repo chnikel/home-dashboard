@@ -233,7 +233,11 @@ const compactMode = ref(params.compact === "1");
 
           <template v-for="group in groups">
             <ServiceGroup
-              v-if="group.services.length > 0 || isEditMode"
+              v-if="
+                (group.services.length > 0 &&
+                  group.services.filter((s) => s.enabled).length > 0) ||
+                isEditMode
+              "
               :compact="compactMode"
               :id="group.id"
               :title="group.id == null ? 'Keine Gruppe' : group.title"

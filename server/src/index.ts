@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "../dist")));
+app.use(express.static(path.join(__dirname, "../../dist")));
 
 const getServices = async () => {
   const data = await db.allServices() as any;

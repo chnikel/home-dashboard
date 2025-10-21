@@ -26,7 +26,7 @@ const emit = defineEmits<{
     </ContextMenuTrigger>
     <ContextMenuContent>
       <ContextMenuItem @click="emit('edit')"><PenIcon /> Bearbeiten</ContextMenuItem>
-      <ContextMenuItem disabled>
+      <ContextMenuItem @click="emit('toggleVisibility')">
         <template v-if="isEnabled"> <EyeOffIcon /> Verstecken </template>
         <template v-else> <EyeIcon /> Anzeigen </template>
       </ContextMenuItem>

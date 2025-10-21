@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Button from "./ui/button/Button.vue";
-import { updateService, type GetServicesResponse } from "@/api";
+import { disableService, enableService, updateService, type GetServicesResponse } from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
 import { findTag } from "@/store";
@@ -15,6 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "edit"): void;
+  (e: "toggleVisibility"): void;
   (e: "delete"): void;
 }>();
 
@@ -63,6 +64,16 @@ const onEditService = async (data: ServiceDialogFormData) => {
 
   emit("edit");
 };
+
+async function toggleServiceVisibility() {
+  if (props.service.enabled) {
+    await disableService(props.service.id.toString())
+  } else {
+    await enableService(props.service.id.toString())
+  }
+
+  emit("toggleVisibility")
+}
 </script>
 
 <template>
@@ -76,7 +87,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
   >
     <ServiceContextMenuWrapper
       :isEnabled="service.enabled"
-      @toggle-visibility=""
+      @toggle-visibility="toggleServiceVisibility()"
       @edit="showEditServiceDialog = true"
       @delete="emit('delete')"
     >

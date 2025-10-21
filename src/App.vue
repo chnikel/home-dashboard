@@ -250,6 +250,7 @@ const compactMode = ref(params.compact === "1");
                   :service="service"
                   :edit="isEditMode"
                   @edit="onEditServiceSuccess()"
+                  @toggleVisibility="refreshGroups()"
                   @delete="handleDeleteService(service)"
                 >
                   <Service

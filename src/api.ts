@@ -208,3 +208,23 @@ export const getTags = async () => {
 
   return services as GetTagsResponse[];
 };
+
+export const disableService = async (id: string) => {
+   await fetch(`${host}/services/${id}/disable`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: null
+  });
+};
+
+export const enableService = async (id: string) => {
+   await fetch(`${host}/services/${id}/enable`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: null
+  });
+};

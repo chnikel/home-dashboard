@@ -241,6 +241,7 @@ const compactMode = ref(params.compact === "1");
                 :icon_url="service.icon_url"
                 :icon_wrap="service.icon_wrap"
                 :tags="service.tags"
+                :isEnabled="service.enabled"
               />
             </EditServiceWrapper>
           </template>

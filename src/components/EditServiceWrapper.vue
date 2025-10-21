@@ -75,7 +75,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
   >
     <div
       v-if="edit"
-      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1"
+      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1 z-10"
     >
       <div class="flex gap-3 justify-center items-center h-full">
         <Button

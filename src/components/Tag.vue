@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { XIcon } from "lucide-vue-next";
 import { computed } from "vue";
 
 const classes = {
@@ -34,7 +35,7 @@ const classes = {
   stone: "bg-stone-100 text-stone-800 dark:bg-stone-900 dark:text-stone-300",
 };
 
-export type TagColors = keyof typeof classes
+export type TagColors = keyof typeof classes;
 
 const emit = defineEmits<{
   (e: "action"): void;
@@ -51,17 +52,15 @@ const colorClasses = computed(() => classes[props.color]);
 
 <template>
   <div
-    :class="`inline-flex text-xs font-medium me-2 px-2.5 py-0.5 rounded ${colorClasses}`"
+    :class="`inline-flex text-xs font-medium me-2 px-2.5 py-1 rounded ${colorClasses}`"
   >
     <div>{{ name }}</div>
 
-    <div
+    <XIcon
       v-if="action"
+      class="ml-1 font-bold cursor-pointer hover:bg-gray-100/10 rounded"
+      :size="16"
       @click="emit('action')"
-      class="ml-2 font-bold cursor-pointer"
-      type="button"
-    >
-      x
-    </div>
+    />
   </div>
 </template>

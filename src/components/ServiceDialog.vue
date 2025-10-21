@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import z from "zod";
 import Button from "./ui/button/Button.vue";
-import { Form, FormField } from "./ui/form";
+import { FormField } from "./ui/form";
 import FormItem from "./ui/form/FormItem.vue";
 import FormLabel from "./ui/form/FormLabel.vue";
 import FormControl from "./ui/form/FormControl.vue";
@@ -250,10 +250,7 @@ function handleTagRemove(id: number) {
           </FormItem>
         </FormField>
 
-        <FormField
-          v-slot="{ value }"
-          name="tagIds"
-        >
+        <FormField name="tagIds">
           <FormItem>
             <FormLabel>Tags</FormLabel>
 

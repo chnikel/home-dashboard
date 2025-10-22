@@ -197,12 +197,12 @@ app.get("/groups", async (req, res) => {
   res.json(groups);
 });
 
-app.post("/groups", (req, res) => {
+app.post("/groups", async (req, res) => {
   const data = {
     title: req.body.title,
   };
 
-  db.insertGroup(data);
+  await db.insertGroup(data);
 
   res.json({ message: "Gruppe erfolgreich hinzugefügt" });
 });

@@ -72,7 +72,7 @@ const allGroups = async () => {
 };
 
 const insertGroup = async (data: NewGroup) => {
-  const result = await db.insert(services).values(data);
+  const result = db.insert(groups).values(data);
   return result;
 };
 

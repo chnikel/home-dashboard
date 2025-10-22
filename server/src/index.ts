@@ -8,7 +8,7 @@ import db from "./db";
 const app = express();
 const port = 3000;
 
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   cors({
@@ -75,18 +75,20 @@ app.post("/services", async (req, res) => {
 
   const tags = req.body.tags || [];
 
-  tags.forEach((tag: any) => {
-    db.tagToService(tag, Number(serviceId.lastInsertRowid));
-  });
+  await Promise.all(
+    tags.map((tag: any) => {
+      return db.tagToService(tag, Number(serviceId.lastInsertRowid));
+    })
+  );
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
 });
 
-app.post("/services/:id/group/:group", (req, res) => {
+app.post("/services/:id/group/:group", async (req, res) => {
   const id = Number(req.params.id);
   const groupId = Number(req.params.group);
 
-  db.serviceToGroup(id, groupId);
+  await db.serviceToGroup(id, groupId);
 
   res.json({ message: "Service erfolgreich der Gruppe zugewiesen" });
 });
@@ -109,49 +111,53 @@ app.put("/services/:id", async (req, res) => {
   const updatedTags = req.body.tags || [];
   const currentTags = await db.allTagsForService(serviceId);
 
-  updatedTags.forEach((tag: any) => {
-    const foundTag = currentTags.find((t) => t.tags?.name === tag);
+  await Promise.all(
+    updatedTags.map((tag: any) => {
+      const foundTag = currentTags.find((t) => t.tags?.name === tag);
 
-    if (foundTag) {
-      return;
-    }
+      if (foundTag) {
+        return;
+      }
 
-    db.tagToService(tag, serviceId);
-  });
+      return db.tagToService(tag, serviceId);
+    })
+  );
 
-  currentTags.forEach((t: any) => {
-    const foundTag = updatedTags.find((tag: any) => tag === t.name);
+  await Promise.all(
+    currentTags.map((t: any) => {
+      const foundTag = updatedTags.find((tag: any) => tag === t.name);
 
-    if (foundTag) {
-      return;
-    }
+      if (foundTag) {
+        return;
+      }
 
-    db.removeTagFromService(t.name, serviceId);
-  });
+      return db.removeTagFromService(t.name, serviceId);
+    })
+  );
 
   res.json({ message: "Service erfolgreich aktualisiert" });
 });
 
-app.post("/services/:id/disable", (req, res) => {
+app.post("/services/:id/disable", async (req, res) => {
   const id = Number(req.params.id);
 
-  db.toggleService(id, false);
+  await db.toggleService(id, false);
 
   res.json({ message: "Service erfolgreich deaktiviert" });
 });
 
-app.post("/services/:id/enable", (req, res) => {
+app.post("/services/:id/enable", async (req, res) => {
   const id = Number(req.params.id);
 
-  db.toggleService(id, true);
+  await db.toggleService(id, true);
 
   res.json({ message: "Service erfolgreich aktiviert" });
 });
 
-app.delete("/services/:id", (req, res) => {
+app.delete("/services/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  db.deleteService(id);
+  await db.deleteService(id);
 
   res.json({ message: "Service erfolgreich gelöscht" });
 });
@@ -207,14 +213,14 @@ app.post("/groups", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich hinzugefügt" });
 });
 
-app.put("/groups/:id", (req, res) => {
+app.put("/groups/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   const data = {
     title: req.body.title,
   };
 
-  db.updateGroup(id, data);
+  await db.updateGroup(id, data);
 
   res.json({ message: "Gruppe erfolgreich aktualisiert" });
 });

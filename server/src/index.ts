@@ -255,24 +255,6 @@ app.post("/tags", async (req, res) => {
     });
 });
 
-app.post("/tags/:name/service/:service", (req, res) => {
-  const name = req.params.name;
-  const serviceId = Number(req.params.service);
-
-  db.tagToService(name, serviceId);
-
-  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
-});
-
-app.delete("/tags/:name/service/:service", (req, res) => {
-  const name = req.params.name;
-  const serviceId = Number(req.params.service);
-
-  db.removeTagFromService(name, serviceId);
-
-  res.json({ message: "Tag erfolgreich dem Service zugewiesen" });
-});
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });

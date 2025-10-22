@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
-import db from "./db"
+import db from "./db";
 
 const app = express();
 const port = 3000;
@@ -17,10 +17,10 @@ app.use(
 app.use(express.static(path.join(__dirname, "../../dist")));
 
 const getServices = async () => {
-  const data = await db.allServices() as any;
+  const data = await db.allServices();
 
   const services = await Promise.all(
-    data.map(async (entry: any) => {
+    data.map(async (entry) => {
       const tags = await db.allTagsForService(entry.id);
 
       return {
@@ -28,10 +28,10 @@ const getServices = async () => {
         title: entry.title,
         description: entry.description,
         link: entry.link,
-        icon_url: entry.icon_url,
-        icon_wrap: entry.icon_wrap ? true : false,
-        enabled: entry.status_enabled ? true : false,
-        groupId: entry.group_id,
+        icon_url: entry.iconUrl,
+        icon_wrap: entry.iconWrap ? true : false,
+        enabled: entry.enabled ? true : false,
+        groupId: entry.groupId,
         tags,
       };
     })
@@ -69,20 +69,20 @@ app.post("/services", async (req, res) => {
     groupId: req.body.groupId,
   };
 
-  const serviceId = await db.insertService(data) as string;
+  const serviceId = await db.insertService(data);
 
   const tags = req.body.tags || [];
 
   tags.forEach((tag: any) => {
-    db.tagToService(tag, serviceId);
+    db.tagToService(tag, Number(serviceId.lastInsertRowid));
   });
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
 });
 
 app.post("/services/:id/group/:group", (req, res) => {
-  const id = req.params.id;
-  const groupId = req.params.group;
+  const id = Number(req.params.id);
+  const groupId = Number(req.params.group);
 
   db.serviceToGroup(id, groupId);
 
@@ -90,7 +90,7 @@ app.post("/services/:id/group/:group", (req, res) => {
 });
 
 app.put("/services/:id", async (req, res) => {
-  const serviceId = req.params.id;
+  const serviceId = Number(req.params.id);
 
   const data = {
     title: req.body.title,
@@ -105,10 +105,10 @@ app.put("/services/:id", async (req, res) => {
   await db.updateService(serviceId, data);
 
   const updatedTags = req.body.tags || [];
-  const currentTags = await db.allTagsForService(serviceId) as any;
+  const currentTags = await db.allTagsForService(serviceId);
 
   updatedTags.forEach((tag: any) => {
-    const foundTag = currentTags.find((t: any) => t.name === tag);
+    const foundTag = currentTags.find((t) => t.tags?.name === tag);
 
     if (foundTag) {
       return;
@@ -131,7 +131,7 @@ app.put("/services/:id", async (req, res) => {
 });
 
 app.post("/services/:id/disable", (req, res) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   db.toggleService(id, false);
 
@@ -139,7 +139,7 @@ app.post("/services/:id/disable", (req, res) => {
 });
 
 app.post("/services/:id/enable", (req, res) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   db.toggleService(id, true);
 
@@ -147,7 +147,7 @@ app.post("/services/:id/enable", (req, res) => {
 });
 
 app.delete("/services/:id", (req, res) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   db.deleteService(id);
 
@@ -157,7 +157,7 @@ app.delete("/services/:id", (req, res) => {
 app.get("/groups", async (req, res) => {
   const includeServices = req.query.services == "true";
 
-  const rawGroups = await db.allGroups() as any;
+  const rawGroups = await db.allGroups();
 
   const groupsWithDefaultGroup = [
     ...rawGroups,
@@ -188,7 +188,7 @@ app.get("/groups", async (req, res) => {
     return {
       id: entry.id,
       title: entry.title,
-      services: servicesGrouped[entry.id] || [],
+      services: entry.id ? servicesGrouped[entry.id] || [] : [],
     };
   });
 
@@ -206,7 +206,7 @@ app.post("/groups", (req, res) => {
 });
 
 app.put("/groups/:id", (req, res) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   const data = {
     title: req.body.title,
@@ -218,7 +218,7 @@ app.put("/groups/:id", (req, res) => {
 });
 
 app.delete("/groups/:id", (req, res) => {
-  const id = req.params.id;
+  const id = Number(req.params.id);
 
   db.deleteGroup(id);
   db.clearGroup(id);
@@ -227,9 +227,9 @@ app.delete("/groups/:id", (req, res) => {
 });
 
 app.get("/tags", async (req, res) => {
-  const data = await db.allTags() as any;
+  const data = await db.allTags();
 
-  const tags = data.map((entry: any) => ({
+  const tags = data.map((entry) => ({
     id: entry.id,
     name: entry.name,
     color: entry.color,
@@ -257,7 +257,7 @@ app.post("/tags", async (req, res) => {
 
 app.post("/tags/:name/service/:service", (req, res) => {
   const name = req.params.name;
-  const serviceId = req.params.service;
+  const serviceId = Number(req.params.service);
 
   db.tagToService(name, serviceId);
 
@@ -266,7 +266,7 @@ app.post("/tags/:name/service/:service", (req, res) => {
 
 app.delete("/tags/:name/service/:service", (req, res) => {
   const name = req.params.name;
-  const serviceId = req.params.service;
+  const serviceId = Number(req.params.service);
 
   db.removeTagFromService(name, serviceId);
 

@@ -1,373 +1,149 @@
-import _sqlite3 from "sqlite3";
-import path from "path";
-import fs from "fs";
-
-const sqlite3 = _sqlite3.verbose();
-
-const dataFolder = path.join(__dirname, "data");
-const dbPath = path.join(dataFolder, "test.db");
-
-if (!fs.existsSync(dataFolder)) {
-  console.log("🗂️  Create data folder...");
-  fs.mkdirSync(dataFolder);
-}
-
-const openDB = () => new sqlite3.Database(dbPath);
+import { and, eq } from "drizzle-orm";
+import { db } from "./db/index";
+import {
+  groups,
+  NewGroup,
+  NewService,
+  NewTag,
+  services,
+  serviceTags,
+  tags,
+} from "./db/schema";
 
 const allServices = async () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all(
-      "SELECT id, title, description, link, icon_url, icon_wrap, status_enabled, group_id FROM services",
-      (err, rows) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(rows);
-      }
-    );
-  });
+  return db.select().from(services);
 };
 
-const insertService = ({
-  title,
-  description,
-  link,
-  icon_url,
-  icon_wrap,
-  status_enabled,
-  groupId,
-}: any) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-INSERT INTO services 
-(title, description, link, icon_url, icon_wrap, status_enabled, group_id)
-VALUES
-(
-  '${title}',
-  '${description}',
-  '${link}',
-  '${icon_url}',
-  ${icon_wrap},
-  ${status_enabled},
-  ${groupId || null}
-);
-`
-    );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      // @ts-ignore
-      resolve(this.lastID);
-    });
-    stmt.finalize();
-
-    db.close();
-  });
+const insertService = (data: NewService) => {
+  const result = db.insert(services).values(data);
+  return result;
 };
 
-const serviceToGroup = (serviceId: string, groupId: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-UPDATE services
-SET group_id = ${groupId}
-WHERE id = ${serviceId};
-`
-  );
-  stmt.run();
-  stmt.finalize();
+const serviceToGroup = async (serviceId: number, groupId: number) => {
+  const result = await db
+    .update(services)
+    .set({
+      groupId: groupId,
+    })
+    .where(eq(services.id, serviceId));
 
-  db.close();
+  return result;
 };
 
-const clearGroup = (groupId: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-UPDATE services
-SET group_id = null
-WHERE group_id = ${groupId};
-`
-  );
-  stmt.run();
-  stmt.finalize();
+const clearGroup = async (groupId: number) => {
+  const result = await db
+    .update(services)
+    .set({
+      groupId: groupId,
+    })
+    .where(eq(services.groupId, groupId));
 
-  db.close();
+  return result;
 };
 
-const db = openDB();
-db.serialize(() => {
-  console.log("🗂️  Create DB if not exists...");
+const updateService = async (serviceId: number, data: Partial<NewService>) => {
+  const result = await db
+    .update(services)
+    .set(data)
+    .where(eq(services.id, serviceId));
 
-  db.run(`
-CREATE TABLE IF NOT EXISTS services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    link TEXT,
-    icon_url TEXT,
-    icon_wrap BOOLEAN,
-    status_enabled BOOLEAN,
-    group_id INT
-);
-`);
-
-  db.run(`
-CREATE TABLE IF NOT EXISTS groups (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL
-);
-`);
-
-  db.run(`
-CREATE TABLE IF NOT EXISTS tags (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    color TEXT NOT NULL
-);
-`);
-
-  db.run(`
-  CREATE TABLE IF NOT EXISTS service_tags (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    service_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL
-);
-`);
-});
-
-const updateService = (
-  id: string,
-  { title, description, link, icon_url, icon_wrap, status_enabled, groupId }: any
-) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-UPDATE services
-SET 
-    title = '${title}',
-    description = '${description}',
-    link = '${link}',
-    icon_url = '${icon_url}',
-    icon_wrap = ${icon_wrap},
-    status_enabled = ${status_enabled},
-    group_id = ${groupId}
-WHERE id = ${id};
-`
-    );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(null);
-    });
-    stmt.finalize();
-
-    db.close();
-  });
+  return result;
 };
 
-const toggleService = (id: string, enabled: boolean) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-UPDATE services
-SET 
-    status_enabled = ${enabled}
-WHERE id = ${id};
-`
-    );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(null);
-    });
-    stmt.finalize();
+const toggleService = async (serviceId: number, isEnabled: boolean) => {
+  const result = await db
+    .update(services)
+    .set({
+      enabled: isEnabled,
+    })
+    .where(eq(services.id, serviceId));
 
-    db.close();
-  });
+  return result;
 };
 
-const deleteService = (id: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-DELETE FROM services
-WHERE id = ${id};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
+const deleteService = (serviceId: number) => {
+  const result = db.delete(services).where(eq(services.id, serviceId));
+  return result;
 };
-
-db.close();
 
 const allGroups = async () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all("SELECT id, title FROM groups", (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(rows);
-    });
-  });
+  const result = db.select().from(groups);
+  return result;
 };
 
-const insertGroup = ({ title }: any) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-INSERT INTO groups 
-(title)
-VALUES
-(
-  '${title}'
-);
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
+const insertGroup = async (data: NewGroup) => {
+  const result = await db.insert(services).values(data);
+  return result;
 };
 
-const updateGroup = (id: string, { title }: any) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-UPDATE groups
-SET 
-    title = '${title}'
-WHERE id = ${id};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
+const updateGroup = async (groupId: number, data: NewGroup) => {
+  const result = db.update(groups).set(data).where(eq(groups.id, groupId));
+  return result;
 };
 
-const deleteGroup = (id: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-DELETE FROM groups
-WHERE id = ${id};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
+const deleteGroup = (groupId: number) => {
+  const result = db.delete(groups).where(eq(groups.id, groupId));
+  return result;
 };
 
 const allTags = () => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all("SELECT id, name, color FROM tags", (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(rows);
-    });
-  });
+  const result = db.select().from(tags);
+  return result;
 };
 
-const insertTag = ({ name, color }: any) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    const stmt = db.prepare(
-      `
-INSERT INTO tags 
-(name, color)
-VALUES
-(
-  '${name}',
-  '${color}'
-);
-`
+const findTagByName = async (name: string) => {
+  const result = await db.select().from(tags).where(eq(tags.name, name));
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return result[0];
+};
+
+const insertTag = (data: NewTag) => {
+  const result = db.insert(tags).values(data);
+  return result;
+};
+
+const allTagsForService = (serviceId: number) => {
+  const result = db
+    .select()
+    .from(tags)
+    .leftJoin(serviceTags, eq(tags.id, serviceTags.tagId))
+    .where(eq(serviceTags.serviceId, serviceId)); // TODO: LEFT correct?
+  return result;
+};
+
+const tagToService = async (tagName: string, serviceId: number) => {
+  const tag = await findTagByName(tagName);
+
+  if (!tag) {
+    throw Error(`Tag not found '${tagName}'`);
+  }
+
+  const result = db.insert(serviceTags).values({
+    serviceId: serviceId,
+    tagId: tag.id,
+  });
+
+  return result;
+};
+
+const removeTagFromService = async (tagName: string, serviceId: number) => {
+  const tag = await findTagByName(tagName);
+
+  if (!tag) {
+    throw Error(`Tag not found '${tagName}'`);
+  }
+
+  const result = db
+    .delete(serviceTags)
+    .where(
+      and(eq(serviceTags.tagId, tag.id), eq(serviceTags.serviceId, serviceId))
     );
-    stmt.run(function (err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(null);
-    });
-    stmt.finalize();
 
-    db.close();
-  });
-};
-
-const allTagsForService = (serviceId: string) => {
-  return new Promise((resolve, reject) => {
-    const db = openDB();
-    db.all(
-      `
-SELECT t.id, t.name, t.color
-FROM tags t
-JOIN service_tags st ON t.id = st.tag_id
-WHERE st.service_id = ${serviceId};
-      `,
-      (err, rows) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(rows);
-      }
-    );
-  });
-};
-
-const tagToService = (tag: string, serviceId: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-INSERT INTO service_tags (service_id, tag_id)
-VALUES 
-(
-  ${serviceId},
-  (SELECT id FROM tags WHERE name='${tag}')
-);
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
-};
-
-const removeTagFromService = (tag: string, serviceId: string) => {
-  const db = openDB();
-  const stmt = db.prepare(
-    `
-DELETE FROM service_tags
-WHERE tag_id = (SELECT id FROM tags WHERE name = '${tag}')
-AND service_id = ${serviceId};
-`
-  );
-  stmt.run();
-  stmt.finalize();
-
-  db.close();
+  return result;
 };
 
 export default {

@@ -219,11 +219,11 @@ app.put("/groups/:id", (req, res) => {
   res.json({ message: "Gruppe erfolgreich aktualisiert" });
 });
 
-app.delete("/groups/:id", (req, res) => {
+app.delete("/groups/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  db.deleteGroup(id);
-  db.clearGroup(id);
+  await db.deleteGroup(id);
+  await db.clearGroup(id);
 
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });

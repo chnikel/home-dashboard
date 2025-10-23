@@ -106,12 +106,17 @@ const insertTag = (data: NewTag) => {
   return result;
 };
 
-const allTagsForService = (serviceId: number) => {
+const allTagsForService = async (serviceId: number) => {
   const result = db
-    .select()
+    .select({
+      id: tags.id,
+      name: tags.name,
+      color: tags.color,
+    })
     .from(tags)
     .leftJoin(serviceTags, eq(tags.id, serviceTags.tagId))
-    .where(eq(serviceTags.serviceId, serviceId)); // TODO: LEFT correct?
+    .where(eq(serviceTags.serviceId, serviceId));
+
   return result;
 };
 
@@ -120,7 +125,7 @@ const tagToService = async (tagName: string, serviceId: number) => {
 
   if (!tag) {
     console.warn(`Not adding tag '${tagName}'. Reason: Tag not found.`);
-    return 
+    return;
   }
 
   const result = db.insert(serviceTags).values({

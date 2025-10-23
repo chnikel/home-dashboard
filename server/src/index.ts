@@ -114,7 +114,7 @@ app.put("/services/:id", async (req, res) => {
 
   await Promise.all(
     updatedTags.map((tag: any) => {
-      const foundTag = currentTags.find((t) => t.tags?.name === tag);
+      const foundTag = currentTags.find((t) => t?.name === tag);
 
       if (foundTag) {
         return;

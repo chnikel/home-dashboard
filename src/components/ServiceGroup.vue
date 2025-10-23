@@ -4,6 +4,7 @@ import EditGroupWrapper from "./EditGroupWrapper.vue";
 import { moveService, updateGroup } from "../api";
 import GroupDialog from "./GroupDialog.vue";
 import { provide } from "vue";
+import { EyeOffIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   compact?: boolean;
@@ -84,6 +85,9 @@ const onEditGroupSuccess = async (data: { title: string }) => {
       >
         {{ title }}
       </h2>
+      <div v-if="!compact" class="flex gap-1 items-center px-4">
+        <EyeOffIcon :size="16"/> 0
+      </div>
     </EditGroupWrapper>
     <div
       class=""

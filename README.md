@@ -16,3 +16,12 @@ services:
     volumes:
       - ./data:/app/server/data
 ```
+
+## Migrations
+
+Run migration
+
+```sh
+docker exec -it <container_name> bash
+npm run db:push
+```

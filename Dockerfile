@@ -17,4 +17,6 @@ WORKDIR /app/server
 
 RUN npm install
 
-CMD [ "node", "server.js" ]
+RUN npm run build
+
+CMD [ "node", "dist", "server.js" ]

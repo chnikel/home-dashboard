@@ -11,7 +11,8 @@ export const services = sqliteTable("services", {
   groupId: integer("group_id").references(() => groups.id),
 });
 
-export type NewService = Omit<typeof services.$inferInsert, "id">;
+export type Service = typeof services.$inferInsert;
+export type NewService = Omit<Service, "id">;
 
 export const groups = sqliteTable("groups", {
   id: integer("id").primaryKey({ autoIncrement: true }),

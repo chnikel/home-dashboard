@@ -46,11 +46,11 @@ const getServices = async () => {
 app.get("/services", async (req, res) => {
   const services = await getServices();
 
-  const groupBy = req.query.groupBy;
+  const groupBy = String(req.query.groupBy);
 
   if (groupBy) {
     const servicesGrouped = services.reduce((acc: any, service: any) => {
-      (acc[service[groupBy as any]] ??= []).push(service);
+      (acc[service[groupBy]] ??= []).push(service);
       return acc;
     }, {});
 
@@ -74,10 +74,10 @@ app.post("/services", async (req, res) => {
 
   const serviceId = await db.insertService(data);
 
-  const tags = req.body.tags || [];
+  const tags: string[] = req.body.tags || [];
 
   await Promise.all(
-    tags.map((tag: any) => {
+    tags.map((tag) => {
       return db.tagToService(tag, Number(serviceId.lastInsertRowid));
     })
   );
@@ -109,11 +109,11 @@ app.put("/services/:id", async (req, res) => {
 
   await db.updateService(serviceId, data);
 
-  const updatedTags = req.body.tags || [];
+  const updatedTags: string[] = req.body.tags || [];
   const currentTags = await db.allTagsForService(serviceId);
 
   await Promise.all(
-    updatedTags.map((tag: any) => {
+    updatedTags.map((tag) => {
       const foundTag = currentTags.find((t) => t?.name === tag);
 
       if (foundTag) {
@@ -125,8 +125,8 @@ app.put("/services/:id", async (req, res) => {
   );
 
   await Promise.all(
-    currentTags.map((t: any) => {
-      const foundTag = updatedTags.find((tag: any) => tag === t.name);
+    currentTags.map((t) => {
+      const foundTag = updatedTags.find((tag) => tag === t.name);
 
       if (foundTag) {
         return;
@@ -258,7 +258,7 @@ app.post("/tags", async (req, res) => {
     .then(() => {
       res.json({ message: "Tag erfolgreich hinzugefügt" });
     })
-    .catch((err: any) => {
+    .catch((err) => {
       console.log(err);
       res.json({ message: "Es ist ein Fehler aufgetreten" });
     });

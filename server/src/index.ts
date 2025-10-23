@@ -64,13 +64,13 @@ app.get("/services", async (req, res) => {
 });
 
 app.post("/services", async (req, res) => {
-  const data = {
+  const data: NewService = {
     title: req.body.title,
     description: req.body.description,
     link: req.body.link,
-    icon_url: req.body.icon_url,
-    icon_wrap: req.body.icon_wrap,
-    status_enabled: req.body.enabled,
+    iconUrl: req.body.icon_url,
+    iconWrap: req.body.icon_wrap,
+    enabled: req.body.enabled,
     groupId: req.body.groupId,
   };
 

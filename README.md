@@ -16,3 +16,11 @@ services:
     volumes:
       - ./data:/app/server/data
 ```
+
+## Migrations
+
+Run migration
+
+```sh
+docker exec home-dashboard-homepage-1 npm run migrate
+```

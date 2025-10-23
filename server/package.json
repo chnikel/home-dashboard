@@ -5,7 +5,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrate": "npx drizzle-kit push"
+    "db:push": "npx drizzle-kit push"
   },
   "keywords": [],
   "author": "",

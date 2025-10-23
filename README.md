@@ -22,5 +22,5 @@ services:
 Run migration
 
 ```sh
-docker exec home-dashboard-homepage-1 npm run migrate
+docker exec home-dashboard-homepage-1 npm run db:push
 ```

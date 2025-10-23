@@ -19,6 +19,8 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "../../dist")));
 
+const DEFAULT_GROUP_ID = "null";
+
 const getServices = async () => {
   const data = await db.allServices();
 
@@ -188,8 +190,10 @@ app.get("/groups", async (req, res) => {
 
   const services = await getServices();
 
-  const servicesGrouped = services.reduce((acc: any, service: any) => {
-    (acc[service.groupId] ??= []).push(service);
+  const servicesGrouped = services.reduce<{
+    [key: string]: (typeof services)[0][];
+  }>((acc, service) => {
+    (acc[service.groupId || DEFAULT_GROUP_ID] ??= []).push(service);
     return acc;
   }, {});
 
@@ -197,7 +201,7 @@ app.get("/groups", async (req, res) => {
     return {
       id: entry.id,
       title: entry.title,
-      services: entry.id ? servicesGrouped[entry.id] || [] : [],
+      services: servicesGrouped[entry.id || DEFAULT_GROUP_ID] || [],
     };
   });
 

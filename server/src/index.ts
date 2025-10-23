@@ -99,7 +99,7 @@ app.post("/services/:id/group/:group", async (req, res) => {
 app.put("/services/:id", async (req, res) => {
   const serviceId = Number(req.params.id);
 
-  const data = {
+  const data: NewService = {
     title: req.body.title,
     description: req.body.description,
     link: req.body.link,
@@ -107,7 +107,7 @@ app.put("/services/:id", async (req, res) => {
     iconWrap: req.body.icon_wrap,
     enabled: req.body.enabled,
     groupId: req.body.groupId,
-  } satisfies NewService;
+  };
 
   await db.updateService(serviceId, data);
 

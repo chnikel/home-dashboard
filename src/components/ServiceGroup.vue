@@ -71,6 +71,7 @@ const onEditGroupSuccess = async (data: { title: string }) => {
     }"
   >
     <EditGroupWrapper
+      class="h-12"
       :edit="edit"
       @edit="showGroupDialog = true"
       @delete="$emit('delete')"

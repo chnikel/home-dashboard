@@ -246,7 +246,7 @@ const searchText = ref("");
               "
               :compact="compactMode"
               :id="group.id"
-              :title="group.id == null ? 'Keine Gruppe' : group.title"
+              :title="group.id == null ? '' : group.title"
               :edit="isEditMode"
               @edit="onEditSuccess()"
               @delete="handleDeleteGroup(group.id)"

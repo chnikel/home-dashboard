@@ -314,7 +314,7 @@ function handleTagRemove(id: number) {
                       v-for="group in store.groups"
                       :value="group.id"
                     >
-                      {{ group.title || "Keine Gruppe" }}
+                      {{ group.title }}
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

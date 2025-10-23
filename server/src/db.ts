@@ -119,7 +119,8 @@ const tagToService = async (tagName: string, serviceId: number) => {
   const tag = await findTagByName(tagName);
 
   if (!tag) {
-    throw Error(`Tag not found '${tagName}'`);
+    console.warn(`Not adding tag '${tagName}'. Reason: Tag not found.`);
+    return 
   }
 
   const result = db.insert(serviceTags).values({

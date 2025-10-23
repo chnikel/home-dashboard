@@ -41,7 +41,7 @@ const clearGroup = async (groupId: number) => {
   return result;
 };
 
-const updateService = async (serviceId: number, data: Partial<NewService>) => {
+const updateService = async (serviceId: number, data: NewService) => {
   const result = await db
     .update(services)
     .set(data)

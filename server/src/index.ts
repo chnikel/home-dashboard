@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
+import { NewService } from "./db/schema";
 
 import db from "./db";
 
@@ -100,11 +101,11 @@ app.put("/services/:id", async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     link: req.body.link,
-    icon_url: req.body.icon_url,
-    icon_wrap: req.body.icon_wrap,
-    status_enabled: req.body.enabled,
+    iconUrl: req.body.icon_url,
+    iconWrap: req.body.icon_wrap,
+    enabled: req.body.enabled,
     groupId: req.body.groupId,
-  };
+  } satisfies NewService;
 
   await db.updateService(serviceId, data);
 

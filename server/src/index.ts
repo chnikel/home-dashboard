@@ -46,7 +46,7 @@ const getServices = async () => {
 app.get("/services", async (req, res) => {
   const services = await getServices();
 
-  const groupBy = String(req.query.groupBy);
+  const groupBy = req.query.groupBy as string | undefined;
 
   if (groupBy) {
     const servicesGrouped = services.reduce((acc: any, service: any) => {

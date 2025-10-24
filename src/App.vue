@@ -30,7 +30,7 @@ import { findTag, store } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
   FilePlusIcon,
-  GroupIcon,
+  FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
   TagIcon,
@@ -42,9 +42,6 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import ContextMenuSub from "./components/ui/context-menu/ContextMenuSub.vue";
-import ContextMenuSubTrigger from "./components/ui/context-menu/ContextMenuSubTrigger.vue";
-import ContextMenuSubContent from "./components/ui/context-menu/ContextMenuSubContent.vue";
 import Input from "./components/ui/input/Input.vue";
 
 const groups = ref<GetServiceGroupsResponse[] | null>(null);
@@ -204,7 +201,7 @@ const searchText = ref("");
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem @click="showGroupDialog = true">
-                  <GroupIcon /> Gruppe hinzufügen
+                  <FolderIcon /> Gruppe hinzufügen
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="showTagDialog = true">
                   <TagIcon /> Tag hinzufügen
@@ -298,21 +295,16 @@ const searchText = ref("");
       </div>
     </ContextMenuTrigger>
     <ContextMenuContent>
-      <ContextMenuSub>
-        <ContextMenuSubTrigger inset> Hinzufügen </ContextMenuSubTrigger>
-        <ContextMenuSubContent class="w-48">
-          <ContextMenuItem @click="showServiceDialog = true">
-            <FilePlusIcon /> Service
-          </ContextMenuItem>
-          <ContextMenuSeparator />
-          <ContextMenuItem @click="showGroupDialog = true">
-            <GroupIcon /> Gruppe
-          </ContextMenuItem>
-          <ContextMenuItem @click="showTagDialog = true">
-            <TagIcon /> Tag
-          </ContextMenuItem>
-        </ContextMenuSubContent>
-      </ContextMenuSub>
+      <ContextMenuItem @click="showServiceDialog = true">
+        <FilePlusIcon /> Service hinzufügen
+      </ContextMenuItem>
+      <ContextMenuSeparator />
+      <ContextMenuItem @click="showGroupDialog = true">
+        <FolderIcon /> Gruppe hinzufügen
+      </ContextMenuItem>
+      <ContextMenuItem @click="showTagDialog = true">
+        <TagIcon /> Tag hinzufügen
+      </ContextMenuItem>
 
       <ContextMenuSeparator />
 

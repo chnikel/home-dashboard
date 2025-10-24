@@ -1,12 +1,12 @@
 name: Docker Image Push
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
 
-  build:
+  publish:
 
     runs-on: ubuntu-latest
 

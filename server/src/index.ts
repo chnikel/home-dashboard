@@ -7,6 +7,9 @@ import { NewService, NewTag } from "./db/schema";
 import db from "./db";
 import config from "./config";
 
+console.log(`ℹ️  Port: ${config.port}`);
+console.log(`ℹ️  Database: ${config.database.filename}`);
+
 const app = express();
 
 app.use(morgan("dev"));

@@ -170,8 +170,8 @@ const searchText = ref("");
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="h-screen p-3">
-        <div class="container mx-auto">
-          <div class="pl-3 space-x-2 mb-6 flex sticky right-6 top-6 z-30">
+        <div class="container mx-auto pb-6">
+          <div class="pl-3 space-x-2 flex sticky right-6 top-6 z-30">
             <Input
               v-model="searchText"
               placeholder="Search name, description or tag:"

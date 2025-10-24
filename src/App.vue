@@ -30,7 +30,7 @@ import { findTag, store } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
   FilePlusIcon,
-  GroupIcon,
+  FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
   TagIcon,
@@ -201,7 +201,7 @@ const searchText = ref("");
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem @click="showGroupDialog = true">
-                  <GroupIcon /> Gruppe hinzufügen
+                  <FolderIcon /> Gruppe hinzufügen
                 </DropdownMenuItem>
                 <DropdownMenuItem @click="showTagDialog = true">
                   <TagIcon /> Tag hinzufügen
@@ -300,7 +300,7 @@ const searchText = ref("");
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuItem @click="showGroupDialog = true">
-        <GroupIcon /> Gruppe hinzufügen
+        <FolderIcon /> Gruppe hinzufügen
       </ContextMenuItem>
       <ContextMenuItem @click="showTagDialog = true">
         <TagIcon /> Tag hinzufügen

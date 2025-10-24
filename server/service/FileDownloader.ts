@@ -7,11 +7,7 @@ const BYTE_IN_MB = 1048576;
 
 export class FileDownloader {
   download(filename: string, url: string) {
-
     const imagesFolder = path.join(__dirname, `../data/images/`);
-
-    console.log({imagesFolder});
-    
 
     if (!fs.existsSync(imagesFolder)) {
       console.log("🗂️  Create images folder...");
@@ -35,11 +31,11 @@ export class FileDownloader {
 
         response.on("data", (chunk) => {
           cur += chunk.length;
-          this.showProgress(filename, cur, len, total);
+          // this.showProgress(filename, cur, len, total);
         });
 
         response.on("end", () => {
-          console.log("Download complete");
+          // console.log("Download complete");
           resolve(localFile);
         });
 

@@ -174,7 +174,7 @@ const searchText = ref("");
           <div class="pl-3 space-x-2 flex sticky right-6 top-6 z-30">
             <Input
               v-model="searchText"
-              placeholder="Search name, description or tag:"
+              placeholder="Search name, description or #tag"
             />
 
             <Button
@@ -252,11 +252,11 @@ const searchText = ref("");
             >
               <template
                 v-for="service in group.services.filter((service) => {
-                  if (searchText.includes('tag:')) {
+                  if (searchText.includes('#')) {
                     return service.tags.some((tag) =>
                       tag.name
                         .toLowerCase()
-                        .includes(searchText.replace('tag:', '').toLowerCase())
+                        .includes(searchText.replace('#', '').toLowerCase())
                     );
                   }
 

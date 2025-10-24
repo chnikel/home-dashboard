@@ -1,0 +1,1 @@
+ALTER TABLE `tags` ADD `weight` integer DEFAULT 0;

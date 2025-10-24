@@ -25,6 +25,7 @@ export const tags = sqliteTable("tags", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
   color: text("color").notNull(),
+  weight: integer("weight").default(0),
 });
 
 export type NewTag = Omit<typeof tags.$inferInsert, "id">;

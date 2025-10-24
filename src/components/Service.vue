@@ -36,7 +36,7 @@ const sortedTags = computed(() => {
     "
     :class="{
       'w-min': compact,
-      'p-4': !compact,
+      'p-2 py-3': !compact,
     }"
   >
     <div

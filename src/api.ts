@@ -231,3 +231,13 @@ export const enableService = async (id: string) => {
     body: null,
   });
 };
+
+export const toggleTag = async (serviceId: string, tagId: string) => {
+  await fetch(`${host}/tags/${tagId}/toggle/${serviceId}`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: null,
+  });
+};

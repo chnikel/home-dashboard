@@ -276,6 +276,7 @@ const searchText = ref("");
                   :edit="isEditMode"
                   @edit="onEditServiceSuccess()"
                   @toggleVisibility="refreshGroups()"
+                  @toggleTag="refreshGroups()"
                   @delete="handleDeleteService(service)"
                 >
                   <Service

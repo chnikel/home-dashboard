@@ -81,7 +81,8 @@ app.post("/services", async (req, res) => {
   };
 
   if (data.iconUrl) {
-    const fileDownloader = new FileDownloader();
+    const imagesFolder = path.join(__dirname, `../data/images/`);
+    const fileDownloader = new FileDownloader(imagesFolder);
 
     console.log(`ℹ️  Handle icon download of ${data.title}`);
 
@@ -325,22 +326,25 @@ app.post("/download-images", async (req, res) => {
 
   const services = await db.allServices();
 
-  const fileDownloader = new FileDownloader();
+  const imagesFolder = path.join(__dirname, `../data/images/`);
+  const fileDownloader = new FileDownloader(imagesFolder);
 
   services.map((service) => {
     if (!service.iconUrl) {
       return;
     }
 
-    console.log(`ℹ️  Handle icon download of ${service.title}`);
+    console.log(`Handle icon download of ${service.title}`);
     let hash = crypto.createHash("md5").update(service.iconUrl).digest("hex");
 
-    console.log(`ℹ️  Hash: ${hash}`);
+    const parsed = URL.parse(service.iconUrl);
 
-    var parsed = URL.parse(service.iconUrl);
+    if (!parsed) {
+      return;
+    }
 
-    const filename = path.basename(parsed!.pathname);
-
+    const extname = path.extname(parsed.pathname);
+    const filename = `${hash}${extname}`;
     fileDownloader.download(filename, service.iconUrl);
   });
 

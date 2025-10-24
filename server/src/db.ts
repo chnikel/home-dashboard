@@ -50,6 +50,16 @@ const updateService = async (serviceId: number, data: NewService) => {
   return result;
 };
 
+const serviceToggleTag = async (serviceId: number, tagId: number) => {
+  const hasTagResult = await serviceHasTag(serviceId, tagId);
+
+  if (hasTagResult) {
+    return removeTagFromServiceById(tagId, serviceId);
+  }
+
+  return tagToServiceById(tagId, serviceId);
+};
+
 const toggleService = async (serviceId: number, isEnabled: boolean) => {
   const result = await db
     .update(services)
@@ -101,6 +111,11 @@ const findTagByName = async (name: string) => {
   return result[0];
 };
 
+const getTagById = (tagId: number) => {
+  const result = db.select().from(tags).where(eq(tags.id, tagId));
+  return result;
+};
+
 const insertTag = (data: NewTag) => {
   const result = db.insert(tags).values(data);
   return result;
@@ -126,6 +141,17 @@ const allTagsForService = async (serviceId: number) => {
   return result;
 };
 
+const serviceHasTag = async (serviceId: number, tagId: number) => {
+  const result = await db
+    .select()
+    .from(serviceTags)
+    .where(
+      and(eq(serviceTags.serviceId, serviceId), eq(serviceTags.tagId, tagId))
+    );
+
+  return result.length > 0;
+};
+
 const tagToService = async (tagName: string, serviceId: number) => {
   const tag = await findTagByName(tagName);
 
@@ -134,9 +160,13 @@ const tagToService = async (tagName: string, serviceId: number) => {
     return;
   }
 
+  return tagToServiceById(tag.id, serviceId);
+};
+
+const tagToServiceById = async (tagId: number, serviceId: number) => {
   const result = db.insert(serviceTags).values({
     serviceId: serviceId,
-    tagId: tag.id,
+    tagId: tagId,
   });
 
   return result;
@@ -149,10 +179,14 @@ const removeTagFromService = async (tagName: string, serviceId: number) => {
     throw Error(`Tag not found '${tagName}'`);
   }
 
+  return removeTagFromServiceById(tag.id, serviceId);
+};
+
+const removeTagFromServiceById = async (tagId: number, serviceId: number) => {
   const result = db
     .delete(serviceTags)
     .where(
-      and(eq(serviceTags.tagId, tag.id), eq(serviceTags.serviceId, serviceId))
+      and(eq(serviceTags.tagId, tagId), eq(serviceTags.serviceId, serviceId))
     );
 
   return result;
@@ -163,6 +197,7 @@ export default {
   insertService,
   allServices,
   updateService,
+  serviceToggleTag,
   toggleService,
   deleteService,
   allGroups,
@@ -172,6 +207,7 @@ export default {
   clearGroup,
   serviceToGroup,
   allTags,
+  getTagById,
   insertTag,
   updateTag,
   allTagsForService,

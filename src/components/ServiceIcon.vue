@@ -2,14 +2,16 @@
 defineProps<{
   wrap?: boolean;
   url?: string;
+  boxed?: boolean;
 }>();
 </script>
 
 <template>
   <div
-    class="w-16 h-16 bg-neutral-700/80 rounded-2xl shrink-0 self-center overflow-hidden transition-all"
+    class="w-16 h-16 rounded-2xl shrink-0 self-center overflow-hidden transition-all"
     :class="{
-      'p-2 border-neutral-600 border': !wrap,
+      'p-2  ': !wrap,
+      'bg-neutral-700/80 border border-neutral-600': boxed,
     }"
   >
     <img

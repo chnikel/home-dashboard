@@ -106,13 +106,18 @@ const insertTag = (data: NewTag) => {
   return result;
 };
 
+const updateTag = (tagId: number, data: Partial<NewTag>) => {
+  const result = db.update(tags).set(data).where(eq(tags.id, tagId));
+  return result;
+};
+
 const allTagsForService = async (serviceId: number) => {
   const result = db
     .select({
       id: tags.id,
       name: tags.name,
       color: tags.color,
-      weight: tags.weight
+      weight: tags.weight,
     })
     .from(tags)
     .leftJoin(serviceTags, eq(tags.id, serviceTags.tagId))
@@ -168,6 +173,7 @@ export default {
   serviceToGroup,
   allTags,
   insertTag,
+  updateTag,
   allTagsForService,
   tagToService,
   removeTagFromService,

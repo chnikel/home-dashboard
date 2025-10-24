@@ -252,7 +252,7 @@ app.post("/tags", async (req, res) => {
   const data: NewTag = {
     name: req.body.name,
     color: req.body.color,
-    weight: Number(req.body.weight)
+    weight: Number(req.body.weight),
   };
 
   await db
@@ -264,6 +264,23 @@ app.post("/tags", async (req, res) => {
       console.log(err);
       res.json({ message: "Es ist ein Fehler aufgetreten" });
     });
+});
+
+app.put("/tags/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  const data: Partial<NewTag> = {
+    color: req.body.color,
+    weight: Number(req.body.weight),
+  };
+
+  const { changes } = await db.updateTag(id, data);
+
+  if (changes > 0) {
+    res.json({ message: "Tag erfolgreich aktualisiert" });
+  } else {
+    res.json({ message: "Es ist ein Fehler aufgetreten" });
+  }
 });
 
 app.get("/", (req, res) => {

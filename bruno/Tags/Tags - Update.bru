@@ -1,0 +1,22 @@
+meta {
+  name: Tags - Update
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{host}}/tags/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "color": "blue",
+    "weight": 0
+  }
+}

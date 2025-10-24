@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
-import { NewService } from "./db/schema";
+import { NewService, NewTag } from "./db/schema";
 
 import db from "./db";
 
@@ -242,19 +242,14 @@ app.delete("/groups/:id", async (req, res) => {
 app.get("/tags", async (req, res) => {
   const data = await db.allTags();
 
-  const tags = data.map((entry) => ({
-    id: entry.id,
-    name: entry.name,
-    color: entry.color,
-  }));
-
-  res.json(tags);
+  res.json(data);
 });
 
 app.post("/tags", async (req, res) => {
-  const data = {
+  const data: NewTag = {
     name: req.body.name,
     color: req.body.color,
+    weight: Number(req.body.weight)
   };
 
   await db

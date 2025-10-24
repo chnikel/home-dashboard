@@ -20,6 +20,7 @@ import ColorItem from "./ColorItem.vue";
 const TagDialogFormData = z.object({
   name: z.string(),
   color: z.string(),
+  weight: z.number().default(0),
 });
 
 export type TagDialogFormData = z.infer<typeof TagDialogFormData>;
@@ -43,6 +44,7 @@ async function onSubmit(values: any) {
   emit("submit", {
     name: data.name,
     color: data.color,
+    weight: data.weight,
   });
 
   props.handleClose();
@@ -139,6 +141,21 @@ const validColors: TagColors[] = [
                     />
                   </template>
                 </div>
+              </FormControl>
+            </FormItem>
+          </FormField>
+
+          <FormField
+            v-slot="{ componentField }"
+            name="weight"
+          >
+            <FormItem>
+              <FormLabel>Gewichtung</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  v-bind="componentField"
+                />
               </FormControl>
             </FormItem>
           </FormField>

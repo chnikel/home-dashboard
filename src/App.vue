@@ -109,6 +109,7 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
     await addTag({
       name: data.name,
       color: data.color,
+      weight: data.weight,
     });
   } catch (error) {
     console.log(error);

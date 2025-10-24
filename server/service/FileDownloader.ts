@@ -6,16 +6,16 @@ import path from "path";
 const BYTE_IN_MB = 1048576;
 
 export class FileDownloader {
-  download(filename: string, url: string) {
-    const imagesFolder = path.join(__dirname, `../data/images/`);
+  constructor(public folder: string) {}
 
-    if (!fs.existsSync(imagesFolder)) {
+  download(filename: string, url: string) {
+    if (!fs.existsSync(this.folder)) {
       console.log("🗂️  Create images folder...");
-      fs.mkdirSync(imagesFolder);
+      fs.mkdirSync(this.folder);
     }
 
     return new Promise((resolve, reject) => {
-      let localFile = fs.createWriteStream(path.join(imagesFolder, filename));
+      let localFile = fs.createWriteStream(path.join(this.folder, filename));
 
       const client = url.startsWith("https") ? https : http;
       const request = client.get(url, (response) => {

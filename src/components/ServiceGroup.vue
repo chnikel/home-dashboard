@@ -4,6 +4,7 @@ import EditGroupWrapper from "./EditGroupWrapper.vue";
 import { moveService, updateGroup } from "../api";
 import GroupDialog from "./GroupDialog.vue";
 import { provide } from "vue";
+import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
 
 const props = defineProps<{
   compact?: boolean;
@@ -76,15 +77,14 @@ const onEditGroupSuccess = async (data: { title: string }) => {
       @edit="showGroupDialog = true"
       @delete="$emit('delete')"
     >
-      <h2
-        class="text-2xl font-light"
-        :class="{
-          'px-4 py-2': !compact,
-          'py-4': compact,
-        }"
+      <GroupContextMenuWrapper
+        @edit="showGroupDialog = true"
+        @delete="emit('delete')"
       >
-        {{ title }}
-      </h2>
+        <h2 class="text-2xl font-light inline">
+          {{ title }}
+        </h2>
+      </GroupContextMenuWrapper>
     </EditGroupWrapper>
     <div
       class=""

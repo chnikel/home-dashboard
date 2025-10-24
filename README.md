@@ -23,5 +23,5 @@ Run migration
 
 ```sh
 docker exec -it <container_name> bash
-npm run db:push
+npm run db:migrate
 ```

@@ -283,6 +283,19 @@ app.put("/tags/:id", async (req, res) => {
   }
 });
 
+app.post("/tags/:id/toggle/:serviceId", async (req, res) => {
+  const tagId = Number(req.params.id);
+  const serviceId = Number(req.params.serviceId);
+
+  const { changes } = await db.serviceToggleTag(serviceId, tagId);
+
+  if (changes > 0) {
+    res.json({ message: "Tag erfolgreich aktualisiert" });
+  } else {
+    res.json({ message: "Es ist ein Fehler aufgetreten" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });

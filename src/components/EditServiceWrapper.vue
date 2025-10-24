@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Button from "./ui/button/Button.vue";
-import { disableService, enableService, updateService, type GetServicesResponse } from "@/api";
+import {
+  disableService,
+  enableService,
+  toggleTag,
+  updateService,
+  type GetServicesResponse,
+} from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
 import { findTag } from "@/store";
@@ -16,6 +22,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "edit"): void;
   (e: "toggleVisibility"): void;
+  (e: "toggleTag"): void;
   (e: "delete"): void;
 }>();
 
@@ -67,12 +74,18 @@ const onEditService = async (data: ServiceDialogFormData) => {
 
 async function toggleServiceVisibility() {
   if (props.service.enabled) {
-    await disableService(props.service.id.toString())
+    await disableService(props.service.id.toString());
   } else {
-    await enableService(props.service.id.toString())
+    await enableService(props.service.id.toString());
   }
 
-  emit("toggleVisibility")
+  emit("toggleVisibility");
+}
+
+async function handleToggleTag(tagId: number) {
+  await toggleTag(props.service.id.toString(), tagId.toString());
+
+  emit("toggleTag");
 }
 </script>
 
@@ -87,9 +100,11 @@ async function toggleServiceVisibility() {
   >
     <ServiceContextMenuWrapper
       :isEnabled="service.enabled"
+      :tags="service.tags.map((t) => t.name)"
       @toggle-visibility="toggleServiceVisibility()"
       @edit="showEditServiceDialog = true"
       @delete="emit('delete')"
+      @toggle-tag="handleToggleTag"
     >
       <div
         v-if="edit"

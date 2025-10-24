@@ -1,0 +1,22 @@
+meta {
+  name: Tags - Toggle
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/tags/:id/toggle/:serviceId
+  body: json
+  auth: inherit
+}
+
+params:path {
+  serviceId: 2
+  id: 1
+}
+
+body:json {
+  {
+    "weight": 80
+  }
+}

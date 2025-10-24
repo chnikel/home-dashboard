@@ -2,8 +2,9 @@
 import { EyeOffIcon } from "lucide-vue-next";
 import type { ServiceTag } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
+import { computed } from "vue";
 
-defineProps<{
+const props = defineProps<{
   compact?: boolean;
   title: string;
   description: string;
@@ -13,6 +14,12 @@ defineProps<{
   tags: ServiceTag[];
   isEnabled?: boolean;
 }>();
+
+const sortedTags = computed(() => {
+  return props.tags.sort((a, b) => {
+    return b.weight - a.weight
+  });
+});
 </script>
 
 <template>
@@ -41,7 +48,7 @@ defineProps<{
       </h3>
       <p class="text-sm text-neutral-400 line-clamp-1">{{ description }}</p>
       <span
-        v-for="tag in tags"
+        v-for="tag in sortedTags"
         :class="`bg-${tag.color}-100 text-${tag.color}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-${tag.color}-900 dark:text-${tag.color}-300`"
       >
         {{ tag.name }}

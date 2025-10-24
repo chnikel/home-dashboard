@@ -11,6 +11,7 @@ services:
     image: chnikel/home-dashboard
     environment:
       NODE_ENV: production
+      # DB_FILENAME: home_dashboard.prod.db
     ports:
       - 3005:3000
     volumes:

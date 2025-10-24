@@ -20,7 +20,7 @@ services:
 ## Migrations
 
 Run migration
-
+dwa
 ```sh
 docker exec -it <container_name> bash
 npm run db:migrate

@@ -16,7 +16,7 @@ defineProps<{
   >
     <img
       class="block h-full w-full"
-      :src="url"
+      :src="`http://localhost:3000${url}`"
     />
   </div>
 </template>

@@ -80,6 +80,24 @@ app.post("/services", async (req, res) => {
     groupId: req.body.groupId,
   };
 
+  if (data.iconUrl) {
+    const fileDownloader = new FileDownloader();
+
+    console.log(`ℹ️  Handle icon download of ${data.title}`);
+
+    let hash = crypto.createHash("md5").update(data.iconUrl).digest("hex");
+
+    console.log(`ℹ️  Hash: ${hash}`);
+
+    const parsed = URL.parse(data.iconUrl);
+    const filename = path.basename(parsed!.pathname);
+    await fileDownloader.download(filename, data.iconUrl);
+
+    const url = `/images/${filename}`;
+
+    data.iconUrl = url;
+  }
+
   const serviceId = await db.insertService(data);
 
   const tags: string[] = req.body.tags || [];
@@ -319,11 +337,10 @@ app.post("/download-images", async (req, res) => {
 
     console.log(`ℹ️  Hash: ${hash}`);
 
-    
     var parsed = URL.parse(service.iconUrl);
 
-    const filename = path.basename(parsed!.pathname)
-    
+    const filename = path.basename(parsed!.pathname);
+
     fileDownloader.download(filename, service.iconUrl);
   });
 

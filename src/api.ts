@@ -6,7 +6,7 @@ export type ServiceTag = {
   id: number;
   name: string;
   color: TagColors;
-  weight: number
+  weight: number;
 };
 
 export type GetServicesResponse = {
@@ -178,7 +178,7 @@ export const deleteGroup = async (id: number) => {
 export type AddTagRequest = {
   name: string;
   color: string;
-  weight: number
+  weight: number;
 };
 
 export type AddTagResponse = {};
@@ -201,6 +201,7 @@ export type GetTagsResponse = {
   id: number;
   name: string;
   color: TagColors;
+  weight: number;
 };
 
 export const getTags = async () => {
@@ -212,21 +213,21 @@ export const getTags = async () => {
 };
 
 export const disableService = async (id: string) => {
-   await fetch(`${host}/services/${id}/disable`, {
+  await fetch(`${host}/services/${id}/disable`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
-    body: null
+    body: null,
   });
 };
 
 export const enableService = async (id: string) => {
-   await fetch(`${host}/services/${id}/enable`, {
+  await fetch(`${host}/services/${id}/enable`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
-    body: null
+    body: null,
   });
 };

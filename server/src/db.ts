@@ -112,6 +112,7 @@ const allTagsForService = async (serviceId: number) => {
       id: tags.id,
       name: tags.name,
       color: tags.color,
+      weight: tags.weight
     })
     .from(tags)
     .leftJoin(serviceTags, eq(tags.id, serviceTags.tagId))

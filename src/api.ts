@@ -6,6 +6,7 @@ export type ServiceTag = {
   id: number;
   name: string;
   color: TagColors;
+  weight: number
 };
 
 export type GetServicesResponse = {
@@ -177,6 +178,7 @@ export const deleteGroup = async (id: number) => {
 export type AddTagRequest = {
   name: string;
   color: string;
+  weight: number
 };
 
 export type AddTagResponse = {};

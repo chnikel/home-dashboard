@@ -1,7 +1,9 @@
+import { FileDownloader } from "./../service/FileDownloader";
 import express from "express";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
+import crypto from "crypto";
 import { NewService, NewTag } from "./db/schema";
 
 import db from "./db";
@@ -21,6 +23,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "../../dist")));
+app.use("/images", express.static(path.join(__dirname, "../data/images")));
 
 const DEFAULT_GROUP_ID = "null";
 
@@ -294,6 +297,39 @@ app.post("/tags/:id/toggle/:serviceId", async (req, res) => {
   } else {
     res.json({ message: "Es ist ein Fehler aufgetreten" });
   }
+});
+
+app.post("/download-images", async (req, res) => {
+  // fileDownloader.download(
+  //   "home-assistant.svg",
+  //   "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/home-assistant.svg"
+  // );
+
+  const services = await db.allServices();
+
+  const fileDownloader = new FileDownloader();
+
+  services.map((service) => {
+    if (!service.iconUrl) {
+      return;
+    }
+
+    console.log(`ℹ️  Handle icon download of ${service.title}`);
+    let hash = crypto.createHash("md5").update(service.iconUrl).digest("hex");
+
+    console.log(`ℹ️  Hash: ${hash}`);
+
+    
+    var parsed = URL.parse(service.iconUrl);
+
+    const filename = path.basename(parsed!.pathname)
+    
+    fileDownloader.download(filename, service.iconUrl);
+  });
+
+  res.json({
+    message: "Ok",
+  });
 });
 
 app.get("/", (req, res) => {

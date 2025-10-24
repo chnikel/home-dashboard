@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
 import { moveService, updateGroup } from "../api";
-import GroupDialog from "./GroupDialog.vue";
+import GroupDialog, { type GroupDialogFormData } from "./GroupDialog.vue";
 import { provide } from "vue";
 import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
 
@@ -57,6 +57,12 @@ const onEditGroupSuccess = async (data: { title: string }) => {
 
   emit("edit");
 };
+
+const data = computed<Partial<GroupDialogFormData>>(() => {
+  return {
+    title: props.title,
+  };
+});
 </script>
 
 <template>
@@ -98,14 +104,14 @@ const onEditGroupSuccess = async (data: { title: string }) => {
     </div>
   </div>
 
-  <GroupDialog
-    :open="showGroupDialog"
-    :data="{
-      title: title,
-    }"
-    :handleClose="() => (showGroupDialog = false)"
-    @submit="onEditGroupSuccess"
-    title="Gruppe bearbeiten"
-    submitButton="Speichern"
-  />
+  <template v-if="showGroupDialog">
+    <GroupDialog
+      :open="showGroupDialog"
+      :data="data"
+      :handleClose="() => (showGroupDialog = false)"
+      @submit="onEditGroupSuccess"
+      title="Gruppe bearbeiten"
+      submitButton="Speichern"
+    />
+  </template>
 </template>

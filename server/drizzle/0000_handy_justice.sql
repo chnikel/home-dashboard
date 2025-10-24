@@ -1,9 +1,9 @@
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `service_tags` (
+CREATE TABLE IF NOT EXISTS `service_tags` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`service_id` integer NOT NULL,
 	`tag_id` integer NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `service_tags` (
 	FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `services` (
+CREATE TABLE IF NOT EXISTS `services` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
 	`description` text,
@@ -23,10 +23,10 @@ CREATE TABLE `services` (
 	FOREIGN KEY (`group_id`) REFERENCES `groups`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `tags` (
+CREATE TABLE IF NOT EXISTS `tags` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`color` text NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `tags_name_unique` ON `tags` (`name`);
+CREATE UNIQUE INDEX IF NOT EXISTS `tags_name_unique` ON `tags` (`name`);

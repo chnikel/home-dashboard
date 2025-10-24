@@ -26,10 +26,13 @@ const sortedTags = computed(() => {
   <a
     :href="link"
     target="_blank"
-    class="lg:p-6 flex gap-3 text-white hover:bg-neutral-300/5 rounded-2xl border"
+    class="lg:p-6 flex gap-3 text-white hovder:bg-neutral-300/5 rounded-2xl border"
     :class="{
       'w-min': compact,
       'p-4': !compact,
+      'bg-red-500/20 hover:bg-red-500/30 border-red-500/20': title === 'Pi-Hole',
+      'bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/20': title === 'Dockge' || title === 'Home Assistant',
+      'bg-green-500/20 hover:bg-green-500/30 border-green-500/20': title === 'Uptime Kuma' || title === 'Paperless',
     }"
   >
     <div

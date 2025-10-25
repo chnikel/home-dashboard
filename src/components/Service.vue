@@ -3,6 +3,12 @@ import { EyeOffIcon } from "lucide-vue-next";
 import type { ServiceTag } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
 import { computed } from "vue";
+import Tag from "./Tag.vue";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const props = defineProps<{
   compact?: boolean;
@@ -57,12 +63,27 @@ const sortedTags = computed(() => {
         {{ description }}
       </p>
       <div style="grid-area: tags">
-        <span
-          v-for="tag in sortedTags"
-          :class="`bg-${tag.color}-100 text-${tag.color}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-${tag.color}-900 dark:text-${tag.color}-300`"
-        >
-          {{ tag.name }}
-        </span>
+        <Tag
+          v-for="tag in sortedTags.slice(0, 3)"
+          :color="tag.color"
+          :name="tag.name"
+        />
+
+        <Popover v-if="sortedTags.length > 3">
+          <PopoverTrigger @click.prevent>
+            <Tag
+              color="neutral"
+              :name="`+${sortedTags.length - 3}`"
+            />
+          </PopoverTrigger>
+          <PopoverContent>
+            <Tag
+              v-for="tag in sortedTags.slice(3)"
+              :color="tag.color"
+              :name="tag.name"
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </template>
   </a>

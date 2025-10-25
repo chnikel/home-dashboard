@@ -170,7 +170,7 @@ const searchText = ref("");
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen snap pb-[50vh]">
+        <div class="h-screen snap-container">
           <div
             class="container mx-auto gap-2 flex sticky right-0 top-0 pt-6 z-30 bg-background"
           >
@@ -339,9 +339,10 @@ const searchText = ref("");
 </template>
 
 <style lang="css" scoped>
-.snap {
+.snap-container {
   overflow-y: scroll;
   scroll-snap-type: y proximity;
   scroll-padding-top: 80px;
+  padding-bottom: 50vh;
 }
 </style>

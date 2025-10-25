@@ -27,16 +27,9 @@ const sortedTags = computed(() => {
     :href="link"
     target="_blank"
     class="lg:p-6 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3"
-    style="
-      grid-template-columns: auto 1fr;
-      grid-template-areas:
-        'icon title'
-        'icon description'
-        'icon tags';
-    "
     :class="{
-      'w-min': compact,
-      'p-2 py-3': !compact,
+      'w-min layout-compact': compact,
+      'p-2 py-3 layout-normal': !compact,
     }"
   >
     <div
@@ -74,3 +67,20 @@ const sortedTags = computed(() => {
     </template>
   </a>
 </template>
+
+<style lang="css" scoped>
+.layout-compact {
+  grid-template-columns: auto;
+  grid-template-areas:
+    "icon"
+    "title";
+}
+
+.layout-normal {
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon title"
+    "icon description"
+    "icon tags";
+}
+</style>

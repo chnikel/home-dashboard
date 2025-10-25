@@ -169,9 +169,11 @@ const searchText = ref("");
 <template>
   <ContextMenu>
     <ContextMenuTrigger>
-      <div class="h-screen p-3">
-        <div class="container mx-auto pb-6">
-          <div class="pl-3 space-x-2 flex sticky right-6 top-6 z-30">
+      <div class="overflow-auto">
+        <div class="h-screen snap pb-[100vh]">
+          <div
+            class="container mx-auto gap-2 flex sticky right-0 top-0 pt-6 z-30 bg-background"
+          >
             <Input
               v-model="searchText"
               placeholder="Search name, description or #tag"
@@ -235,62 +237,64 @@ const searchText = ref("");
             submitButton="Hinzufügen"
           />
 
-          <template v-for="group in groups">
-            <ServiceGroup
-              v-if="
-                (group.services.length > 0 &&
-                  group.services.filter((s) => s.enabled).length > 0) ||
-                isEditMode
-              "
-              :compact="compactMode"
-              :id="group.id"
-              :title="group.id == null ? '' : group.title"
-              :edit="isEditMode"
-              @edit="onEditSuccess()"
-              @delete="handleDeleteGroup(group.id)"
-              @move="afterMove()"
-            >
-              <template
-                v-for="service in group.services.filter((service) => {
-                  if (searchText.includes('#')) {
-                    return service.tags.some((tag) =>
-                      tag.name
-                        .toLowerCase()
-                        .includes(searchText.replace('#', '').toLowerCase())
-                    );
-                  }
-
-                  return (service.title + ' ' + service.description)
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
-                })"
+          <div class="container mx-auto">
+            <template v-for="group in groups">
+              <ServiceGroup
+                v-if="
+                  (group.services.length > 0 &&
+                    group.services.filter((s) => s.enabled).length > 0) ||
+                  isEditMode
+                "
+                :compact="compactMode"
+                :id="group.id"
+                :title="group.id == null ? '' : group.title"
+                :edit="isEditMode"
+                @edit="onEditSuccess()"
+                @delete="handleDeleteGroup(group.id)"
+                @move="afterMove()"
               >
-                <EditServiceWrapper
-                  v-if="service.enabled || isEditMode"
-                  :draggable="isEditMode"
-                  :id="service.id"
-                  :service="service"
-                  :edit="isEditMode"
-                  @edit="onEditServiceSuccess()"
-                  @toggleVisibility="refreshGroups()"
-                  @toggleTag="refreshGroups()"
-                  @delete="handleDeleteService(service)"
+                <template
+                  v-for="service in group.services.filter((service) => {
+                    if (searchText.includes('#')) {
+                      return service.tags.some((tag) =>
+                        tag.name
+                          .toLowerCase()
+                          .includes(searchText.replace('#', '').toLowerCase())
+                      );
+                    }
+
+                    return (service.title + ' ' + service.description)
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase());
+                  })"
                 >
-                  <Service
-                    :compact="compactMode"
-                    :id="'service' + service.id"
-                    :title="service.title"
-                    :description="service.description"
-                    :link="service.link"
-                    :icon_url="service.icon_url"
-                    :icon_wrap="service.icon_wrap"
-                    :tags="service.tags"
-                    :isEnabled="service.enabled"
-                  />
-                </EditServiceWrapper>
-              </template>
-            </ServiceGroup>
-          </template>
+                  <EditServiceWrapper
+                    v-if="service.enabled || isEditMode"
+                    :draggable="isEditMode"
+                    :id="service.id"
+                    :service="service"
+                    :edit="isEditMode"
+                    @edit="onEditServiceSuccess()"
+                    @toggleVisibility="refreshGroups()"
+                    @toggleTag="refreshGroups()"
+                    @delete="handleDeleteService(service)"
+                  >
+                    <Service
+                      :compact="compactMode"
+                      :id="'service' + service.id"
+                      :title="service.title"
+                      :description="service.description"
+                      :link="service.link"
+                      :icon_url="service.icon_url"
+                      :icon_wrap="service.icon_wrap"
+                      :tags="service.tags"
+                      :isEnabled="service.enabled"
+                    />
+                  </EditServiceWrapper>
+                </template>
+              </ServiceGroup>
+            </template>
+          </div>
         </div>
       </div>
     </ContextMenuTrigger>
@@ -333,3 +337,11 @@ const searchText = ref("");
     </ContextMenuContent>
   </ContextMenu>
 </template>
+
+<style lang="css" scoped>
+.snap {
+  overflow-y: scroll;
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 80px;
+}
+</style>

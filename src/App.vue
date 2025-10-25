@@ -170,7 +170,7 @@ const searchText = ref("");
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen snap pb-[100vh]">
+        <div class="h-screen snap pb-[50vh]">
           <div
             class="container mx-auto gap-2 flex sticky right-0 top-0 pt-6 z-30 bg-background"
           >

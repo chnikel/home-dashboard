@@ -148,7 +148,7 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      registerType: "prompt",
+      registerType: "autoUpdate",
       workbox: {
         runtimeCaching: [
           {

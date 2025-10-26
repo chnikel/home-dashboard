@@ -1,5 +1,7 @@
 # Home Dashboard
 
+![Application](docs/img1.png)
+
 Inspired by [Mafl](https://github.com/hywax/mafl)
 
 ## Installation

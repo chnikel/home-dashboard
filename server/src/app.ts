@@ -18,8 +18,8 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "../../dist")));
 
-app.use("/services", serviceRouter);
-app.use("/groups", groupRouter);
-app.use("/tags", tagRouter);
+app.use("/api/services", serviceRouter);
+app.use("/api/groups", groupRouter);
+app.use("/api/tags", tagRouter);
 
 export default app;

@@ -44,15 +44,6 @@ import {
 } from "@/components/ui/context-menu";
 import Input from "./components/ui/input/Input.vue";
 
-const groups = ref<
-  | {
-      id: string;
-      title: string;
-      services: GetServicesResponse[];
-    }[]
-  | null
->(null);
-
 async function refreshServices() {
   const groupsResponse = await getGroups();
 
@@ -73,7 +64,6 @@ async function refreshServices() {
     }
   );
 
-  groups.value = servicesWithGroupName;
   store.groups = servicesWithGroupName;
 }
 
@@ -257,7 +247,7 @@ const searchText = ref("");
           />
 
           <div class="container mx-auto">
-            <template v-for="group in groups">
+            <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="
                   (group.services.length > 0 &&

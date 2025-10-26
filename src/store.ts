@@ -1,7 +1,6 @@
 import { computed, reactive } from "vue";
 import {
   getTags,
-  type GetGroupsResponse,
   type GetServicesResponse,
   type GetTagsResponse,
 } from "./api";

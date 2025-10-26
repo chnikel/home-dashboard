@@ -21,8 +21,16 @@ export type GetServicesResponse = {
   tags: ServiceTag[];
 };
 
-export const getServices = async () => {
-  const response = await fetch(`${host}/services`);
+export const getServices = async (groupBy?: keyof GetServicesResponse) => {
+  let query = "";
+
+  if (groupBy) {
+    query = new URLSearchParams({
+      groupBy,
+    }).toString();
+  }
+
+  const response = await fetch(`${host}/services?${query}`);
 
   const services = await response.json();
 

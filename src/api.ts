@@ -21,7 +21,13 @@ export type GetServicesResponse = {
   tags: ServiceTag[];
 };
 
-export const getServices = async (groupBy?: keyof GetServicesResponse) => {
+export type GetServicesGroupedResponse = {
+  [key: string]: GetServicesResponse[];
+};
+
+export const getServicesGroupBy = async (
+  groupBy?: keyof GetServicesResponse
+) => {
   let query = "";
 
   if (groupBy) {
@@ -34,7 +40,7 @@ export const getServices = async (groupBy?: keyof GetServicesResponse) => {
 
   const services = await response.json();
 
-  return services as GetServicesResponse[];
+  return services as GetServicesGroupedResponse;
 };
 
 export type AddServiceRequest = {
@@ -127,14 +133,6 @@ export type GetServiceGroupsResponse = GetGroupsResponse & {
   services: GetServicesResponse[];
 };
 
-export const getServiceGroups = async () => {
-  const response = await fetch(`${host}/groups?services=true`);
-
-  const services = await response.json();
-
-  return services as GetServiceGroupsResponse[];
-};
-
 export type AddGroupRequest = {
   title: string;
 };
@@ -157,7 +155,7 @@ export const addGroup = async (data: AddGroupRequest) => {
 
 export type UpdateGroupResponse = {};
 
-export const updateGroup = async (id: number, data: AddGroupRequest) => {
+export const updateGroup = async (id: string, data: AddGroupRequest) => {
   const response = await fetch(`${host}/groups/${id}`, {
     method: "put",
     headers: {
@@ -173,7 +171,7 @@ export const updateGroup = async (id: number, data: AddGroupRequest) => {
 
 export type DeleteGroupResponse = {};
 
-export const deleteGroup = async (id: number) => {
+export const deleteGroup = async (id: string) => {
   const response = await fetch(`${host}/groups/${id}`, {
     method: "delete",
   });

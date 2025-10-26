@@ -1,8 +1,17 @@
 import { computed, reactive } from "vue";
-import { getTags, type GetGroupsResponse, type GetTagsResponse } from "./api";
+import {
+  getTags,
+  type GetGroupsResponse,
+  type GetServicesResponse,
+  type GetTagsResponse,
+} from "./api";
 
 export const store = reactive({
-  groups: [] as GetGroupsResponse[],
+  groups: [] as {
+    id: string;
+    title: string;
+    services: GetServicesResponse[];
+  }[],
   tags: [] as GetTagsResponse[],
 });
 

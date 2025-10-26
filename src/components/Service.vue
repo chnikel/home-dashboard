@@ -3,6 +3,7 @@ import { EyeOffIcon } from "lucide-vue-next";
 import type { ServiceTag } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
 import ServiceTags from "./ServiceTags.vue";
+import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 
 defineProps<{
   compact?: boolean;
@@ -32,6 +33,15 @@ defineProps<{
     >
       <EyeOffIcon />
     </div>
+    <ServiceInfoIcon
+      :show-deprecated-icon="
+        tags.findIndex((t) => t.name.toLowerCase() == 'deprecated') != -1
+      "
+      :show-live-icon="
+        tags.findIndex((t) => t.name.toLowerCase() == 'live') != -1
+      "
+    />
+
     <ServiceIcon
       style="grid-area: icon"
       :wrap="icon_wrap"

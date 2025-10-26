@@ -6,7 +6,7 @@ const DEFAULT_GROUP_ID = "null";
 
 const groupRouter = express.Router();
 
-groupRouter.get("/groups", async (req, res) => {
+groupRouter.get("", async (req, res) => {
   const includeServices = req.query.services == "true";
 
   const rawGroups = await db.allGroups();
@@ -49,7 +49,7 @@ groupRouter.get("/groups", async (req, res) => {
   res.json(groups);
 });
 
-groupRouter.post("/groups", async (req, res) => {
+groupRouter.post("", async (req, res) => {
   const data = {
     title: req.body.title,
   };
@@ -59,7 +59,7 @@ groupRouter.post("/groups", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich hinzugefügt" });
 });
 
-groupRouter.put("/groups/:id", async (req, res) => {
+groupRouter.put("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   const data = {
@@ -71,7 +71,7 @@ groupRouter.put("/groups/:id", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich aktualisiert" });
 });
 
-groupRouter.delete("/groups/:id", async (req, res) => {
+groupRouter.delete("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   await db.deleteGroup(id);

@@ -20,7 +20,7 @@ defineProps<{
   <a
     :href="link"
     target="_blank"
-    class="lg:p-6 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3"
+    class="lg:p-4 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3"
     :class="{
       'w-min layout-compact': compact,
       'p-2 py-3 layout-normal': !compact,

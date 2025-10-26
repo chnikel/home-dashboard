@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
-import { NewService, NewTag } from "./db/schema";
+import { NewService } from "./db/schema";
+import tagRouter from './routes/tagRouter';
+
 
 import db from "./db";
 
@@ -17,6 +19,8 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "../../dist")));
+
+app.use('/tags', tagRouter);
 
 const DEFAULT_GROUP_ID = "null";
 
@@ -238,59 +242,7 @@ app.delete("/groups/:id", async (req, res) => {
   res.json({ message: "Gruppe erfolgreich gelöscht" });
 });
 
-app.get("/tags", async (req, res) => {
-  const data = await db.allTags();
 
-  res.json(data);
-});
-
-app.post("/tags", async (req, res) => {
-  const data: NewTag = {
-    name: req.body.name,
-    color: req.body.color,
-    weight: Number(req.body.weight),
-  };
-
-  await db
-    .insertTag(data)
-    .then(() => {
-      res.json({ message: "Tag erfolgreich hinzugefügt" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({ message: "Es ist ein Fehler aufgetreten" });
-    });
-});
-
-app.put("/tags/:id", async (req, res) => {
-  const id = Number(req.params.id);
-
-  const data: Partial<NewTag> = {
-    color: req.body.color,
-    weight: Number(req.body.weight),
-  };
-
-  const { changes } = await db.updateTag(id, data);
-
-  if (changes > 0) {
-    res.json({ message: "Tag erfolgreich aktualisiert" });
-  } else {
-    res.json({ message: "Es ist ein Fehler aufgetreten" });
-  }
-});
-
-app.post("/tags/:id/toggle/:serviceId", async (req, res) => {
-  const tagId = Number(req.params.id);
-  const serviceId = Number(req.params.serviceId);
-
-  const { changes } = await db.serviceToggleTag(serviceId, tagId);
-
-  if (changes > 0) {
-    res.json({ message: "Tag erfolgreich aktualisiert" });
-  } else {
-    res.json({ message: "Es ist ein Fehler aufgetreten" });
-  }
-});
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));

@@ -8,7 +8,7 @@ import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
 
 const props = defineProps<{
   compact?: boolean;
-  id: number;
+  id: string;
   edit: boolean;
   title: string;
 }>();

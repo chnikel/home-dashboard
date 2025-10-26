@@ -7,8 +7,8 @@ import {
   addTag,
   deleteGroup,
   deleteService,
-  getServiceGroups,
-  type GetServiceGroupsResponse,
+  getGroups,
+  getServicesGroupBy,
   type GetServicesResponse,
 } from "./api";
 import EditServiceWrapper from "./components/EditServiceWrapper.vue";
@@ -44,29 +44,38 @@ import {
 } from "@/components/ui/context-menu";
 import Input from "./components/ui/input/Input.vue";
 
-const groups = ref<GetServiceGroupsResponse[] | null>(null);
+async function refreshServices() {
+  const groupsResponse = await getGroups();
 
-async function refreshGroups() {
-  const fetchedGroups = await getServiceGroups();
+  const groupedServicesResponse = await getServicesGroupBy("groupId");
 
-  groups.value = fetchedGroups;
-  store.groups = fetchedGroups.map((group) => {
-    return {
-      id: group.id,
-      title: group.title,
-    };
-  });
+  const servicesWithGroupName = Object.entries(groupedServicesResponse).map(
+    ([groupId, services]) => {
+      const group = groupsResponse.find(
+        (group) => group.id?.toString() == groupId
+      );
+      const groupTitle = group?.title || "";
+
+      return {
+        id: groupId,
+        title: groupTitle,
+        services,
+      };
+    }
+  );
+
+  store.groups = servicesWithGroupName;
 }
 
 onMounted(async () => {
-  refreshGroups();
+  refreshServices();
 });
 
 const isEditMode = ref(false);
 const editData = ref<ServiceDialogFormData | null>(null);
 
 const onEditServiceSuccess = async () => {
-  refreshGroups();
+  refreshServices();
 };
 
 const handleDeleteService = async (service: GetServicesResponse) => {
@@ -77,15 +86,15 @@ const handleDeleteService = async (service: GetServicesResponse) => {
       console.log(error);
     }
 
-    refreshGroups();
+    refreshServices();
   }
 };
 
 const onEditSuccess = async () => {
-  refreshGroups();
+  refreshServices();
 };
 
-const handleDeleteGroup = async (groupId: number) => {
+const handleDeleteGroup = async (groupId: string) => {
   if (confirm("Gruppe löschen?")) {
     try {
       await deleteGroup(groupId);
@@ -93,12 +102,12 @@ const handleDeleteGroup = async (groupId: number) => {
       console.log(error);
     }
 
-    refreshGroups();
+    refreshServices();
   }
 };
 
 const afterMove = async () => {
-  refreshGroups();
+  refreshServices();
 };
 
 const onAddTagSuccess = async (data: TagDialogFormData) => {
@@ -112,7 +121,7 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
     console.log(error);
   }
 
-  refreshGroups();
+  refreshServices();
 };
 
 const onAddService = async (data: ServiceDialogFormData) => {
@@ -140,7 +149,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
     console.log(error);
   }
 
-  refreshGroups();
+  refreshServices();
 };
 
 const onAddGroupSuccess = async (data: { title: string }) => {
@@ -152,7 +161,7 @@ const onAddGroupSuccess = async (data: { title: string }) => {
     console.log(error);
   }
 
-  refreshGroups();
+  refreshServices();
 };
 
 const showServiceDialog = ref(false);
@@ -238,7 +247,7 @@ const searchText = ref("");
           />
 
           <div class="container mx-auto">
-            <template v-for="group in groups">
+            <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="
                   (group.services.length > 0 &&
@@ -275,8 +284,8 @@ const searchText = ref("");
                     :service="service"
                     :edit="isEditMode"
                     @edit="onEditServiceSuccess()"
-                    @toggleVisibility="refreshGroups()"
-                    @toggleTag="refreshGroups()"
+                    @toggleVisibility="refreshServices()"
+                    @toggleTag="refreshServices()"
                     @delete="handleDeleteService(service)"
                   >
                     <Service

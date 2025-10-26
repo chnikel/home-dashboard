@@ -1,14 +1,9 @@
 import express from "express";
 import db from "../db";
-import { NEED_REFACTOR_getServices } from "./serviceRouter";
-
-const DEFAULT_GROUP_ID = "null";
 
 const groupRouter = express.Router();
 
 groupRouter.get("", async (req, res) => {
-  const includeServices = req.query.services == "true";
-
   const rawGroups = await db.allGroups();
 
   const groupsWithDefaultGroup = [
@@ -16,33 +11,10 @@ groupRouter.get("", async (req, res) => {
     { id: null, title: "", services: [] },
   ];
 
-  if (!includeServices) {
-    const groups = groupsWithDefaultGroup.map((entry) => {
-      return {
-        id: entry.id,
-        title: entry.title,
-      };
-    });
-
-    res.json(groups);
-
-    return;
-  }
-
-  const services = await NEED_REFACTOR_getServices();
-
-  const servicesGrouped = services.reduce<{
-    [key: string]: (typeof services)[0][];
-  }>((acc, service) => {
-    (acc[service.groupId || DEFAULT_GROUP_ID] ??= []).push(service);
-    return acc;
-  }, {});
-
   const groups = groupsWithDefaultGroup.map((entry) => {
     return {
       id: entry.id,
       title: entry.title,
-      services: servicesGrouped[entry.id || DEFAULT_GROUP_ID] || [],
     };
   });
 

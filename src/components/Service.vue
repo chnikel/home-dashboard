@@ -44,14 +44,22 @@ const isReachable = computed(() => {
     :class="{
       'w-min layout-compact': compact,
       'p-2 py-3 layout-normal': !compact,
+      'border-red-600': !isReachable,
     }"
   >
     <div
-      v-if="!isEnabled"
+      v-if="!isReachable"
+      class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
+    >
+      <span class="tracking-wider">Offline</span>
+    </div>
+    <div
+      v-else-if="!isEnabled"
       class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
     >
       <EyeOffIcon />
     </div>
+
     <ServiceInfoIcon
       :show-deprecated-icon="
         tags.findIndex((t) => t.name.toLowerCase() == 'deprecated') != -1

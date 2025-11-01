@@ -90,12 +90,17 @@ const validColors: TagColors[] = [
       @submit="handleSubmit($event, onSubmit)"
     >
       <template #content>
-        <div class="h-6 mb-4">
+        <div
+          class="px-2 py-2 border  rounded mb-2 flex justify-center"
+        >
           <Tag
             v-if="values.name"
             :name="values.name"
             :color="values.color"
           />
+          <span v-else class="italic text-accent-foreground/30 tracking-wider">
+            Preview
+          </span>
         </div>
 
         <FormField

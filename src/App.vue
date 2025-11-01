@@ -26,7 +26,7 @@ import TagDialog, { type TagDialogFormData } from "./components/TagDialog.vue";
 import ServiceDialog, {
   type ServiceDialogFormData,
 } from "./components/ServiceDialog.vue";
-import { findTag, store } from "./store";
+import { findTag, store, updateLocalServicePings } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
   FilePlusIcon,
@@ -173,6 +173,10 @@ const params = useUrlSearchParams("history");
 const compactMode = ref(params.compact === "1");
 
 const searchText = ref("");
+
+onMounted(async () => {
+  updateLocalServicePings();
+});
 </script>
 
 <template>
@@ -290,7 +294,7 @@ const searchText = ref("");
                   >
                     <Service
                       :compact="compactMode"
-                      :id="'service' + service.id"
+                      :id="service.id"
                       :title="service.title"
                       :description="service.description"
                       :link="service.link"
@@ -342,6 +346,15 @@ const searchText = ref("");
         :disabled="compactMode"
       >
         <LayoutGridIcon /> Compact View
+      </ContextMenuItem>
+
+      <ContextMenuSeparator />
+
+      <ContextMenuItem
+        inset
+        @click="updateLocalServicePings"
+      >
+        Pings neu laden
       </ContextMenuItem>
     </ContextMenuContent>
   </ContextMenu>

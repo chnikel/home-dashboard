@@ -1,9 +1,13 @@
 import { computed, reactive } from "vue";
-import {
-  getTags,
-  type GetServicesResponse,
-  type GetTagsResponse,
-} from "./api";
+import { getTags, type GetServicesResponse, type GetTagsResponse } from "./api";
+import PingService from "./services/PingService";
+
+const pingService = new PingService();
+
+export type ServicePing = {
+  serviceId: number;
+  isReachable: boolean;
+};
 
 export const store = reactive({
   groups: [] as {
@@ -12,6 +16,7 @@ export const store = reactive({
     services: GetServicesResponse[];
   }[],
   tags: [] as GetTagsResponse[],
+  servicePings: [] as ServicePing[],
 });
 
 export async function updateLocalTags() {
@@ -31,4 +36,10 @@ export function tagsSortedByWeight() {
       return b.weight - a.weight;
     })
   );
+}
+
+export async function updateLocalServicePings() {
+  const response = await pingService.pingAllEnabledServices();
+
+  store.servicePings = response;
 }

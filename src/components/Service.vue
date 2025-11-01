@@ -75,21 +75,12 @@ const isReachable = computed(() => {
         style="grid-area: title"
         class="text-lg font-semibold flex gap-2 items-center"
       >
-        <span class="relative flex size-3">
-          <span
-            class="absolute inline-flex h-full w-full animate-ping animation-duration-[1.9s] rounded-full opacity-75"
-            :class="{
-              'bg-red-400': !isReachable,
-              'bg-green-400': isReachable,
-            }"
-          ></span>
-          <span
-            class="relative inline-flex size-3 rounded-full"
-            :class="{
-              'bg-red-500': !isReachable,
-              'bg-green-500': isReachable,
-            }"
-          ></span
+        <span
+          class="relative inline-flex size-3 rounded-full"
+          :class="{
+            'bg-red-500': !isReachable,
+            'bg-green-500': isReachable,
+          }"
         ></span>
         {{ title }}
       </h3>

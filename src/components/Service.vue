@@ -51,7 +51,7 @@ const isReachable = computed(() => {
       v-if="!isReachable"
       class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
     >
-      <span class="tracking-wider">Offline</span>
+      <span class="tracking-wider text-red-700 font-bold uppercase text-xl">Offline</span>
     </div>
     <div
       v-else-if="!isEnabled"

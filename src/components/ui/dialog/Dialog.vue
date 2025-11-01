@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import type { DialogRootEmits, DialogRootProps } from "reka-ui"
-import { DialogRoot, useForwardPropsEmits } from "reka-ui"
+import type { DialogRootEmits, DialogRootProps } from "reka-ui";
+import { DialogRoot, useForwardPropsEmits } from "reka-ui";
+import DialogContent from "./DialogContent.vue";
+import DialogHeader from "./DialogHeader.vue";
+import DialogTitle from "./DialogTitle.vue";
+import { reactiveOmit } from "@vueuse/core";
+import DialogFooter from "./DialogFooter.vue";
 
-const props = defineProps<DialogRootProps>()
-const emits = defineEmits<DialogRootEmits>()
+const props = defineProps<DialogRootProps & { title: string }>();
+const emits = defineEmits<DialogRootEmits & {
+  'submit': [value: any]
+}>();
 
-const forwarded = useForwardPropsEmits(props, emits)
+const delegatedProps = reactiveOmit(props, "title");
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
@@ -13,6 +21,20 @@ const forwarded = useForwardPropsEmits(props, emits)
     data-slot="dialog"
     v-bind="forwarded"
   >
-    <slot />
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>{{ title }}</DialogTitle>
+      </DialogHeader>
+
+      <form class="max-h-[80vh] flex flex-col overflow-auto" @submit="emits('submit', $event)">
+        <div class="mb-4 overflow-y-auto pr-4 space-y-3">
+          <slot name="content" />
+        </div>
+
+        <DialogFooter class=" pr-4">
+          <slot name="action" />
+        </DialogFooter>
+      </form>
+    </DialogContent>
   </DialogRoot>
 </template>

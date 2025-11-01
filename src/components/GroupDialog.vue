@@ -54,48 +54,40 @@ const onSubmit = form.handleSubmit((values) => {
 
 <template>
   <Dialog
+    :title="title"
     :open="open"
     @update:open="handleClose"
+    @submit="onSubmit"
   >
-    <DialogContent class="sm:max-w-[425px]">
-      <DialogHeader>
-        <DialogTitle>{{ title }}</DialogTitle>
-      </DialogHeader>
-
-      <form
-        id="dialogForm"
-        @submit="onSubmit"
-        class="space-y-3"
+    <template #content>
+      <FormField
+        v-slot="{ componentField }"
+        name="title"
       >
-        <FormField
-          v-slot="{ componentField }"
-          name="title"
-        >
-          <FormItem>
-            <FormLabel>Title</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                autocomplete="off"
-                v-bind="componentField"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
+        <FormItem>
+          <FormLabel>Title</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              autocomplete="off"
+              v-bind="componentField"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
+    </template>
 
-        <DialogFooter>
-          <Button type="submit">
-            {{ submitButton }}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            @click="handleClose"
-          >
-            Schließen
-          </Button>
-        </DialogFooter>
-      </form>
-    </DialogContent>
+    <template #action>
+      <Button type="submit">
+        {{ submitButton }}
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        @click="handleClose"
+      >
+        Schließen
+      </Button>
+    </template>
   </Dialog>
 </template>

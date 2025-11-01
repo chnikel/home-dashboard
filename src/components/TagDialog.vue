@@ -84,15 +84,13 @@ const validColors: TagColors[] = [
     :validation-schema="formSchema"
   >
     <Dialog
+      :title="title"
       :open="open"
       @update:open="handleClose"
+      @submit="handleSubmit($event, onSubmit)"
     >
-      <DialogContent class="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{{ title }}</DialogTitle>
-        </DialogHeader>
-
-        <div class="h-6">
+      <template #content>
+        <div class="h-6 mb-4">
           <Tag
             v-if="values.name"
             :name="values.name"
@@ -100,84 +98,78 @@ const validColors: TagColors[] = [
           />
         </div>
 
-        <form
-          id="dialogForm"
-          @submit="handleSubmit($event, onSubmit)"
-          class="space-y-3"
+        <FormField
+          v-slot="{ componentField }"
+          name="name"
         >
-          <FormField
-            v-slot="{ componentField }"
-            name="name"
-          >
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  autocomplete="off"
-                  v-bind="componentField"
-                />
-              </FormControl>
-            </FormItem>
-          </FormField>
+          <FormItem>
+            <FormLabel>Name</FormLabel>
+            <FormControl>
+              <Input
+                type="text"
+                autocomplete="off"
+                v-bind="componentField"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
 
-          <FormField
-            v-slot="{ value, setValue }"
-            name="color"
-          >
-            <FormItem>
-              <FormLabel>Farbe</FormLabel>
-              <FormControl>
-                <div class="flex gap-1 flex-wrap">
-                  <template v-for="color in validColors">
-                    <ColorItem
-                      class="cursor-pointer border rounded"
-                      :class="{
-                        'border-primary': color === value,
-                        'border-transparent': color !== value,
-                      }"
-                      :color="color"
-                      @click="setValue(color)"
-                    />
-                  </template>
-                </div>
-              </FormControl>
-            </FormItem>
-          </FormField>
+        <FormField
+          v-slot="{ value, setValue }"
+          name="color"
+        >
+          <FormItem>
+            <FormLabel>Farbe</FormLabel>
+            <FormControl>
+              <div class="flex gap-1 flex-wrap">
+                <template v-for="color in validColors">
+                  <ColorItem
+                    class="cursor-pointer border rounded"
+                    :class="{
+                      'border-primary': color === value,
+                      'border-transparent': color !== value,
+                    }"
+                    :color="color"
+                    @click="setValue(color)"
+                  />
+                </template>
+              </div>
+            </FormControl>
+          </FormItem>
+        </FormField>
 
-          <FormField
-            v-slot="{ componentField }"
-            name="weight"
-          >
-            <FormItem>
-              <FormLabel>Gewichtung</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  v-bind="componentField"
-                />
-              </FormControl>
-            </FormItem>
-          </FormField>
-        </form>
+        <FormField
+          v-slot="{ componentField }"
+          name="weight"
+        >
+          <FormItem>
+            <FormLabel>Gewichtung</FormLabel>
+            <FormControl>
+              <Input
+                type="number"
+                v-bind="componentField"
+              />
+            </FormControl>
+          </FormItem>
+        </FormField>
+      </template>
 
-        <DialogFooter>
-          <Button
-            type="submit"
-            form="dialogForm"
-          >
-            {{ submitButton }}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            form="dialogForm"
-            @click="handleClose"
-          >
-            Schließen
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+      <template #action>
+        <Button
+          type="submit"
+          form="dialogForm"
+        >
+          {{ submitButton }}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          form="dialogForm"
+          @click="handleClose"
+        >
+          Schließen
+        </Button>
+      </template>
     </Dialog>
   </Form>
 </template>

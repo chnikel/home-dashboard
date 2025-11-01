@@ -31,7 +31,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
           <slot name="content" />
         </div>
 
-        <DialogFooter>
+        <DialogFooter class=" pr-4">
           <slot name="action" />
         </DialogFooter>
       </form>

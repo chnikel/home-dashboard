@@ -62,6 +62,7 @@ const isReachable = computed(() => {
       :show-device-icon="
         tags.findIndex((t) => t.name.toLowerCase() == 'physical') != -1
       "
+      :show-disconnected-icon="!isReachable"
     />
 
     <ServiceIcon

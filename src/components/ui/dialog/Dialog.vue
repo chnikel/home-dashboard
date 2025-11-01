@@ -27,7 +27,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       </DialogHeader>
 
       <form class="max-h-[80vh] flex flex-col overflow-auto" @submit="emits('submit', $event)">
-        <div class="mb-4 overflow-y-auto pr-4">
+        <div class="mb-4 overflow-y-auto pr-4 space-y-3">
           <slot name="content" />
         </div>
 

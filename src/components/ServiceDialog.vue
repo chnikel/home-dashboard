@@ -129,213 +129,205 @@ function handleTagRemove(id: number) {
 
 <template>
   <Dialog
+    :title="title"
     :open="open"
     @update:open="handleClose"
+    @submit="onSubmit"
   >
-    <DialogContent class="sm:max-w-[425px]">
-      <DialogHeader>
-        <DialogTitle>{{ title }}</DialogTitle>
-      </DialogHeader>
-
-      <form
-        id="dialogForm"
-        @submit="onSubmit"
-        class="space-y-3"
+    <template #content>
+      <FormField
+        v-slot="{ componentField }"
+        name="title"
       >
-        <FormField
-          v-slot="{ componentField }"
-          name="title"
-        >
-          <FormItem>
-            <FormLabel>Title</FormLabel>
-            <FormControl>
+        <FormItem>
+          <FormLabel>Title</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              autocomplete="off"
+              v-bind="componentField"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField
+        v-slot="{ componentField }"
+        name="description"
+      >
+        <FormItem>
+          <FormLabel>Beschreibung</FormLabel>
+          <FormControl>
+            <Textarea
+              autocomplete="off"
+              v-bind="componentField"
+            ></Textarea>
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField
+        v-slot="{ componentField }"
+        name="link"
+      >
+        <FormItem>
+          <FormLabel>Link</FormLabel>
+          <FormControl>
+            <Input
+              type="text"
+              autocomplete="off"
+              v-bind="componentField"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField
+        v-slot="{ componentField, value }"
+        name="icon_url"
+      >
+        <FormItem>
+          <FormLabel>Icon</FormLabel>
+          <FormControl>
+            <div class="flex items-center gap-2">
+              <ServiceIcon
+                :url="value"
+                :wrap="form.values.icon_wrap"
+              />
               <Input
                 type="text"
                 autocomplete="off"
+                placeholder="URL"
                 v-bind="componentField"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
-
-        <FormField
-          v-slot="{ componentField }"
-          name="description"
-        >
-          <FormItem>
-            <FormLabel>Beschreibung</FormLabel>
-            <FormControl>
-              <Textarea
-                autocomplete="off"
-                v-bind="componentField"
-              ></Textarea>
-            </FormControl>
-          </FormItem>
-        </FormField>
-
-        <FormField
-          v-slot="{ componentField }"
-          name="link"
-        >
-          <FormItem>
-            <FormLabel>Link</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                autocomplete="off"
-                v-bind="componentField"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
-
-        <FormField
-          v-slot="{ componentField, value }"
-          name="icon_url"
-        >
-          <FormItem>
-            <FormLabel>Icon</FormLabel>
-            <FormControl>
-              <div class="flex items-center gap-2">
-                <ServiceIcon
-                  :url="value"
-                  :wrap="form.values.icon_wrap"
-                />
-                <Input
-                  type="text"
-                  autocomplete="off"
-                  placeholder="URL"
-                  v-bind="componentField"
-                />
-              </div>
-            </FormControl>
-            <FormDescription>
-              Tip: Nutze
-              <a
-                class="inline-flex items-center gap-0.5 hover:text-white"
-                :href="`https://dashboardicons.com/icons?q=${form.values.title}`"
-                target="_blank"
-              >
-                <span class="underline">dashboardicons.com</span>
-                <ExternalLinkIcon :size="16" />
-              </a>
-            </FormDescription>
-          </FormItem>
-        </FormField>
-
-        <FormField
-          v-slot="{ value, handleChange }"
-          name="icon_wrap"
-        >
-          <FormItem>
-            <FormLabel>Icon wrap</FormLabel>
-            <FormControl>
-              <Switch
-                :model-value="value"
-                @update:model-value="handleChange"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
-
-        <FormField
-          v-slot="{ value, handleChange }"
-          name="enabled"
-        >
-          <FormItem>
-            <FormLabel>Enabled</FormLabel>
-            <FormControl>
-              <Switch
-                :model-value="value"
-                @update:model-value="handleChange"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
-
-        <FormField name="tagIds">
-          <FormItem>
-            <FormLabel>Tags</FormLabel>
-
-            <div>
-              <Tag
-                v-for="tag in tags"
-                :name="tag.name"
-                :color="tag.color"
-                :action="true"
-                @action="() => handleTagRemove(tag.id)"
               />
             </div>
+          </FormControl>
+          <FormDescription>
+            Tip: Nutze
+            <a
+              class="inline-flex items-center gap-0.5 hover:text-white"
+              :href="`https://dashboardicons.com/icons?q=${form.values.title}`"
+              target="_blank"
+            >
+              <span class="underline">dashboardicons.com</span>
+              <ExternalLinkIcon :size="16" />
+            </a>
+          </FormDescription>
+        </FormItem>
+      </FormField>
 
-            <FormControl>
-              <Select
-                v-model="tagToAdd"
-                @update:model-value="onTagChange"
-              >
-                <FormControl>
-                  <SelectTrigger class="w-full">
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem
-                      v-for="tag in filteredTags"
-                      :value="tag.id"
-                    >
-                      <Tag
-                        :name="tag.name"
-                        :color="tag.color"
-                      />
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormControl>
-          </FormItem>
-        </FormField>
+      <FormField
+        v-slot="{ value, handleChange }"
+        name="icon_wrap"
+      >
+        <FormItem>
+          <FormLabel>Icon wrap</FormLabel>
+          <FormControl>
+            <Switch
+              :model-value="value"
+              @update:model-value="handleChange"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
 
-        <FormField
-          v-slot="{ componentField }"
-          name="groupId"
-        >
-          <FormItem>
-            <FormLabel>Gruppe</FormLabel>
-            <FormControl>
-              <Select v-bind="componentField">
-                <FormControl>
-                  <SelectTrigger class="w-full">
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem
-                      v-for="group in store.groups"
-                      :value="group.id"
-                    >
-                      {{ group.title }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormControl>
-          </FormItem>
-        </FormField>
+      <FormField
+        v-slot="{ value, handleChange }"
+        name="enabled"
+      >
+        <FormItem>
+          <FormLabel>Enabled</FormLabel>
+          <FormControl>
+            <Switch
+              :model-value="value"
+              @update:model-value="handleChange"
+            />
+          </FormControl>
+        </FormItem>
+      </FormField>
 
-        <DialogFooter>
-          <Button type="submit">
-            {{ submitButton }}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            @click="handleClose"
-          >
-            Schließen
-          </Button>
-        </DialogFooter>
-      </form>
-    </DialogContent>
+      <FormField name="tagIds">
+        <FormItem>
+          <FormLabel>Tags</FormLabel>
+
+          <div>
+            <Tag
+              v-for="tag in tags"
+              :name="tag.name"
+              :color="tag.color"
+              :action="true"
+              @action="() => handleTagRemove(tag.id)"
+            />
+          </div>
+
+          <FormControl>
+            <Select
+              v-model="tagToAdd"
+              @update:model-value="onTagChange"
+            >
+              <FormControl>
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem
+                    v-for="tag in filteredTags"
+                    :value="tag.id"
+                  >
+                    <Tag
+                      :name="tag.name"
+                      :color="tag.color"
+                    />
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </FormControl>
+        </FormItem>
+      </FormField>
+
+      <FormField
+        v-slot="{ componentField }"
+        name="groupId"
+      >
+        <FormItem>
+          <FormLabel>Gruppe</FormLabel>
+          <FormControl>
+            <Select v-bind="componentField">
+              <FormControl>
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem
+                    v-for="group in store.groups"
+                    :value="group.id"
+                  >
+                    {{ group.title }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </FormControl>
+        </FormItem>
+      </FormField>
+    </template>
+
+    <template #action>
+      <Button type="submit">
+        {{ submitButton }}
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        @click="handleClose"
+      >
+        Schließen
+      </Button>
+    </template>
   </Dialog>
 </template>

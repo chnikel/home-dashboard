@@ -176,6 +176,16 @@ const searchText = ref("");
 
 onMounted(async () => {
   updateLocalServicePings();
+
+  const pingInterval = setInterval(() => {
+    console.log("Refreshing pings");
+    
+    updateLocalServicePings();
+  }, 60000);
+
+  return () => {
+    clearInterval(pingInterval);
+  };
 });
 </script>
 

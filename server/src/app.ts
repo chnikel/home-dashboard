@@ -5,6 +5,7 @@ import morgan from "morgan";
 import tagRouter from "./routes/tagRouter";
 import serviceRouter from "./routes/serviceRouter";
 import groupRouter from "./routes/groupRouter";
+import pingRouter from "./routes/pingRouter";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(
 app.use(express.static(path.join(__dirname, "../../dist")));
 
 app.use("/api/services", serviceRouter);
+app.use("/api/ping", pingRouter);
 app.use("/api/groups", groupRouter);
 app.use("/api/tags", tagRouter);
 

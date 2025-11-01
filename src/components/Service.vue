@@ -40,6 +40,7 @@ defineProps<{
       :show-live-icon="
         tags.findIndex((t) => t.name.toLowerCase() == 'live') != -1
       "
+      :show-device-icon="tags.findIndex((t) => t.name.toLowerCase() == 'physical') != -1"
     />
 
     <ServiceIcon

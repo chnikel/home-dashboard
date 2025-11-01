@@ -83,13 +83,6 @@ const isReachable = computed(() => {
         style="grid-area: title"
         class="text-lg font-semibold flex gap-2 items-center"
       >
-        <span
-          class="relative inline-flex size-3 rounded-full"
-          :class="{
-            'bg-red-500': !isReachable,
-            'bg-green-500': isReachable,
-          }"
-        ></span>
         {{ title }}
       </h3>
       <p

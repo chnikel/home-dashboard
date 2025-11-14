@@ -9,7 +9,7 @@ import {
 import { computed } from "vue";
 
 type PositionVertical = "top" | "bottom";
-type PositionHorizontal = "left" | "right";
+type PositionHorizontal = "left" | "right" | "center";
 type Position = `${PositionVertical}-${PositionHorizontal}`;
 
 const props = defineProps<{
@@ -56,14 +56,17 @@ const selected = computed(() => {
 
 const position = computed(() => {
   switch (props.position) {
-    case "top-right":
-      return "top-0 right-0 rounded-tr-xl rounded-bl-xl";
-
     case "bottom-right":
       return "bottom-0 right-0 rounded-tl-xl rounded-br-xl";
 
     case "bottom-left":
       return "bottom-0 left-0 rounded-tr-xl rounded-bl-xl";
+
+    case "top-right":
+      return "top-0 right-0 rounded-tr-xl rounded-bl-xl";
+      
+    case "top-center":
+      return "top-0 left-1/2 -translate-x-1/2 rounded-xl";
 
     case "top-left":
     default:
@@ -75,7 +78,7 @@ const position = computed(() => {
 <template>
   <div
     v-if="selected"
-    class="absolute rounded p-1.5"
+    class="absolute rounded p-1.5 shadow-2xl z-10"
     :class="cn(selected.colorClass, position)"
   >
     <component

@@ -261,13 +261,7 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div
-            class="mx-auto"
-            :class="{
-              'container': !compactMode,
-              'max-w-[800px]': compactMode,
-            }"
-          >
+          <div class="container mx-auto">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="

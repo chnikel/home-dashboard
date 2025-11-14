@@ -8,7 +8,9 @@ import {
 } from "lucide-vue-next";
 import { computed } from "vue";
 
-type Position = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+type PositionVertical = "top" | "bottom";
+type PositionHorizontal = "left" | "right";
+type Position = `${PositionVertical}-${PositionHorizontal}`;
 
 const props = defineProps<{
   showLiveIcon?: boolean;

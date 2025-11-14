@@ -21,7 +21,7 @@ const props = defineProps<{
 
 const isReachable = computed(() => {
   if (store.servicePings.length === 0) {
-    return false;
+    return true;
   }
 
   const pingData = store.servicePings.find(

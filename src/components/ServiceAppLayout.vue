@@ -87,6 +87,7 @@ const showPhysicalIndicator = computed(() => {
       class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
     >
       <ServiceInfoIcon
+        class="z-[8]"
         position="top-center"
         :show="selected !== null"
         :component="selected?.component"

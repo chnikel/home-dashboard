@@ -8,9 +8,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const props = defineProps<{
-  tags: ServiceTag[];
-}>();
+const props = withDefaults(
+  defineProps<{
+    tags: ServiceTag[];
+    max?: number;
+  }>(),
+  {
+    max: 3,
+  }
+);
 
 const sortedTags = computed(() => {
   return props.tags.sort((a, b) => {
@@ -22,21 +28,21 @@ const sortedTags = computed(() => {
 <template>
   <div style="grid-area: tags">
     <Tag
-      v-for="tag in sortedTags.slice(0, 3)"
+      v-for="tag in sortedTags.slice(0, props.max)"
       :color="tag.color"
       :name="tag.name"
     />
 
-    <Popover v-if="sortedTags.length > 3">
+    <Popover v-if="sortedTags.length > props.max">
       <PopoverTrigger @click.prevent>
         <Tag
           color="neutral"
-          :name="`+${sortedTags.length - 3}`"
+          :name="`+${sortedTags.length - props.max}`"
         />
       </PopoverTrigger>
       <PopoverContent>
         <Tag
-          v-for="tag in sortedTags.slice(3)"
+          v-for="tag in sortedTags.slice(props.max)"
           :color="tag.color"
           :name="tag.name"
         />

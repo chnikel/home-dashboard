@@ -10,6 +10,7 @@ import {
   HardDriveIcon,
   RadioIcon,
 } from "lucide-vue-next";
+import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
   id: number;
@@ -129,6 +130,12 @@ const showPhysicalIndicator = computed(() => {
       <div class="text-center mt-2 text-sm">
         {{ title }}
       </div>
+
+      <ServiceTags
+      class="mt-1"
+        :tags="tags"
+        :max="2"
+      />
     </a>
   </div>
 </template>

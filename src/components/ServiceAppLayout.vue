@@ -83,19 +83,6 @@ const showPhysicalIndicator = computed(() => {
 
 <template>
   <div class="relative">
-    <div
-      v-if="!isReachable"
-      class="absolute inset-0 flex flex-col justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
-    >
-      <CloudOffIcon color="white" />
-      <span> Offline </span>
-    </div>
-    <div
-      v-else-if="!isEnabled"
-      class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
-    >
-      <EyeOffIcon />
-    </div>
     <a
       :href="link"
       target="_blank"
@@ -132,7 +119,7 @@ const showPhysicalIndicator = computed(() => {
       </div>
 
       <ServiceTags
-      class="mt-1"
+        class="mt-1"
         :tags="tags"
         :max="2"
       />

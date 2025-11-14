@@ -50,12 +50,6 @@ const isReachable = computed(() => {
     >
       <span class="tracking-wider text-red-700 font-bold uppercase text-xl">Offline</span>
     </div>
-    <div
-      v-else-if="!isEnabled"
-      class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
-    >
-      <EyeOffIcon />
-    </div>
 
     <ServiceInfoIcon
       :show-deprecated-icon="

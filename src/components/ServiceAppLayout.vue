@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { EyeOffIcon } from "lucide-vue-next";
 import type { ServiceTag } from "../api";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
@@ -20,7 +19,6 @@ const props = defineProps<{
   icon_url: string;
   icon_wrap: boolean;
   tags: ServiceTag[];
-  isEnabled?: boolean;
   bgColor?: string;
 }>();
 

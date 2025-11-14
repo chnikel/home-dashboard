@@ -43,6 +43,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import Input from "./components/ui/input/Input.vue";
+import ServiceAppLayout from "./components/ServiceAppLayout.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -179,7 +180,7 @@ onMounted(async () => {
 
   const pingInterval = setInterval(() => {
     console.log("Refreshing pings");
-    
+
     updateLocalServicePings();
   }, 60000);
 
@@ -303,6 +304,19 @@ onMounted(async () => {
                     @delete="handleDeleteService(service)"
                   >
                     <Service
+                      v-if="!compactMode"
+                      :compact="compactMode"
+                      :id="service.id"
+                      :title="service.title"
+                      :description="service.description"
+                      :link="service.link"
+                      :icon_url="service.icon_url"
+                      :icon_wrap="service.icon_wrap"
+                      :tags="service.tags"
+                      :isEnabled="service.enabled"
+                    />
+                    <ServiceAppLayout
+                      v-else
                       :compact="compactMode"
                       :id="service.id"
                       :title="service.title"

@@ -108,9 +108,9 @@ async function handleToggleTag(tagId: number) {
     >
       <div
         v-if="edit"
-        class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1 z-10"
+        class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-2xl space-x-1 z-20"
       >
-        <div class="flex gap-3 justify-center items-center h-full">
+        <div class="flex flex-col gap-3 justify-center items-center h-full">
           <Button
             data-variant="outline"
             @click="showEditServiceDialog = true"

@@ -9,7 +9,6 @@ import { store } from "@/store";
 
 const props = defineProps<{
   id: number;
-  compact?: boolean;
   title: string;
   description: string;
   link: string;
@@ -40,10 +39,8 @@ const isReachable = computed(() => {
   <a
     :href="link"
     target="_blank"
-    class="lg:p-4 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3 relative"
+    class="lg:p-4 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3 relative p-2 py-3 layout-normal"
     :class="{
-      'w-min layout-compact': compact,
-      'p-2 py-3 layout-normal': !compact,
       'border-red-600': !isReachable,
     }"
   >
@@ -78,32 +75,23 @@ const isReachable = computed(() => {
       :wrap="icon_wrap"
       :url="icon_url"
     />
-    <template v-if="!compact">
-      <h3
-        style="grid-area: title"
-        class="text-lg font-semibold flex gap-2 items-center"
-      >
-        {{ title }}
-      </h3>
-      <p
-        style="grid-area: description"
-        class="text-sm text-neutral-400 line-clamp-1"
-      >
-        {{ description }}
-      </p>
-      <ServiceTags :tags="tags" />
-    </template>
+    <h3
+      style="grid-area: title"
+      class="text-lg font-semibold flex gap-2 items-center"
+    >
+      {{ title }}
+    </h3>
+    <p
+      style="grid-area: description"
+      class="text-sm text-neutral-400 line-clamp-1"
+    >
+      {{ description }}
+    </p>
+    <ServiceTags :tags="tags" />
   </a>
 </template>
 
 <style lang="css" scoped>
-.layout-compact {
-  grid-template-columns: auto;
-  grid-template-areas:
-    "icon"
-    "title";
-}
-
 .layout-normal {
   grid-template-columns: auto 1fr;
   grid-template-areas:

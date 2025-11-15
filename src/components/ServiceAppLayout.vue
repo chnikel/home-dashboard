@@ -118,7 +118,7 @@ const showPhysicalIndicator = computed(() => {
       </div>
 
       <ServiceTags
-        class="mt-1"
+        class="mt-1 mx-auto"
         :tags="tags"
         :max="2"
       />

@@ -153,7 +153,7 @@ function handleTagRemove(id: number) {
             <TabsTrigger value="large"> <LayoutListIcon /> Large </TabsTrigger>
           </TabsList>
           <TabsContent value="compact">
-            <div class="flex flex-wrap border rounded-lg p-3">
+            <div class="flex flex-wrap border rounded-lg p-3 h-[187.5px]">
               <ServiceAppLayout
                 class="mx-auto"
                 :id="0"
@@ -166,17 +166,18 @@ function handleTagRemove(id: number) {
             </div>
           </TabsContent>
           <TabsContent value="large">
-            <div class="flex flex-wrap border rounded-lg p-3">
-              <Service
-                class="mx-auto"
-                :id="0"
-                :title="form.values.title || ''"
-                :description="form.values.description || ''"
-                :icon_url="form.values.icon_url || ''"
-                :icon_wrap="form.values.icon_wrap || false"
-                :tags="tags"
-              /></div
-          ></TabsContent>
+            <div class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]">
+                <Service
+                  class="mx-auto"
+                  :id="0"
+                  :title="form.values.title || ''"
+                  :description="form.values.description || ''"
+                  :icon_url="form.values.icon_url || ''"
+                  :icon_wrap="form.values.icon_wrap || false"
+                  :tags="tags"
+                />
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
       <form

@@ -5,6 +5,7 @@ import ServiceTags from "./ServiceTags.vue";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
+import { preConfiguredIcons } from "@/lib/status-icons";
 
 const props = defineProps<{
   id: number;
@@ -32,6 +33,27 @@ const isReachable = computed(() => {
 
   return pingData.isReachable;
 });
+
+const selected = computed(() => {
+  if (!isReachable) {
+    return preConfiguredIcons["disconnected"];
+  }
+  const deprecated =
+    props.tags.findIndex((t) => t.name.toLowerCase() == "deprecated") != -1;
+  if (deprecated) {
+    return preConfiguredIcons["deprecated"];
+  }
+  const showLive =
+    props.tags.findIndex((t) => t.name.toLowerCase() == "live") != -1;
+  if (showLive) {
+    return preConfiguredIcons["live"];
+  }
+  return null;
+});
+
+const showPhysicalIndicator = computed(() => {
+  return props.tags.findIndex((t) => t.name.toLowerCase() == "physical") != -1;
+});
 </script>
 
 <template>
@@ -53,16 +75,19 @@ const isReachable = computed(() => {
     </div>
 
     <ServiceInfoIcon
-      :show-deprecated-icon="
-        tags.findIndex((t) => t.name.toLowerCase() == 'deprecated') != -1
-      "
-      :show-live-icon="
-        tags.findIndex((t) => t.name.toLowerCase() == 'live') != -1
-      "
-      :show-device-icon="
-        tags.findIndex((t) => t.name.toLowerCase() == 'physical') != -1
-      "
-      :show-disconnected-icon="!isReachable"
+      class="z-[8]"
+      position="top-left"
+      :show="selected !== null"
+      :component="selected?.component"
+      :colorClass="selected?.colorClass"
+    />
+
+    <ServiceInfoIcon
+      class="z-[8]"
+      position="bottom-left"
+      :show="showPhysicalIndicator"
+      :component="preConfiguredIcons['device'].component"
+      :colorClass="preConfiguredIcons['device'].colorClass"
     />
 
     <ServiceIcon

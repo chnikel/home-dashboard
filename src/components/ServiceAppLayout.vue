@@ -3,13 +3,8 @@ import type { ServiceTag } from "../api";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
-import {
-  CloudOffIcon,
-  ConstructionIcon,
-  HardDriveIcon,
-  RadioIcon,
-} from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
+import { preConfiguredIcons } from "@/lib/status-icons";
 
 const props = defineProps<{
   id: number;
@@ -37,25 +32,6 @@ const isReachable = computed(() => {
 
   return pingData.isReachable;
 });
-
-const preConfiguredIcons = {
-  disconnected: {
-    component: CloudOffIcon,
-    colorClass: "bg-red-600",
-  },
-  live: {
-    component: RadioIcon,
-    colorClass: "bg-red-800",
-  },
-  deprecated: {
-    component: ConstructionIcon,
-    colorClass: "bg-blue-800/50",
-  },
-  device: {
-    component: HardDriveIcon,
-    colorClass: "bg-neutral-800",
-  },
-};
 
 const selected = computed(() => {
   if (!isReachable) {
@@ -86,6 +62,14 @@ const showPhysicalIndicator = computed(() => {
       :target="link && '_blank'"
       class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
     >
+      <ServiceInfoIcon
+        class="z-[8]"
+        position="top-right"
+        :show="!isReachable"
+        :component="preConfiguredIcons['disconnected'].component"
+        :colorClass="preConfiguredIcons['disconnected'].colorClass"
+      />
+      
       <ServiceInfoIcon
         class="z-[8]"
         position="top-center"

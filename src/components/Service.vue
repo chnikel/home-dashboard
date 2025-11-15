@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { EyeOffIcon } from "lucide-vue-next";
 import type { ServiceTag } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
 import ServiceTags from "./ServiceTags.vue";
@@ -11,7 +10,7 @@ const props = defineProps<{
   id: number;
   title: string;
   description: string;
-  link: string;
+  link?: string;
   icon_url: string;
   icon_wrap: boolean;
   tags: ServiceTag[];
@@ -19,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const isReachable = computed(() => {
-  if (store.servicePings.length === 0) {
+  if (store.servicePings.length === 0 || !props.link) {
     return true;
   }
 
@@ -37,8 +36,8 @@ const isReachable = computed(() => {
 
 <template>
   <a
-    :href="link"
-    target="_blank"
+    :href="link || '#'"
+    :target="link && '_blank'"
     class="lg:p-4 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3 relative p-2 py-3 layout-normal"
     :class="{
       'border-red-600': !isReachable,
@@ -48,7 +47,9 @@ const isReachable = computed(() => {
       v-if="!isReachable"
       class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
     >
-      <span class="tracking-wider text-red-700 font-bold uppercase text-xl">Offline</span>
+      <span class="tracking-wider text-red-700 font-bold uppercase text-xl"
+        >Offline</span
+      >
     </div>
 
     <ServiceInfoIcon

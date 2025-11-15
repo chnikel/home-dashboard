@@ -15,7 +15,7 @@ const props = defineProps<{
   id: number;
   title: string;
   description: string;
-  link: string;
+  link?: string;
   icon_url: string;
   icon_wrap: boolean;
   tags: ServiceTag[];
@@ -23,7 +23,7 @@ const props = defineProps<{
 }>();
 
 const isReachable = computed(() => {
-  if (store.servicePings.length === 0) {
+  if (store.servicePings.length === 0 || !props.link) {
     return true;
   }
 
@@ -82,8 +82,8 @@ const showPhysicalIndicator = computed(() => {
 <template>
   <div class="relative">
     <a
-      :href="link"
-      target="_blank"
+      :href="link || '#'"
+      :target="link && '_blank'"
       class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
     >
       <ServiceInfoIcon

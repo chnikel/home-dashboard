@@ -31,7 +31,14 @@ import { useForm } from "vee-validate";
 import { computed, onBeforeMount, ref } from "vue";
 import Tag from "./Tag.vue";
 import type { GetTagsResponse } from "@/api";
-import { ExternalLinkIcon } from "lucide-vue-next";
+import {
+  ExternalLinkIcon,
+  LayoutGridIcon,
+  LayoutListIcon,
+} from "lucide-vue-next";
+import ServiceAppLayout from "./ServiceAppLayout.vue";
+import Service from "./Service.vue";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -137,6 +144,41 @@ function handleTagRemove(id: number) {
         <DialogTitle>{{ title }}</DialogTitle>
       </DialogHeader>
 
+      <div class="sticky -top-1 bg-inherit pb-3">
+        Vorschau
+
+        <Tabs default-value="compact">
+          <TabsList class="grid w-full grid-cols-2">
+            <TabsTrigger value="compact"> <LayoutGridIcon /> App </TabsTrigger>
+            <TabsTrigger value="large"> <LayoutListIcon /> Large </TabsTrigger>
+          </TabsList>
+          <TabsContent value="compact">
+            <div class="flex flex-wrap border rounded-lg p-3">
+              <ServiceAppLayout
+                class="mx-auto"
+                :id="0"
+                :title="form.values.title || ''"
+                :description="form.values.description || ''"
+                :icon_url="form.values.icon_url || ''"
+                :icon_wrap="form.values.icon_wrap || false"
+                :tags="tags"
+              />
+            </div>
+          </TabsContent>
+          <TabsContent value="large">
+            <div class="flex flex-wrap border rounded-lg p-3">
+              <Service
+                class="mx-auto"
+                :id="0"
+                :title="form.values.title || ''"
+                :description="form.values.description || ''"
+                :icon_url="form.values.icon_url || ''"
+                :icon_wrap="form.values.icon_wrap || false"
+                :tags="tags"
+              /></div
+          ></TabsContent>
+        </Tabs>
+      </div>
       <form
         id="dialogForm"
         @submit="onSubmit"
@@ -197,10 +239,7 @@ function handleTagRemove(id: number) {
             <FormLabel>Icon</FormLabel>
             <FormControl>
               <div class="flex items-center gap-2">
-                <ServiceIcon
-                  :url="value"
-                  :wrap="form.values.icon_wrap"
-                />
+                <ServiceIcon :url="value" />
                 <Input
                   type="text"
                   autocomplete="off"

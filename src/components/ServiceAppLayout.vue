@@ -3,7 +3,6 @@ import type { ServiceTag } from "../api";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
-import ServiceTags from "./ServiceTags.vue";
 import { preConfiguredIcons } from "@/lib/status-icons";
 
 const props = defineProps<{
@@ -56,28 +55,11 @@ const showPhysicalIndicator = computed(() => {
 </script>
 
 <template>
-  <a
-    :href="link || '#'"
-    :target="link && '_blank'"
-    class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
-  >
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="top-right"
-      :show="!isReachable"
-      :component="preConfiguredIcons['disconnected'].component"
-      :colorClass="preConfiguredIcons['disconnected'].colorClass"
-    />
-
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="top-center"
-      :show="selected !== null"
-      :component="selected?.component"
-      :colorClass="selected?.colorClass"
-    />
-    <div
-      class="bg-accent size-16 shadow-xl rounded-2xl flex justify-center items-center mx-auto relative"
+  <div class="relative">
+    <a
+      :href="link || '#'"
+      :target="link && '_blank'"
+      class="block p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
     >
       <ServiceInfoIcon
         class="z-[8]"
@@ -95,9 +77,9 @@ const showPhysicalIndicator = computed(() => {
           :src="icon_url"
         />
       </div>
-    </div>
-    <div class="text-center mt-2 text-sm">
-      {{ title }}
-    </div>
-  </a>
+      <div class="text-center mt-2 text-sm">
+        {{ title }}
+      </div>
+    </a>
+  </div>
 </template>

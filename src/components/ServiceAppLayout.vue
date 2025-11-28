@@ -56,56 +56,48 @@ const showPhysicalIndicator = computed(() => {
 </script>
 
 <template>
-  <div class="relative">
-    <a
-      :href="link || '#'"
-      :target="link && '_blank'"
-      class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
+  <a
+    :href="link || '#'"
+    :target="link && '_blank'"
+    class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
+  >
+    <ServiceInfoIcon
+      class="z-[8]"
+      position="top-right"
+      :show="!isReachable"
+      :component="preConfiguredIcons['disconnected'].component"
+      :colorClass="preConfiguredIcons['disconnected'].colorClass"
+    />
+
+    <ServiceInfoIcon
+      class="z-[8]"
+      position="top-center"
+      :show="selected !== null"
+      :component="selected?.component"
+      :colorClass="selected?.colorClass"
+    />
+    <div
+      class="bg-accent size-16 shadow-xl rounded-2xl flex justify-center items-center mx-auto relative"
     >
       <ServiceInfoIcon
         class="z-[8]"
-        position="top-right"
-        :show="!isReachable"
-        :component="preConfiguredIcons['disconnected'].component"
-        :colorClass="preConfiguredIcons['disconnected'].colorClass"
-      />
-      
-      <ServiceInfoIcon
-        class="z-[8]"
-        position="top-center"
-        :show="selected !== null"
-        :component="selected?.component"
-        :colorClass="selected?.colorClass"
+        position="bottom-right-out"
+        :show="showPhysicalIndicator"
+        :component="preConfiguredIcons['device'].component"
+        :colorClass="preConfiguredIcons['device'].colorClass"
       />
       <div
-        class="bg-accent size-16 shadow-xl rounded-2xl flex justify-center items-center mx-auto relative"
+        class="size-11 rounded-lg overflow-hidden p-1"
+        :style="`background-color: ${bgColor};`"
       >
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="bottom-right-out"
-          :show="showPhysicalIndicator"
-          :component="preConfiguredIcons['device'].component"
-          :colorClass="preConfiguredIcons['device'].colorClass"
+        <img
+          class="w-full h-full"
+          :src="icon_url"
         />
-        <div
-          class="size-11 rounded-lg overflow-hidden p-1"
-          :style="`background-color: ${bgColor};`"
-        >
-          <img
-            class="w-full h-full"
-            :src="icon_url"
-          />
-        </div>
       </div>
-      <div class="text-center mt-2 text-sm">
-        {{ title }}
-      </div>
-
-      <ServiceTags
-        class="mt-1 mx-auto"
-        :tags="tags"
-        :max="2"
-      />
-    </a>
-  </div>
+    </div>
+    <div class="text-center mt-2 text-sm">
+      {{ title }}
+    </div>
+  </a>
 </template>

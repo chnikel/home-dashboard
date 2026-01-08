@@ -3,10 +3,15 @@ import {
   ConstructionIcon,
   HardDriveIcon,
   RadioIcon,
+  UnplugIcon,
 } from "lucide-vue-next";
 
 export const preConfiguredIcons = {
   disconnected: {
+    component: UnplugIcon,
+    colorClass: "bg-red-600",
+  },
+  offline: {
     component: CloudOffIcon,
     colorClass: "bg-red-600",
   },

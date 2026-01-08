@@ -67,15 +67,6 @@ const showPhysicalIndicator = computed(() => {
     class="w-40 block"
   >
     <div
-      v-if="!isReachable"
-      class="absolute z-10 inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl border border-red-700"
-    >
-      <div class="rounded-lg p-1.5 shadow-2xl bg-neutral-700">
-        <UnplugIcon />
-      </div>
-    </div>
-
-    <div
       class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
     >
       <div class="relative">
@@ -94,6 +85,14 @@ const showPhysicalIndicator = computed(() => {
           :show="selected !== null"
           :component="selected?.component"
           :colorClass="selected?.colorClass"
+        />
+
+        <ServiceInfoIcon
+          class="z-[8]"
+          position="top-left"
+          :show="!isReachable"
+          :component="preConfiguredIcons['disconnected'].component"
+          :colorClass="preConfiguredIcons['disconnected'].colorClass"
         />
 
         <ServiceInfoIcon

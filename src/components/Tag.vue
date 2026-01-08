@@ -52,7 +52,7 @@ const colorClasses = computed(() => classes[props.color]);
 
 <template>
   <div
-    :class="`inline-flex text-xs font-medium me-2 px-2.5 py-1 rounded ${colorClasses}`"
+    :class="`inline-flex text-xs font-medium me-2 px-2.5 py-1 rounded-lg ${colorClasses}`"
   >
     <div>{{ name }}</div>
 

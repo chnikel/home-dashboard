@@ -8,14 +8,14 @@ defineProps<{
 
 <template>
   <div
-    class="w-16 h-16 rounded-2xl shrink-0 self-center overflow-hidden transition-all"
+    class="size-20 rounded-3xl shrink-0 self-center overflow-hidden transition-all"
     :class="{
-      'p-2  ': !wrap,
-      'bg-neutral-700/80 border border-neutral-600': boxed,
+      'p-2.5  ': !wrap,
+      'bg-neutral-700/80 border shadow-xl': boxed,
     }"
   >
     <img
-      class="block h-full w-full"
+      class="block h-full w-full rounded-lg p-1"
       :src="url"
     />
   </div>

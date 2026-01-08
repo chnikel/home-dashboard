@@ -20,13 +20,16 @@ const position = computed(() => {
       return "bottom-0 right-0 rounded-xl rounded-br-xl";
 
     case "bottom-right-out":
-      return "bottom-0 right-0 rounded-xl rounded-br-xl translate-x-1/3 translate-y-1/3";
+      return "bottom-0 right-0 rounded-xl translate-x-1/3 translate-y-1/3";
 
     case "bottom-center":
       return "bottom-0 left-1/2 -translate-x-1/2 rounded-t-xl";
 
     case "bottom-left":
       return "bottom-0 left-0 rounded-tr-xl rounded-bl-xl";
+
+    case "bottom-left-out":
+      return "bottom-0 left-0 rounded-xl -translate-x-1/3 translate-y-1/3";
 
     case "top-right":
       return "top-0 right-0 rounded-tr-xl rounded-bl-xl";
@@ -36,6 +39,9 @@ const position = computed(() => {
 
     case "top-center":
       return "top-0 left-1/2 -translate-x-1/2 rounded-b-xl";
+
+    case "top-left-out":
+      return "top-0 left-0 rounded-xl -translate-x-1/3 -translate-y-1/3";
 
     case "top-left":
     default:

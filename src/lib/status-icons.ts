@@ -25,6 +25,6 @@ export const preConfiguredIcons = {
   },
   device: {
     component: HardDriveIcon,
-    colorClass: "bg-neutral-800",
+    colorClass: "bg-neutral-900",
   },
 };

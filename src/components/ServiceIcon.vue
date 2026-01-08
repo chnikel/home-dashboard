@@ -12,9 +12,9 @@ defineProps<{
     class="size-20 rounded-3xl shrink-0 self-center overflow-hidden transition-all"
     :class="{
       'p-2.5  ': !wrap,
-      'bg-neutral-700/80 border shadow-xl': boxed,
+      'bg-neutral-700/80 shadow-xl': boxed,
     }"
-    :style="`background-color: ${wrap ? '' : bgColor};`"
+    :style="`background-color: ${bgColor};`"
   >
     <img
       class="block h-full w-full rounded-lg"

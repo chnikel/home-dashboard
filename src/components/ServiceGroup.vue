@@ -93,7 +93,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
       </GroupContextMenuWrapper>
     </EditGroupWrapper>
     <hr />
-    <div class="grid p-2.5 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+    <div class="grid p-2.5 grid-cols-[repeat(auto-fill,minmax(130px,1fr))]">
       <slot />
     </div>
   </div>

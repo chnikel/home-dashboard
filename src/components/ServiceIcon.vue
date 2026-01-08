@@ -17,7 +17,7 @@ defineProps<{
     :style="`background-color: ${bgColor};`"
   >
     <img
-      class="block h-full w-full rounded-lg p-1"
+      class="block h-full w-full rounded-lg"
       :src="url"
     />
   </div>

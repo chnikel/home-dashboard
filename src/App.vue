@@ -196,45 +196,45 @@ onMounted(async () => {
     <ContextMenuTrigger>
       <div class="overflow-auto">
         <div class="h-screen snap-container">
-          <div
-            class="container mx-auto gap-2 flex sticky right-0 top-0 pt-6 z-30 bg-background"
-          >
-            <Input
-              v-model="searchText"
-              placeholder="Search name, description or #tag"
-            />
+          <div class="sticky top-0 py-6 z-30 bg-background shadow-lg">
+            <div class="container mx-auto flex gap-2">
+              <Input
+                v-model="searchText"
+                placeholder="Search name, description or #tag"
+              />
 
-            <Button
-              v-if="isEditMode"
-              class="!bg-orange-500 text-white"
-              @click="isEditMode = false"
-            >
-              Fertig
-            </Button>
-            <Button
-              v-if="!isEditMode"
-              variant="outline"
-              @click="isEditMode = true"
-            >
-              Bearbeiten
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button v-if="isEditMode"> Hinzufügen </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem @click="showServiceDialog = true">
-                  <FilePlusIcon /> Service hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem @click="showGroupDialog = true">
-                  <FolderIcon /> Gruppe hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="showTagDialog = true">
-                  <TagIcon /> Tag hinzufügen
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <Button
+                v-if="isEditMode"
+                class="!bg-orange-500 text-white"
+                @click="isEditMode = false"
+              >
+                Fertig
+              </Button>
+              <Button
+                v-if="!isEditMode"
+                variant="outline"
+                @click="isEditMode = true"
+              >
+                Bearbeiten
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button v-if="isEditMode"> Hinzufügen </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem @click="showServiceDialog = true">
+                    <FilePlusIcon /> Service hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem @click="showGroupDialog = true">
+                    <FolderIcon /> Gruppe hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuItem @click="showTagDialog = true">
+                    <TagIcon /> Tag hinzufügen
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
 
           <ServiceDialog
@@ -390,7 +390,7 @@ onMounted(async () => {
 .snap-container {
   overflow-y: scroll;
   scroll-snap-type: y proximity;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 90px;
   padding-bottom: 50vh;
 }
 </style>

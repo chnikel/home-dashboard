@@ -26,7 +26,7 @@ const sortedTags = computed(() => {
 </script>
 
 <template>
-  <div style="grid-area: tags">
+  <div style="grid-area: tags" class="flex justify-center">
     <Tag
       v-for="tag in sortedTags.slice(0, props.max)"
       :color="tag.color"

@@ -36,6 +36,7 @@ const data = computed<Partial<ServiceDialogFormData>>(() => {
     enabled: props.service.enabled ?? true,
     groupId: props.service.groupId,
     tagIds: props.service.tags.map((t) => t.id),
+    bgColor: props.service.bgColor,
   };
 });
 
@@ -64,6 +65,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       enabled: data.enabled,
       groupId: data.groupId,
       tags,
+      bgColor: data.bgColor,
     });
   } catch (error) {
     console.log(error);

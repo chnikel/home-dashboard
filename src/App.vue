@@ -29,7 +29,6 @@ import ServiceDialog, {
 import { findTag, store, updateLocalServicePings } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
-  EyeOffIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
@@ -146,6 +145,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
       enabled: data.enabled,
       groupId: data.groupId,
       tags,
+      bgColor: data.bgColor,
     });
   } catch (error) {
     console.log(error);
@@ -304,37 +304,31 @@ onMounted(async () => {
                     @toggleTag="refreshServices()"
                     @delete="handleDeleteService(service)"
                   >
-                    <div class="relative">
-                      <div
-                        v-if="!service.enabled"
-                        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
-                      >
-                        <EyeOffIcon />
-                      </div>
-                      <Service
-                        v-if="!compactMode"
-                        :compact="compactMode"
-                        :id="service.id"
-                        :title="service.title"
-                        :description="service.description"
-                        :link="service.link"
-                        :icon_url="service.icon_url"
-                        :icon_wrap="service.icon_wrap"
-                        :tags="service.tags"
-                        :isEnabled="service.enabled"
-                      />
-                      <ServiceAppLayout
-                        v-else
-                        :compact="compactMode"
-                        :id="service.id"
-                        :title="service.title"
-                        :description="service.description"
-                        :link="service.link"
-                        :icon_url="service.icon_url"
-                        :icon_wrap="service.icon_wrap"
-                        :tags="service.tags"
-                      />
-                    </div>
+                    <Service
+                      v-if="!compactMode"
+                      :compact="compactMode"
+                      :id="service.id"
+                      :title="service.title"
+                      :description="service.description"
+                      :link="service.link"
+                      :icon_url="service.icon_url"
+                      :icon_wrap="service.icon_wrap"
+                      :tags="service.tags"
+                      :isEnabled="service.enabled"
+                      :bgColor="service.bgColor"
+                    />
+                    <ServiceAppLayout
+                      v-else
+                      :compact="compactMode"
+                      :id="service.id"
+                      :title="service.title"
+                      :description="service.description"
+                      :link="service.link"
+                      :icon_url="service.icon_url"
+                      :icon_wrap="service.icon_wrap"
+                      :tags="service.tags"
+                      :bgColor="service.bgColor"
+                    />
                   </EditServiceWrapper>
                 </template>
               </ServiceGroup>

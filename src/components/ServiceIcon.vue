@@ -3,19 +3,21 @@ defineProps<{
   wrap?: boolean;
   url?: string;
   boxed?: boolean;
+  bgColor?: string;
 }>();
 </script>
 
 <template>
   <div
-    class="w-16 h-16 rounded-2xl shrink-0 self-center overflow-hidden transition-all"
+    class="size-20 rounded-3xl shrink-0 self-center overflow-hidden transition-all"
     :class="{
-      'p-2  ': !wrap,
-      'bg-neutral-700/80 border border-neutral-600': boxed,
+      'p-2.5  ': !wrap,
+      'bg-neutral-700/80 shadow-xl': boxed,
     }"
+    :style="`background-color: ${bgColor};`"
   >
     <img
-      class="block h-full w-full"
+      class="block h-full w-full rounded-lg"
       :src="url"
     />
   </div>

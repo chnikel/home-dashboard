@@ -39,6 +39,9 @@ import {
 import ServiceAppLayout from "./ServiceAppLayout.vue";
 import Service from "./Service.vue";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import InputGroup from "./ui/input-group/InputGroup.vue";
+import InputGroupAddon from "./ui/input-group/InputGroupAddon.vue";
+import InputGroupInput from "./ui/input-group/InputGroupInput.vue";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -49,6 +52,7 @@ const ServiceDialogFormData = z.object({
   enabled: z.boolean().default(true),
   groupId: z.number().optional().nullable(),
   tagIds: z.array(z.number()).optional(),
+  bgColor: z.string().optional().default(""),
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -79,6 +83,7 @@ const form = useForm({
         enabled: props.data?.enabled ?? true,
         groupId: props.data?.groupId,
         tagIds: props.data?.tagIds,
+        bgColor: props.data?.bgColor || "",
       }
     : undefined,
 });
@@ -144,13 +149,13 @@ function handleTagRemove(id: number) {
         <DialogTitle>{{ title }}</DialogTitle>
       </DialogHeader>
 
-      <div class="sticky -top-1 bg-inherit pb-3">
+      <div class="sticky -top-1 bg-inherit pb-3 z-10">
         Vorschau
 
-        <Tabs default-value="compact">
+        <Tabs default-value="large">
           <TabsList class="grid w-full grid-cols-2">
-            <TabsTrigger value="compact"> <LayoutGridIcon /> App </TabsTrigger>
             <TabsTrigger value="large"> <LayoutListIcon /> Large </TabsTrigger>
+            <TabsTrigger value="compact"> <LayoutGridIcon /> App </TabsTrigger>
           </TabsList>
           <TabsContent value="compact">
             <div class="flex flex-wrap border rounded-lg p-3 h-[187.5px]">
@@ -162,20 +167,26 @@ function handleTagRemove(id: number) {
                 :icon_url="form.values.icon_url || ''"
                 :icon_wrap="form.values.icon_wrap || false"
                 :tags="tags"
+                :bgColor="form.values.bgColor || ''"
+                :is-enabled="form.values.enabled"
               />
             </div>
           </TabsContent>
           <TabsContent value="large">
-            <div class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]">
-                <Service
-                  class="mx-auto"
-                  :id="0"
-                  :title="form.values.title || ''"
-                  :description="form.values.description || ''"
-                  :icon_url="form.values.icon_url || ''"
-                  :icon_wrap="form.values.icon_wrap || false"
-                  :tags="tags"
-                />
+            <div
+              class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]"
+            >
+              <Service
+                class="mx-auto"
+                :id="0"
+                :title="form.values.title || ''"
+                :description="form.values.description || ''"
+                :icon_url="form.values.icon_url || ''"
+                :icon_wrap="form.values.icon_wrap || false"
+                :tags="tags"
+                :bgColor="form.values.bgColor || ''"
+                :is-enabled="form.values.enabled"
+              />
             </div>
           </TabsContent>
         </Tabs>
@@ -240,7 +251,10 @@ function handleTagRemove(id: number) {
             <FormLabel>Icon</FormLabel>
             <FormControl>
               <div class="flex items-center gap-2">
-                <ServiceIcon :url="value" />
+                <ServiceIcon
+                  :url="value"
+                  :bg-color="form.values.bgColor"
+                />
                 <Input
                   type="text"
                   autocomplete="off"
@@ -274,6 +288,30 @@ function handleTagRemove(id: number) {
                 :model-value="value"
                 @update:model-value="handleChange"
               />
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField }"
+          name="bgColor"
+        >
+          <FormItem>
+            <FormLabel>Hintergrundfarbe</FormLabel>
+            <FormControl>
+              <InputGroup>
+                <InputGroupInput
+                  type="text"
+                  v-bind="componentField"
+                />
+                <InputGroupAddon>
+                  <InputGroupInput
+                    class="w-20"
+                    type="color"
+                    v-bind="componentField"
+                  />
+                </InputGroupAddon>
+              </InputGroup>
             </FormControl>
           </FormItem>
         </FormField>
@@ -343,18 +381,16 @@ function handleTagRemove(id: number) {
             <FormLabel>Gruppe</FormLabel>
             <FormControl>
               <Select v-bind="componentField">
-                <FormControl>
-                  <SelectTrigger class="w-full">
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem
                       v-for="group in store.groups"
-                      :value="group.id"
+                      :value="Number(group.id)"
                     >
-                      {{ group.title }}
+                      {{ group.title || "-" }}
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

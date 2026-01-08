@@ -6,6 +6,7 @@ import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
+import { EyeOffIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   id: number;
@@ -16,6 +17,9 @@ const props = defineProps<{
   icon_wrap: boolean;
   tags: ServiceTag[];
   isEnabled?: boolean;
+  showTags?: boolean;
+  showIndicators?: boolean;
+  bgColor?: string;
 }>();
 
 const isReachable = computed(() => {
@@ -60,54 +64,68 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="lg:p-4 text-white hover:bg-neutral-300/5 rounded-2xl border grid gap-x-3 relative p-2 py-3 layout-normal"
-    :class="{
-      'border-red-600': !isReachable,
-    }"
+    class="w-40 block relative"
   >
     <div
-      v-if="!isReachable"
-      class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl"
+      class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
     >
-      <span class="tracking-wider text-red-700 font-bold uppercase text-xl"
-        >Offline</span
+      <div
+        v-if="!isEnabled"
+        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
       >
+        <EyeOffIcon />
+      </div>
+
+      <div class="relative">
+        <ServiceIcon
+          style="grid-area: icon"
+          :wrap="icon_wrap"
+          :url="icon_url"
+          :boxed="true"
+          :bg-color="bgColor"
+        />
+
+        <ServiceInfoIcon
+          v-if="showIndicators"
+          class="z-[8]"
+          position="top-left"
+          :show="selected !== null"
+          :component="selected?.component"
+          :colorClass="selected?.colorClass"
+        />
+
+        <ServiceInfoIcon
+          class="z-[8]"
+          position="top-left"
+          :show="!isReachable"
+          :component="preConfiguredIcons['disconnected'].component"
+          :colorClass="preConfiguredIcons['disconnected'].colorClass"
+        />
+
+        <ServiceInfoIcon
+          v-if="showIndicators"
+          class="z-[8]"
+          position="bottom-left"
+          :show="showPhysicalIndicator"
+          :component="preConfiguredIcons['device'].component"
+          :colorClass="preConfiguredIcons['device'].colorClass"
+        />
+      </div>
+
+      <p
+        style="grid-area: title"
+        class="flex gap-2 items-center mt-2 overflow-hidden text-center"
+      >
+        {{ title }}
+      </p>
+
+      <ServiceTags
+        v-if="showTags"
+        class="mt-2"
+        :tags="tags"
+        :max="2"
+      />
     </div>
-
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="top-left"
-      :show="selected !== null"
-      :component="selected?.component"
-      :colorClass="selected?.colorClass"
-    />
-
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="bottom-left"
-      :show="showPhysicalIndicator"
-      :component="preConfiguredIcons['device'].component"
-      :colorClass="preConfiguredIcons['device'].colorClass"
-    />
-
-    <ServiceIcon
-      style="grid-area: icon"
-      :wrap="icon_wrap"
-      :url="icon_url"
-    />
-    <h3
-      style="grid-area: title"
-      class="text-lg font-semibold flex gap-2 items-center"
-    >
-      {{ title }}
-    </h3>
-    <p
-      style="grid-area: description"
-      class="text-sm text-neutral-400 line-clamp-1"
-    >
-      {{ description }}
-    </p>
-    <ServiceTags :tags="tags" />
   </a>
 </template>
 

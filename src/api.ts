@@ -19,6 +19,7 @@ export type GetServicesResponse = {
   enabled: boolean;
   groupId: number;
   tags: ServiceTag[];
+  bgColor?: string;
 };
 
 export type GetServicesGroupedResponse = {
@@ -52,6 +53,7 @@ export type AddServiceRequest = {
   enabled: boolean;
   groupId?: number | null;
   tags: string[];
+  bgColor: string;
 };
 
 export type AddServiceResponse = {};

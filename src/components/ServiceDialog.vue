@@ -83,7 +83,7 @@ const form = useForm({
         enabled: props.data?.enabled ?? true,
         groupId: props.data?.groupId,
         tagIds: props.data?.tagIds,
-        bgColor: props.data?.bgColor || '',
+        bgColor: props.data?.bgColor || "",
       }
     : undefined,
 });
@@ -168,6 +168,7 @@ function handleTagRemove(id: number) {
                 :icon_wrap="form.values.icon_wrap || false"
                 :tags="tags"
                 :bgColor="form.values.bgColor || ''"
+                :is-enabled="form.values.enabled"
               />
             </div>
           </TabsContent>
@@ -184,6 +185,7 @@ function handleTagRemove(id: number) {
                 :icon_wrap="form.values.icon_wrap || false"
                 :tags="tags"
                 :bgColor="form.values.bgColor || ''"
+                :is-enabled="form.values.enabled"
               />
             </div>
           </TabsContent>

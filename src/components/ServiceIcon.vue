@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <div
-    class="size-20 rounded-3xl shrink-0 self-center overflow-hidden transition-all"
+    class="size-16 rounded-2xl shrink-0 self-center overflow-hidden transition-all"
     :class="{
       'p-2.5  ': !wrap,
       'bg-neutral-700/80 shadow-xl': boxed,

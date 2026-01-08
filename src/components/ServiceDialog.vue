@@ -149,7 +149,7 @@ function handleTagRemove(id: number) {
         <DialogTitle>{{ title }}</DialogTitle>
       </DialogHeader>
 
-      <div class="sticky -top-1 bg-inherit pb-3">
+      <div class="sticky -top-1 bg-inherit pb-3 z-10">
         Vorschau
 
         <Tabs default-value="large">

@@ -58,7 +58,7 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
+    class="relative flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
   >
     <ServiceInfoIcon
       class="z-[8]"

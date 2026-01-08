@@ -39,6 +39,9 @@ import {
 import ServiceAppLayout from "./ServiceAppLayout.vue";
 import Service from "./Service.vue";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import InputGroup from "./ui/input-group/InputGroup.vue";
+import InputGroupAddon from "./ui/input-group/InputGroupAddon.vue";
+import InputGroupInput from "./ui/input-group/InputGroupInput.vue";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -294,11 +297,19 @@ function handleTagRemove(id: number) {
           <FormItem>
             <FormLabel>Hintergrundfarbe</FormLabel>
             <FormControl>
-              <Input
-              class="w-30"
-                type="color"
-                v-bind="componentField"
-              />
+              <InputGroup>
+                <InputGroupInput
+                  type="text"
+                  v-bind="componentField"
+                />
+                <InputGroupAddon>
+                  <InputGroupInput
+                    class="w-20"
+                    type="color"
+                    v-bind="componentField"
+                  />
+                </InputGroupAddon>
+              </InputGroup>
             </FormControl>
           </FormItem>
         </FormField>

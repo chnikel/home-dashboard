@@ -29,7 +29,6 @@ import ServiceDialog, {
 import { findTag, store, updateLocalServicePings } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
-  EyeOffIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,

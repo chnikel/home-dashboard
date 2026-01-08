@@ -146,6 +146,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
       enabled: data.enabled,
       groupId: data.groupId,
       tags,
+      bgColor: data.bgColor,
     });
   } catch (error) {
     console.log(error);
@@ -322,6 +323,7 @@ onMounted(async () => {
                         :icon_wrap="service.icon_wrap"
                         :tags="service.tags"
                         :isEnabled="service.enabled"
+                        :bgColor="service.bgColor"
                       />
                       <ServiceAppLayout
                         v-else
@@ -333,6 +335,7 @@ onMounted(async () => {
                         :icon_url="service.icon_url"
                         :icon_wrap="service.icon_wrap"
                         :tags="service.tags"
+                        :bgColor="service.bgColor"
                       />
                     </div>
                   </EditServiceWrapper>

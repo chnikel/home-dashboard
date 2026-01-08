@@ -64,6 +64,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       enabled: data.enabled,
       groupId: data.groupId,
       tags,
+      bgColor: data.bgColor,
     });
   } catch (error) {
     console.log(error);

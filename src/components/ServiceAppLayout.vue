@@ -3,7 +3,6 @@ import type { ServiceTag } from "../api";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
-import ServiceTags from "./ServiceTags.vue";
 import { preConfiguredIcons } from "@/lib/status-icons";
 
 const props = defineProps<{
@@ -78,6 +77,7 @@ const showPhysicalIndicator = computed(() => {
     />
     <div
       class="bg-accent size-16 shadow-xl rounded-2xl flex justify-center items-center mx-auto relative"
+      :style="`background-color: ${bgColor};`"
     >
       <ServiceInfoIcon
         class="z-[8]"
@@ -86,10 +86,7 @@ const showPhysicalIndicator = computed(() => {
         :component="preConfiguredIcons['device'].component"
         :colorClass="preConfiguredIcons['device'].colorClass"
       />
-      <div
-        class="size-11 rounded-lg overflow-hidden p-1"
-        :style="`background-color: ${bgColor};`"
-      >
+      <div class="size-11 rounded-lg overflow-hidden p-1">
         <img
           class="w-full h-full"
           :src="icon_url"

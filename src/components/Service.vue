@@ -19,6 +19,7 @@ const props = defineProps<{
   isEnabled?: boolean;
   showTags?: boolean;
   showIndicators?: boolean;
+  bgColor?: string
 }>();
 
 const isReachable = computed(() => {
@@ -83,6 +84,7 @@ const showPhysicalIndicator = computed(() => {
           :wrap="icon_wrap"
           :url="icon_url"
           :boxed="true"
+          :bg-color="bgColor"
         />
 
         <ServiceInfoIcon

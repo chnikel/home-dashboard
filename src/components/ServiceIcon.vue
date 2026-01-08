@@ -3,6 +3,7 @@ defineProps<{
   wrap?: boolean;
   url?: string;
   boxed?: boolean;
+  bgColor?: string;
 }>();
 </script>
 
@@ -13,6 +14,7 @@ defineProps<{
       'p-2.5  ': !wrap,
       'bg-neutral-700/80 border shadow-xl': boxed,
     }"
+    :style="`background-color: ${bgColor};`"
   >
     <img
       class="block h-full w-full rounded-lg p-1"

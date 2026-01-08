@@ -14,7 +14,7 @@ defineProps<{
       'p-2.5  ': !wrap,
       'bg-neutral-700/80 border shadow-xl': boxed,
     }"
-    :style="`background-color: ${bgColor};`"
+    :style="`background-color: ${wrap ? '' : bgColor};`"
   >
     <img
       class="block h-full w-full rounded-lg"

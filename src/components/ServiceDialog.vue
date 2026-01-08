@@ -83,7 +83,7 @@ const form = useForm({
         enabled: props.data?.enabled ?? true,
         groupId: props.data?.groupId,
         tagIds: props.data?.tagIds,
-        bgColor: props.data?.bgColor,
+        bgColor: props.data?.bgColor || '',
       }
     : undefined,
 });

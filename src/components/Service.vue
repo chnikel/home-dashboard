@@ -6,7 +6,7 @@ import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import { UnplugIcon } from "lucide-vue-next";
+import { EyeOffIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   id: number;
@@ -69,6 +69,13 @@ const showPhysicalIndicator = computed(() => {
     <div
       class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
     >
+      <div
+        v-if="!isEnabled"
+        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
+      >
+        <EyeOffIcon />
+      </div>
+
       <div class="relative">
         <ServiceIcon
           style="grid-area: icon"

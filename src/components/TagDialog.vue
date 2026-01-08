@@ -92,12 +92,15 @@ const validColors: TagColors[] = [
           <DialogTitle>{{ title }}</DialogTitle>
         </DialogHeader>
 
-        <div class="h-6">
-          <Tag
-            v-if="values.name"
-            :name="values.name"
-            :color="values.color"
-          />
+        <div class="sticky -top-1 bg-inherit z-10">
+          Vorschau
+
+          <div class="border rounded-lg p-3 h-12 flex items-center">
+            <Tag
+              :name="values.name || 'Beispiel'"
+              :color="values.color"
+            />
+          </div>
         </div>
 
         <form
@@ -116,6 +119,7 @@ const validColors: TagColors[] = [
                   type="text"
                   autocomplete="off"
                   v-bind="componentField"
+                  placeholder=""
                 />
               </FormControl>
             </FormItem>

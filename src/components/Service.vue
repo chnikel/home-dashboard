@@ -6,7 +6,7 @@ import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import { CloudOffIcon } from "lucide-vue-next";
+import { UnplugIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   id: number;
@@ -19,7 +19,7 @@ const props = defineProps<{
   isEnabled?: boolean;
   showTags?: boolean;
   showIndicators?: boolean;
-  bgColor?: string
+  bgColor?: string;
 }>();
 
 const isReachable = computed(() => {
@@ -71,7 +71,7 @@ const showPhysicalIndicator = computed(() => {
       class="absolute z-10 inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl border border-red-700"
     >
       <div class="rounded-lg p-1.5 shadow-2xl bg-neutral-700">
-        <CloudOffIcon />
+        <UnplugIcon />
       </div>
     </div>
 

@@ -36,6 +36,7 @@ const data = computed<Partial<ServiceDialogFormData>>(() => {
     enabled: props.service.enabled ?? true,
     groupId: props.service.groupId,
     tagIds: props.service.tags.map((t) => t.id),
+    bgColor: props.service.bgColor,
   };
 });
 

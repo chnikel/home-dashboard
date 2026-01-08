@@ -381,18 +381,16 @@ function handleTagRemove(id: number) {
             <FormLabel>Gruppe</FormLabel>
             <FormControl>
               <Select v-bind="componentField">
-                <FormControl>
-                  <SelectTrigger class="w-full">
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem
                       v-for="group in store.groups"
-                      :value="group.id"
+                      :value="Number(group.id)"
                     >
-                      {{ group.title }}
+                      {{ group.title || "-" }}
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>

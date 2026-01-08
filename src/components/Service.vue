@@ -18,7 +18,6 @@ const props = defineProps<{
   tags: ServiceTag[];
   isEnabled?: boolean;
   showTags?: boolean;
-  showIndicators?: boolean;
   bgColor?: string;
 }>();
 
@@ -36,23 +35,6 @@ const isReachable = computed(() => {
   }
 
   return pingData.isReachable;
-});
-
-const selected = computed(() => {
-  if (!isReachable) {
-    return preConfiguredIcons["disconnected"];
-  }
-  const deprecated =
-    props.tags.findIndex((t) => t.name.toLowerCase() == "deprecated") != -1;
-  if (deprecated) {
-    return preConfiguredIcons["deprecated"];
-  }
-  const showLive =
-    props.tags.findIndex((t) => t.name.toLowerCase() == "live") != -1;
-  if (showLive) {
-    return preConfiguredIcons["live"];
-  }
-  return null;
 });
 
 const showPhysicalIndicator = computed(() => {
@@ -86,26 +68,16 @@ const showPhysicalIndicator = computed(() => {
         />
 
         <ServiceInfoIcon
-          v-if="showIndicators"
           class="z-[8]"
-          position="top-left"
-          :show="selected !== null"
-          :component="selected?.component"
-          :colorClass="selected?.colorClass"
-        />
-
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="top-left"
+          position="top-left-out"
           :show="!isReachable"
           :component="preConfiguredIcons['disconnected'].component"
           :colorClass="preConfiguredIcons['disconnected'].colorClass"
         />
 
         <ServiceInfoIcon
-          v-if="showIndicators"
           class="z-[8]"
-          position="bottom-left"
+          position="bottom-right-out"
           :show="showPhysicalIndicator"
           :component="preConfiguredIcons['device'].component"
           :colorClass="preConfiguredIcons['device'].colorClass"

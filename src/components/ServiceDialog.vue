@@ -212,6 +212,7 @@ function handleTagRemove(id: number) {
                 <ServiceIcon
                   :url="value"
                   :bg-color="form.values.bgColor"
+                  :wrap="form.values.icon_wrap || false"
                 />
                 <Input
                   type="text"

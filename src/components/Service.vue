@@ -64,7 +64,7 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="w-40 block relative"
+    class="block relative"
   >
     <div
       class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"

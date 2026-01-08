@@ -149,48 +149,6 @@ function handleTagRemove(id: number) {
         <DialogTitle>{{ title }}</DialogTitle>
       </DialogHeader>
 
-      <div class="sticky -top-1 bg-inherit pb-3 z-10">
-        Vorschau
-
-        <Tabs default-value="large">
-          <TabsList class="grid w-full grid-cols-2">
-            <TabsTrigger value="large"> <LayoutListIcon /> Large </TabsTrigger>
-            <TabsTrigger value="compact"> <LayoutGridIcon /> App </TabsTrigger>
-          </TabsList>
-          <TabsContent value="compact">
-            <div class="flex flex-wrap border rounded-lg p-3 h-[187.5px]">
-              <ServiceAppLayout
-                class="mx-auto"
-                :id="0"
-                :title="form.values.title || ''"
-                :description="form.values.description || ''"
-                :icon_url="form.values.icon_url || ''"
-                :icon_wrap="form.values.icon_wrap || false"
-                :tags="tags"
-                :bgColor="form.values.bgColor || ''"
-                :is-enabled="form.values.enabled"
-              />
-            </div>
-          </TabsContent>
-          <TabsContent value="large">
-            <div
-              class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]"
-            >
-              <Service
-                class="mx-auto"
-                :id="0"
-                :title="form.values.title || ''"
-                :description="form.values.description || ''"
-                :icon_url="form.values.icon_url || ''"
-                :icon_wrap="form.values.icon_wrap || false"
-                :tags="tags"
-                :bgColor="form.values.bgColor || ''"
-                :is-enabled="form.values.enabled"
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
       <form
         id="dialogForm"
         @submit="onSubmit"
@@ -398,6 +356,55 @@ function handleTagRemove(id: number) {
             </FormControl>
           </FormItem>
         </FormField>
+
+        <hr />
+
+        <div class="sticky -top-1 bg-inherit pb-3 z-10">
+          Vorschau
+
+          <Tabs default-value="large">
+            <TabsList class="grid w-full grid-cols-2">
+              <TabsTrigger value="large">
+                <LayoutListIcon /> Large
+              </TabsTrigger>
+              <TabsTrigger value="compact">
+                <LayoutGridIcon /> App
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="compact">
+              <div class="flex flex-wrap border rounded-lg p-3 h-[187.5px]">
+                <ServiceAppLayout
+                  class="mx-auto"
+                  :id="0"
+                  :title="form.values.title || ''"
+                  :description="form.values.description || ''"
+                  :icon_url="form.values.icon_url || ''"
+                  :icon_wrap="form.values.icon_wrap || false"
+                  :tags="tags"
+                  :bgColor="form.values.bgColor || ''"
+                  :is-enabled="form.values.enabled"
+                />
+              </div>
+            </TabsContent>
+            <TabsContent value="large">
+              <div
+                class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]"
+              >
+                <Service
+                  class="mx-auto"
+                  :id="0"
+                  :title="form.values.title || ''"
+                  :description="form.values.description || ''"
+                  :icon_url="form.values.icon_url || ''"
+                  :icon_wrap="form.values.icon_wrap || false"
+                  :tags="tags"
+                  :bgColor="form.values.bgColor || ''"
+                  :is-enabled="form.values.enabled"
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
 
         <DialogFooter>
           <Button type="submit">

@@ -92,17 +92,6 @@ const validColors: TagColors[] = [
           <DialogTitle>{{ title }}</DialogTitle>
         </DialogHeader>
 
-        <div class="sticky -top-1 bg-inherit z-10">
-          Vorschau
-
-          <div class="border rounded-lg p-3 h-12 flex items-center">
-            <Tag
-              :name="values.name || 'Beispiel'"
-              :color="values.color"
-            />
-          </div>
-        </div>
-
         <form
           id="dialogForm"
           @submit="handleSubmit($event, onSubmit)"
@@ -164,6 +153,17 @@ const validColors: TagColors[] = [
             </FormItem>
           </FormField>
         </form>
+
+        <div class="sticky -top-1 bg-inherit z-10">
+          Vorschau
+
+          <div class="border rounded-lg p-3 h-12 flex items-center">
+            <Tag
+              :name="values.name || 'Beispiel'"
+              :color="values.color"
+            />
+          </div>
+        </div>
 
         <DialogFooter>
           <Button

@@ -35,8 +35,9 @@ serviceRouter.get("", async (req, res) => {
   const groupBy = req.query.groupBy as string | undefined;
 
   if (groupBy) {
+    const FALLBACK_GROUP_ID = -1
     const servicesGrouped = services.reduce((acc: any, service: any) => {
-      (acc[service[groupBy]] ??= []).push(service);
+      (acc[service[groupBy] || FALLBACK_GROUP_ID] ??= []).push(service);
       return acc;
     }, {});
 

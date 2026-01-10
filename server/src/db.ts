@@ -15,11 +15,19 @@ const allServices = async () => {
 };
 
 const insertService = (data: NewService) => {
+  if (data.groupId == -1) {
+    data.groupId = null;
+  }
+
   const result = db.insert(services).values(data);
   return result;
 };
 
-const serviceToGroup = async (serviceId: number, groupId: number) => {
+const serviceToGroup = async (serviceId: number, groupId: number | null) => {
+  if (groupId == -1) {
+    groupId = null;
+  }
+
   const result = await db
     .update(services)
     .set({
@@ -42,6 +50,10 @@ const clearGroup = async (groupId: number) => {
 };
 
 const updateService = async (serviceId: number, data: NewService) => {
+  if (data.groupId == -1) {
+    data.groupId = null;
+  }
+
   const result = await db
     .update(services)
     .set(data)

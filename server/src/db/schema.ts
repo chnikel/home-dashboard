@@ -10,6 +10,7 @@ export const services = sqliteTable("services", {
   enabled: integer("status_enabled", { mode: "boolean" }),
   groupId: integer("group_id").references(() => groups.id),
   bgColor: text("bgColor"),
+  deleted: integer("deleted").default(0),
 });
 
 export type Service = typeof services.$inferInsert;
@@ -36,4 +37,3 @@ export const serviceTags = sqliteTable("service_tags", {
   serviceId: integer("service_id").notNull().references(() => services.id),
   tagId: integer("tag_id").notNull().references(() => tags.id),
 });
-

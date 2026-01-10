@@ -1,0 +1,1 @@
+ALTER TABLE `services` ADD `deleted` integer DEFAULT 0;

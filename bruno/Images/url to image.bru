@@ -1,0 +1,19 @@
+meta {
+  name: url to image
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/api/images/url-to-image
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "automation",
+    "color": "blue",
+    "weight": 0
+  }
+}

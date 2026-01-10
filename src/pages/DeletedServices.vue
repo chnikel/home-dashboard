@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "vue-sonner";
 
 const services = ref<any>([]);
 
@@ -39,6 +40,8 @@ onMounted(async () => {
 const handleDeleteClick = async (id: number) => {
   await deleteService(id, true).then(() => {
     getSoftDeletedServices();
+
+    toast.success("Service wurde gelöscht.");
   });
 };
 </script>

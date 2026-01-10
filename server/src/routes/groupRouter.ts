@@ -1,14 +1,15 @@
 import express from "express";
 import db from "../db";
+import { Group } from "../db/schema";
 
 const groupRouter = express.Router();
 
 groupRouter.get("", async (req, res) => {
   const rawGroups = await db.allGroups();
 
-  const groupsWithDefaultGroup = [
+  const groupsWithDefaultGroup: Group[] = [
     ...rawGroups,
-    { id: null, title: "", services: [] },
+    { id: -1, title: "" },
   ];
 
   const groups = groupsWithDefaultGroup.map((entry) => {

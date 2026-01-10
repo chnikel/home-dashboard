@@ -65,6 +65,14 @@ async function refreshServices() {
     }
   );
 
+  if (servicesWithGroupName.findIndex((group) => group.id === "-1") === -1) {
+    servicesWithGroupName.push({
+      id: "-1",
+      services: [],
+      title: "",
+    });
+  }
+
   store.groups = servicesWithGroupName;
 }
 

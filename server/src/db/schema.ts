@@ -20,7 +20,8 @@ export const groups = sqliteTable("groups", {
   title: text("title").notNull(),
 });
 
-export type NewGroup = Omit<typeof groups.$inferInsert, "id">;
+export type Group = typeof groups.$inferInsert;
+export type NewGroup = Omit<Group, "id">;
 
 export const tags = sqliteTable("tags", {
   id: integer("id").primaryKey({ autoIncrement: true }),

@@ -5,7 +5,7 @@ import { NewService } from "../db/schema";
 const serviceRouter = express.Router();
 
 export const NEED_REFACTOR_getServices = async () => {
-  const data = await db.allServices();
+  const data = await db.allActiveServices();
 
   const services = await Promise.all(
     data.map(async (entry) => {
@@ -146,7 +146,7 @@ serviceRouter.post("/:id/enable", async (req, res) => {
 serviceRouter.delete("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  await db.deleteService(id);
+  await db.softDeleteService(id);
 
   res.json({ message: "Service erfolgreich gelöscht" });
 });

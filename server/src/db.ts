@@ -14,6 +14,10 @@ const allServices = async () => {
   return db.select().from(services);
 };
 
+const allActiveServices = async () => {
+  return db.select().from(services).where(eq(services.deleted, 0));
+};
+
 const insertService = (data: NewService) => {
   const result = db.insert(services).values(data);
   return result;
@@ -68,6 +72,16 @@ const toggleService = async (serviceId: number, isEnabled: boolean) => {
     })
     .where(eq(services.id, serviceId));
 
+  return result;
+};
+
+const softDeleteService = (serviceId: number) => {
+  const result = db
+    .update(services)
+    .set({
+      deleted: 1,
+    })
+    .where(eq(services.id, serviceId));
   return result;
 };
 
@@ -196,9 +210,11 @@ export default {
   db,
   insertService,
   allServices,
+  allActiveServices,
   updateService,
   serviceToggleTag,
   toggleService,
+  softDeleteService,
   deleteService,
   allGroups,
   insertGroup,

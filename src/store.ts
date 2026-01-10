@@ -13,6 +13,7 @@ export const store = reactive({
   groups: [] as {
     id: string;
     title: string;
+    colspan: number;
     services: GetServicesResponse[];
   }[],
   tags: [] as GetTagsResponse[],

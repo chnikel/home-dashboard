@@ -1,20 +1,22 @@
 import express from "express";
 import db from "../db";
+import { Group } from "../db/schema";
 
 const groupRouter = express.Router();
 
 groupRouter.get("", async (req, res) => {
   const rawGroups = await db.allGroups();
 
-  const groupsWithDefaultGroup = [
+  const groupsWithDefaultGroup: Group[] = [
     ...rawGroups,
-    { id: null, title: "", services: [] },
+    { id: -1, title: "", colspan: 12 },
   ];
 
   const groups = groupsWithDefaultGroup.map((entry) => {
     return {
       id: entry.id,
       title: entry.title,
+      colspan: entry.colspan,
     };
   });
 
@@ -24,6 +26,7 @@ groupRouter.get("", async (req, res) => {
 groupRouter.post("", async (req, res) => {
   const data = {
     title: req.body.title,
+    colspan: req.body.colspan,
   };
 
   await db.insertGroup(data);
@@ -36,6 +39,7 @@ groupRouter.put("/:id", async (req, res) => {
 
   const data = {
     title: req.body.title,
+    colspan: req.body.colspan,
   };
 
   await db.updateGroup(id, data);

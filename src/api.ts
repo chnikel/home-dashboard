@@ -121,6 +121,7 @@ export const deleteService = async (id: number) => {
 export type GetGroupsResponse = {
   id: number;
   title: string;
+  colspan: number;
 };
 
 export const getGroups = async () => {
@@ -137,6 +138,7 @@ export type GetServiceGroupsResponse = GetGroupsResponse & {
 
 export type AddGroupRequest = {
   title: string;
+  colspan: number;
 };
 
 export type AddGroupResponse = {};

@@ -11,6 +11,7 @@ const props = defineProps<{
   id: string;
   edit: boolean;
   title: string;
+  colspan: number;
 }>();
 
 provide("editable", !!props.id);
@@ -46,10 +47,11 @@ const onDrop = async (event: DragEvent) => {
 const isOver = ref(false);
 const showGroupDialog = ref(false);
 
-const onEditGroupSuccess = async (data: { title: string }) => {
+const onEditGroupSuccess = async (data: { title: string; colspan: number }) => {
   try {
     await updateGroup(props.id, {
       title: data.title,
+      colspan: data.colspan,
     });
   } catch (error) {
     console.log(error);
@@ -61,6 +63,7 @@ const onEditGroupSuccess = async (data: { title: string }) => {
 const data = computed<Partial<GroupDialogFormData>>(() => {
   return {
     title: props.title,
+    colspan: props.colspan,
   };
 });
 </script>
@@ -71,11 +74,12 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
     @dragover="edit && onDragOver($event)"
     @dragleave="edit && (isOver = false)"
     @dragend="edit && (isOver = false)"
-    class="text-white mt-8 snap-start outline rounded-lg bg-neutral-900"
+    class="text-white snap-start outline rounded-lg bg-neutral-900 col-span-6"
     :class="{
       'outline-2 outline-offset-4 rounded outline-blue-500 z-10': isOver,
       '': !isOver,
     }"
+    :style="`grid-column: span ${colspan};`"
   >
     <EditGroupWrapper
       class="h-12 flex items-center"

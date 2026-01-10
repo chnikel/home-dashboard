@@ -15,6 +15,9 @@ import FormControl from "./ui/form/FormControl.vue";
 import Input from "./ui/input/Input.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
+import InputGroup from "./ui/input-group/InputGroup.vue";
+import InputGroupInput from "./ui/input-group/InputGroupInput.vue";
+import InputGroupAddon from "./ui/input-group/InputGroupAddon.vue";
 
 const props = defineProps<{
   open: boolean;
@@ -26,6 +29,7 @@ const props = defineProps<{
 
 const GroupDialogFormData = z.object({
   title: z.string(),
+  colspan: z.number().default(12),
 });
 
 export type GroupDialogFormData = z.infer<typeof GroupDialogFormData>;
@@ -37,6 +41,7 @@ const form = useForm({
   initialValues: props.data
     ? {
         title: props.data?.title,
+        colspan: props.data?.colspan,
       }
     : undefined,
 });
@@ -79,6 +84,30 @@ const onSubmit = form.handleSubmit((values) => {
                 autocomplete="off"
                 v-bind="componentField"
               />
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ componentField, value }"
+          name="colspan"
+        >
+          <FormItem>
+            <FormLabel>Spalten</FormLabel>
+            <FormControl>
+              <InputGroup>
+                <InputGroupInput
+                  class="mx-2"
+                  type="range"
+                  min="0"
+                  max="12"
+                  v-bind="componentField"
+                />
+
+                <InputGroupAddon align="inline-end">
+                  {{ value }} Spalten
+                </InputGroupAddon>
+              </InputGroup>
             </FormControl>
           </FormItem>
         </FormField>

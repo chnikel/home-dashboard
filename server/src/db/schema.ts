@@ -18,10 +18,11 @@ export type NewService = Omit<Service, "id">;
 export const groups = sqliteTable("groups", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
-  colspan: integer("colspan").notNull().default(12)
+  colspan: integer("colspan").notNull().default(12),
 });
 
-export type NewGroup = Omit<typeof groups.$inferInsert, "id">;
+export type Group = typeof groups.$inferInsert;
+export type NewGroup = Omit<Group, "id">;
 
 export const tags = sqliteTable("tags", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -34,7 +35,10 @@ export type NewTag = Omit<typeof tags.$inferInsert, "id">;
 
 export const serviceTags = sqliteTable("service_tags", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  serviceId: integer("service_id").notNull().references(() => services.id),
-  tagId: integer("tag_id").notNull().references(() => tags.id),
+  serviceId: integer("service_id")
+    .notNull()
+    .references(() => services.id),
+  tagId: integer("tag_id")
+    .notNull()
+    .references(() => tags.id),
 });
-

@@ -60,6 +60,7 @@ async function refreshServices() {
       return {
         id: groupId,
         title: groupTitle,
+        colspan: group?.colspan || 12,
         services,
       };
     }
@@ -154,10 +155,11 @@ const onAddService = async (data: ServiceDialogFormData) => {
   refreshServices();
 };
 
-const onAddGroupSuccess = async (data: { title: string }) => {
+const onAddGroupSuccess = async (data: { title: string; colspan: number }) => {
   try {
     await addGroup({
       title: data.title,
+      colspan: data.colspan,
     });
   } catch (error) {
     console.log(error);
@@ -196,7 +198,7 @@ onMounted(async () => {
     <ContextMenuTrigger>
       <div class="overflow-auto">
         <div class="h-screen snap-container">
-          <div class="sticky top-0 py-6 z-30 bg-background shadow-lg">
+          <div class="sticky top-0 py-6 z-30 bg-background shadow-lg mb-1">
             <div class="container mx-auto flex gap-2">
               <Input
                 v-model="searchText"
@@ -262,7 +264,9 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div class="container mx-auto">
+          <div
+            class="container grid grid-cols-12 mx-auto gap-4"
+          >
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="
@@ -274,6 +278,7 @@ onMounted(async () => {
                 :id="group.id"
                 :title="group.id == null ? '' : group.title"
                 :edit="isEditMode"
+                :colspan="group.colspan"
                 @edit="onEditSuccess()"
                 @delete="handleDeleteGroup(group.id)"
                 @move="afterMove()"

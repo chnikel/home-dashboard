@@ -30,6 +30,15 @@ export const NEED_REFACTOR_getServices = async () => {
 };
 
 serviceRouter.get("", async (req, res) => {
+  const softDeletedOnly = req.query.deleted === "true";
+
+  if (softDeletedOnly) {
+    const data = await db.allSoftDeletedServices();
+
+    res.json(data);
+    return;
+  }
+
   const services = await NEED_REFACTOR_getServices();
 
   const groupBy = req.query.groupBy as string | undefined;

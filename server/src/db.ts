@@ -18,6 +18,10 @@ const allActiveServices = async () => {
   return db.select().from(services).where(eq(services.deleted, 0));
 };
 
+const allSoftDeletedServices = async () => {
+  return db.select().from(services).where(eq(services.deleted, 1));
+};
+
 const insertService = (data: NewService) => {
   const result = db.insert(services).values(data);
   return result;
@@ -211,6 +215,7 @@ export default {
   insertService,
   allServices,
   allActiveServices,
+  allSoftDeletedServices,
   updateService,
   serviceToggleTag,
   toggleService,

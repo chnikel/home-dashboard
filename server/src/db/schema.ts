@@ -18,6 +18,7 @@ export type NewService = Omit<Service, "id">;
 export const groups = sqliteTable("groups", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
+  colspan: integer("colspan").notNull().default(12)
 });
 
 export type NewGroup = Omit<typeof groups.$inferInsert, "id">;

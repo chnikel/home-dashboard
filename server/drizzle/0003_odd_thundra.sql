@@ -1,0 +1,1 @@
+ALTER TABLE `groups` ADD `colspan` integer DEFAULT 12 NOT NULL;

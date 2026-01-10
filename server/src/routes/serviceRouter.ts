@@ -155,7 +155,11 @@ serviceRouter.post("/:id/enable", async (req, res) => {
 serviceRouter.delete("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  await db.softDeleteService(id);
+  if (req.query.hard === "true") {
+    await db.deleteService(id);
+  } else {
+    await db.softDeleteService(id);
+  }
 
   res.json({ message: "Service erfolgreich gelöscht" });
 });

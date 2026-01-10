@@ -108,8 +108,8 @@ export const moveService = async (
 
 export type DeleteServiceResponse = {};
 
-export const deleteService = async (id: number) => {
-  const response = await fetch(`${host}/api/services/${id}`, {
+export const deleteService = async (id: number, hard: boolean = false) => {
+  const response = await fetch(`${host}/api/services/${id}?hard=${hard}`, {
     method: "delete",
   });
 

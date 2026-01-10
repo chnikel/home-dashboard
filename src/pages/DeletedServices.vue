@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { host } from "@/api";
+import { deleteService, host } from "@/api";
 import ServiceIcon from "@/components/ServiceIcon.vue";
 import Button from "@/components/ui/button/Button.vue";
 import {
@@ -11,6 +11,16 @@ import {
 import ItemDescription from "@/components/ui/item/ItemDescription.vue";
 import ItemMedia from "@/components/ui/item/ItemMedia.vue";
 import { onMounted, ref } from "vue";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const services = ref<any>([]);
 
@@ -25,6 +35,12 @@ const getSoftDeletedServices = async () => {
 onMounted(async () => {
   await getSoftDeletedServices();
 });
+
+const handleDeleteClick = async (id: number) => {
+  await deleteService(id, true).then(() => {
+    getSoftDeletedServices();
+  });
+};
 </script>
 
 <template>
@@ -50,18 +66,62 @@ onMounted(async () => {
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button
-            variant="outline"
-            size="sm"
-          >
-            Rückgängig
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-          >
-            Löschen
-          </Button>
+          <Dialog>
+            <DialogTrigger as-child>
+              <Button
+                variant="outline"
+                size="sm"
+              >
+                Rückgängig
+              </Button>
+            </DialogTrigger>
+            <DialogContent class="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Aktion erforderlich</DialogTitle>
+                <DialogDescription>
+                  Soll die Löschung des Services rückgängig gemacht werden?
+                </DialogDescription>
+              </DialogHeader>
+
+              <DialogFooter>
+                <DialogClose as-child>
+                  <Button variant="outline"> Abbrechen </Button>
+                </DialogClose>
+                <Button type="submit"> Rückgängig machen </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog>
+            <DialogTrigger as-child>
+              <Button
+                variant="destructive"
+                size="sm"
+              >
+                Löschen
+              </Button>
+            </DialogTrigger>
+            <DialogContent class="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Aktion erforderlich</DialogTitle>
+                <DialogDescription>
+                  Soll der Service unwiderruflich gelöscht werden?
+                </DialogDescription>
+              </DialogHeader>
+
+              <DialogFooter>
+                <DialogClose as-child>
+                  <Button variant="outline"> Abbrechen </Button>
+                </DialogClose>
+                <Button
+                  variant="destructive"
+                  @click="handleDeleteClick(service.id)"
+                >
+                  Unwiderruflich löschen
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </ItemActions>
       </Item>
     </div>

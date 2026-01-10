@@ -10,8 +10,6 @@ async function isUrlReachable(url: string) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
     const response = await fetch(url, { method: "HEAD" });
-    console.debug(url, response.status);
-
     return response.ok || successResponseCodes.includes(response.status);
   } catch (err) {
     return false;

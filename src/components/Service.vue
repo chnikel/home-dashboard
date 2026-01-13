@@ -89,7 +89,7 @@ const showPhysicalIndicator = computed(() => {
 
       <p
         style="grid-area: title"
-        class="flex gap-2 items-center mt-2 overflow-hidden text-center"
+        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-sm"
       >
         {{ title }}
       </p>

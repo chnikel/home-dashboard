@@ -71,7 +71,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
     @dragover="edit && onDragOver($event)"
     @dragleave="edit && (isOver = false)"
     @dragend="edit && (isOver = false)"
-    class="text-white mt-8 snap-start outline rounded-lg bg-neutral-900"
+    class="text-white mt-8 outline rounded-lg bg-neutral-900"
     :class="{
       'outline-2 outline-offset-4 rounded outline-blue-500 z-10': isOver,
       '': !isOver,

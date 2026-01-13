@@ -210,9 +210,9 @@ onMounted(async () => {
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen">
+        <div class="h-screen p-4 max-w-6xl mx-auto">
           <div
-            class="container mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline"
+            class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline"
           >
             <InputGroup>
               <InputGroupInput
@@ -284,7 +284,7 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div class="container mx-auto">
+          <div class="flex gap-4 flex-col mt-6">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="

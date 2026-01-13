@@ -59,7 +59,15 @@ const showPhysicalIndicator = computed(() => {
       </div>
 
       <div class="relative">
+        <div
+          v-if="!isReachable"
+          class="absolute inset-0 flex justify-center items-center bg-neutral-900/70 z-[8] rounded-2xl"
+        ></div>
+
         <ServiceIcon
+          :class="{
+            'outline-3 outline-red-500': !isReachable,
+          }"
           style="grid-area: icon"
           :wrap="icon_wrap"
           :url="icon_url"
@@ -86,7 +94,7 @@ const showPhysicalIndicator = computed(() => {
 
       <p
         style="grid-area: title"
-        class="flex gap-2 items-center mt-2 overflow-hidden text-center"
+        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-sm"
       >
         {{ title }}
       </p>

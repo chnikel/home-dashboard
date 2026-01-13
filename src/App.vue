@@ -33,6 +33,10 @@ import {
   FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
+  PenIcon,
+  PlusIcon,
+  SaveIcon,
+  SearchIcon,
   TagIcon,
 } from "lucide-vue-next";
 import {
@@ -42,8 +46,10 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import Input from "./components/ui/input/Input.vue";
 import ServiceAppLayout from "./components/ServiceAppLayout.vue";
+import InputGroup from "./components/ui/input-group/InputGroup.vue";
+import InputGroupInput from "./components/ui/input-group/InputGroupInput.vue";
+import InputGroupAddon from "./components/ui/input-group/InputGroupAddon.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -203,46 +209,53 @@ onMounted(async () => {
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen snap-container">
-          <div class="sticky top-0 py-6 z-30 bg-background shadow-lg">
-            <div class="container mx-auto flex gap-2">
-              <Input
+        <div class="h-screen p-4 max-w-6xl mx-auto">
+          <div
+            class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline"
+          >
+            <InputGroup>
+              <InputGroupInput
                 v-model="searchText"
                 placeholder="Search name, description or #tag"
               />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
 
-              <Button
-                v-if="isEditMode"
-                class="!bg-orange-500 text-white"
-                @click="isEditMode = false"
-              >
-                Fertig
-              </Button>
-              <Button
-                v-if="!isEditMode"
-                variant="outline"
-                @click="isEditMode = true"
-              >
-                Bearbeiten
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button v-if="isEditMode"> Hinzufügen </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem @click="showServiceDialog = true">
-                    <FilePlusIcon /> Service hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem @click="showGroupDialog = true">
-                    <FolderIcon /> Gruppe hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuItem @click="showTagDialog = true">
-                    <TagIcon /> Tag hinzufügen
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <Button
+              v-if="isEditMode"
+              class="!bg-orange-500"
+              @click="isEditMode = false"
+              size="icon"
+            >
+              <SaveIcon color="white" />
+            </Button>
+            <Button
+              v-if="!isEditMode"
+              variant="outline"
+              @click="isEditMode = true"
+              size="icon"
+            >
+              <PenIcon />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button v-if="isEditMode"> <PlusIcon /> </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem @click="showServiceDialog = true">
+                  <FilePlusIcon /> Service hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem @click="showGroupDialog = true">
+                  <FolderIcon /> Gruppe hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="showTagDialog = true">
+                  <TagIcon /> Tag hinzufügen
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <ServiceDialog
@@ -270,7 +283,7 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div class="container mx-auto">
+          <div class="flex gap-4 flex-col mt-6">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="
@@ -393,12 +406,3 @@ onMounted(async () => {
     </ContextMenuContent>
   </ContextMenu>
 </template>
-
-<style lang="css" scoped>
-.snap-container {
-  overflow-y: scroll;
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 90px;
-  padding-bottom: 50vh;
-}
-</style>

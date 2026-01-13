@@ -60,6 +60,9 @@ const showPhysicalIndicator = computed(() => {
 
       <div class="relative">
         <ServiceIcon
+          :class="{
+            'outline-3 outline-red-500': !isReachable,
+          }"
           style="grid-area: icon"
           :wrap="icon_wrap"
           :url="icon_url"

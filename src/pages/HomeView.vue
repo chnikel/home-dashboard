@@ -23,6 +23,7 @@ import {
   PlusIcon,
   SaveIcon,
   SearchIcon,
+  SettingsIcon,
   TagIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
@@ -50,6 +51,9 @@ import InputGroup from "../components/ui/input-group/InputGroup.vue";
 import InputGroupAddon from "../components/ui/input-group/InputGroupAddon.vue";
 import InputGroupInput from "../components/ui/input-group/InputGroupInput.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -59,7 +63,7 @@ async function refreshServices() {
   const servicesWithGroupName = Object.entries(groupedServicesResponse).map(
     ([groupId, services]) => {
       const group = groupsResponse.find(
-        (group) => group.id?.toString() == groupId
+        (group) => group.id?.toString() == groupId,
       );
       const groupTitle = group?.title || "";
 
@@ -68,7 +72,7 @@ async function refreshServices() {
         title: groupTitle,
         services,
       };
-    }
+    },
   );
 
   if (servicesWithGroupName.findIndex((group) => group.id === "-1") === -1) {
@@ -224,6 +228,13 @@ onMounted(async () => {
             </InputGroup>
 
             <Button
+              variant="outline"
+              @click="router.push({ name: 'settings' })"
+              size="icon"
+            >
+              <SettingsIcon />
+            </Button>
+            <Button
               v-if="isEditMode"
               class="!bg-orange-500"
               @click="isEditMode = false"
@@ -305,7 +316,7 @@ onMounted(async () => {
                       return service.tags.some((tag) =>
                         tag.name
                           .toLowerCase()
-                          .includes(searchText.replace('#', '').toLowerCase())
+                          .includes(searchText.replace('#', '').toLowerCase()),
                       );
                     }
 

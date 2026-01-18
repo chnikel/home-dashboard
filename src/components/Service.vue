@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
-import ServiceIcon from "./ServiceIcon.vue";
-import ServiceTags from "./ServiceTags.vue";
-import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import { EyeOffIcon } from "lucide-vue-next";
+import { EyeOffIcon, MessageSquareTextIcon } from "lucide-vue-next";
+import Tag from "./Tag.vue";
 
 const props = defineProps<{
   id: number;
@@ -27,7 +25,7 @@ const isReachable = computed(() => {
   }
 
   const pingData = store.servicePings.find(
-    (ping) => ping.serviceId == props.id
+    (ping) => ping.serviceId == props.id,
   );
 
   if (!pingData) {
@@ -49,72 +47,85 @@ const showPhysicalIndicator = computed(() => {
     class="block relative"
   >
     <div
-      class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
+      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[120px_auto_auto] overflow-hidden"
+      :class="{
+        'outline-3 outline-red-500': !isReachable,
+      }"
     >
       <div
         v-if="!isEnabled"
-        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
+        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-lg z-[9]"
       >
         <EyeOffIcon />
       </div>
 
-      <div class="relative">
-        <div
-          v-if="!isReachable"
-          class="absolute inset-0 flex justify-center items-center bg-neutral-900/70 z-[8] rounded-2xl"
-        ></div>
-
-        <ServiceIcon
-          :class="{
-            'outline-3 outline-red-500': !isReachable,
-          }"
-          style="grid-area: icon"
-          :wrap="icon_wrap"
-          :url="icon_url"
-          :boxed="true"
-          :bg-color="bgColor"
+      <div
+        class="relative flex justify-center items-center border-b border-solid border-neutral-700 rounded-t-lg"
+        :style="`background-color: ${bgColor};`"
+      >
+        <img
+          class="size-16"
+          :src="icon_url"
         />
 
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="top-left-out"
-          :show="!isReachable"
-          :component="preConfiguredIcons['disconnected'].component"
-          :colorClass="preConfiguredIcons['disconnected'].colorClass"
-        />
-
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="bottom-right-out"
-          :show="showPhysicalIndicator"
-          :component="preConfiguredIcons['device'].component"
-          :colorClass="preConfiguredIcons['device'].colorClass"
-        />
+        <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
+          <div
+            v-if="!isReachable"
+            class="rounded-lg p-1.5"
+            :class="preConfiguredIcons['disconnected'].colorClass"
+          >
+            <component
+              :is="preConfiguredIcons['disconnected'].component"
+              :size="16"
+            ></component>
+          </div>
+          <div
+            v-if="showPhysicalIndicator"
+            class="rounded-lg p-1.5"
+            :class="preConfiguredIcons['device'].colorClass"
+          >
+            <component
+              :is="preConfiguredIcons['device'].component"
+              :size="16"
+            ></component>
+          </div>
+        </div>
       </div>
 
-      <p
-        style="grid-area: title"
-        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-sm"
-      >
-        {{ title }}
-      </p>
+      <div class="overflow-hidden m-2">
+        <div
+          class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
+        >
+          {{ title }}
+        </div>
 
-      <ServiceTags
-        v-if="showTags"
-        class="mt-2"
-        :tags="tags"
-        :max="2"
-      />
+        <div class="flex items-center gap-1">
+          <MessageSquareTextIcon
+            :size="16"
+            class="shrink-0 !text-neutral-300"
+          />
+
+          <div
+            class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
+          >
+            {{ description }}
+          </div>
+        </div>
+      </div>
+      <div
+        class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden"
+      >
+        <div
+          class="flex overflow-auto"
+          style="scrollbar-width: none"
+        >
+          <Tag
+            v-for="tag in tags"
+            :color="tag.color"
+            :name="tag.name"
+          />
+        </div>
+      </div>
     </div>
   </a>
 </template>
-
-<style lang="css" scoped>
-.layout-normal {
-  grid-template-columns: auto 1fr;
-  grid-template-areas:
-    "icon title"
-    "icon description"
-    "icon tags";
-}
-</style>

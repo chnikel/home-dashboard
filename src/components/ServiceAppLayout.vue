@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
+import ServiceIcon from "./ServiceIcon.vue";
+import ServiceTags from "./ServiceTags.vue";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
+import { EyeOffIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   id: number;
@@ -13,6 +16,8 @@ const props = defineProps<{
   icon_url: string;
   icon_wrap: boolean;
   tags: ServiceTag[];
+  isEnabled?: boolean;
+  showTags?: boolean;
   bgColor?: string;
 }>();
 
@@ -32,23 +37,6 @@ const isReachable = computed(() => {
   return pingData.isReachable;
 });
 
-const selected = computed(() => {
-  if (!isReachable) {
-    return preConfiguredIcons["disconnected"];
-  }
-  const deprecated =
-    props.tags.findIndex((t) => t.name.toLowerCase() == "deprecated") != -1;
-  if (deprecated) {
-    return preConfiguredIcons["deprecated"];
-  }
-  const showLive =
-    props.tags.findIndex((t) => t.name.toLowerCase() == "live") != -1;
-  if (showLive) {
-    return preConfiguredIcons["live"];
-  }
-  return null;
-});
-
 const showPhysicalIndicator = computed(() => {
   return props.tags.findIndex((t) => t.name.toLowerCase() == "physical") != -1;
 });
@@ -58,43 +46,65 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="relative flex flex-col justify-center p-5 overflow-hidden hover:bg-neutral-100/5 rounded-2xl"
+    class="block relative"
   >
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="top-right"
-      :show="!isReachable"
-      :component="preConfiguredIcons['disconnected'].component"
-      :colorClass="preConfiguredIcons['disconnected'].colorClass"
-    />
-
-    <ServiceInfoIcon
-      class="z-[8]"
-      position="top-center"
-      :show="selected !== null"
-      :component="selected?.component"
-      :colorClass="selected?.colorClass"
-    />
     <div
-      class="bg-accent size-16 shadow-xl rounded-2xl flex justify-center items-center mx-auto relative"
-      :style="`background-color: ${bgColor};`"
+      class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
     >
-      <ServiceInfoIcon
-        class="z-[8]"
-        position="bottom-right-out"
-        :show="showPhysicalIndicator"
-        :component="preConfiguredIcons['device'].component"
-        :colorClass="preConfiguredIcons['device'].colorClass"
-      />
-      <div class="size-11 rounded-lg overflow-hidden p-1">
-        <img
-          class="w-full h-full"
-          :src="icon_url"
+      <div
+        v-if="!isEnabled"
+        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
+      >
+        <EyeOffIcon />
+      </div>
+
+      <div class="relative">
+        <div
+          v-if="!isReachable"
+          class="absolute inset-0 flex justify-center items-center bg-neutral-900/70 z-[8] rounded-2xl"
+        ></div>
+
+        <ServiceIcon
+          :class="{
+            'outline-3 outline-red-500': !isReachable,
+          }"
+          style="grid-area: icon"
+          :wrap="icon_wrap"
+          :url="icon_url"
+          :boxed="true"
+          :bg-color="bgColor"
+        />
+
+        <ServiceInfoIcon
+          class="z-[8]"
+          position="top-left-out"
+          :show="!isReachable"
+          :component="preConfiguredIcons['disconnected'].component"
+          :colorClass="preConfiguredIcons['disconnected'].colorClass"
+        />
+
+        <ServiceInfoIcon
+          class="z-[8]"
+          position="bottom-right-out"
+          :show="showPhysicalIndicator"
+          :component="preConfiguredIcons['device'].component"
+          :colorClass="preConfiguredIcons['device'].colorClass"
         />
       </div>
-    </div>
-    <div class="text-center mt-2 text-sm">
-      {{ title }}
+
+      <p
+        style="grid-area: title"
+        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-sm"
+      >
+        {{ title }}
+      </p>
+
+      <ServiceTags
+        v-if="showTags"
+        class="mt-2"
+        :tags="tags"
+        :max="2"
+      />
     </div>
   </a>
 </template>

@@ -99,7 +99,7 @@ const showPhysicalIndicator = computed(() => {
           {{ title }}
         </div>
 
-        <div class="flex items-center gap-1">
+        <div v-if="description.trim()" class="flex items-center gap-1">
           <MessageSquareTextIcon
             :size="16"
             class="shrink-0 !text-neutral-300"

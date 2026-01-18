@@ -389,10 +389,10 @@ function handleTagRemove(id: number) {
             </TabsContent>
             <TabsContent value="large">
               <div
-                class="flex flex-wrap items-center border rounded-lg p-3 "
+                class="flex flex-wrap items-center border rounded-lg py-3 px-8"
               >
                 <Service
-                  class="mx-auto"
+                  class="mx-auto w-full"
                   :id="0"
                   :title="form.values.title || ''"
                   :description="form.values.description || ''"

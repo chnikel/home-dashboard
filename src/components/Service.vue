@@ -5,6 +5,7 @@ import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
 import { EyeOffIcon, MessageSquareTextIcon } from "lucide-vue-next";
 import Tag from "./Tag.vue";
+import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
   id: number;
@@ -115,16 +116,12 @@ const showPhysicalIndicator = computed(() => {
       <div
         class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden"
       >
-        <div
+        <ServiceTags
           class="flex overflow-auto"
           style="scrollbar-width: none"
-        >
-          <Tag
-            v-for="tag in tags"
-            :color="tag.color"
-            :name="tag.name"
-          />
-        </div>
+          :tags="tags"
+          :max="2"
+        />
       </div>
     </div>
   </a>

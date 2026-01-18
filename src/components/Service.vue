@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
-import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import {
-  BubblesIcon,
-  EyeOffIcon,
-  MessageSquareIcon,
-  MessageSquareTextIcon,
-  TextIcon,
-} from "lucide-vue-next";
+import { EyeOffIcon, MessageSquareTextIcon } from "lucide-vue-next";
 import Tag from "./Tag.vue";
 
 const props = defineProps<{
@@ -54,7 +47,10 @@ const showPhysicalIndicator = computed(() => {
     class="block relative"
   >
     <div
-      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[100px_auto_auto] overflow-hidden"
+      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[120px_auto_auto] overflow-hidden"
+      :class="{
+        'outline-3 outline-red-500': !isReachable,
+      }"
     >
       <div
         v-if="!isEnabled"
@@ -72,21 +68,28 @@ const showPhysicalIndicator = computed(() => {
           :src="icon_url"
         />
 
-        <ServiceInfoIcon
-          class="z-[8] m-1"
-          position="top-left"
-          :show="!isReachable"
-          :component="preConfiguredIcons['disconnected'].component"
-          :colorClass="preConfiguredIcons['disconnected'].colorClass"
-        />
-
-        <ServiceInfoIcon
-          class="z-[8] m-1"
-          position="bottom-right"
-          :show="showPhysicalIndicator"
-          :component="preConfiguredIcons['device'].component"
-          :colorClass="preConfiguredIcons['device'].colorClass"
-        />
+        <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
+          <div
+            v-if="!isReachable"
+            class="rounded-lg p-1.5"
+            :class="preConfiguredIcons['disconnected'].colorClass"
+          >
+            <component
+              :is="preConfiguredIcons['disconnected'].component"
+              :size="16"
+            ></component>
+          </div>
+          <div
+            v-if="showPhysicalIndicator"
+            class="rounded-lg p-1.5"
+            :class="preConfiguredIcons['device'].colorClass"
+          >
+            <component
+              :is="preConfiguredIcons['device'].component"
+              :size="16"
+            ></component>
+          </div>
+        </div>
       </div>
 
       <div class="overflow-hidden m-2">

@@ -29,6 +29,7 @@ import ServiceDialog, {
 import { findTag, store, updateLocalServicePings } from "./store";
 import { useUrlSearchParams } from "@vueuse/core";
 import {
+  CheckIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
@@ -229,7 +230,7 @@ onMounted(async () => {
               @click="isEditMode = false"
               size="icon"
             >
-              <SaveIcon color="white" />
+              <CheckIcon color="white" />
             </Button>
             <Button
               v-if="!isEditMode"

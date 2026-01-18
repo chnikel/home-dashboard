@@ -93,10 +93,10 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
       </GroupContextMenuWrapper>
     </EditGroupWrapper>
     <div
-      class="grid p-2.5 gap-3"
+      class="grid p-2.5 gap-4"
       :class="{
         'grid-cols-[repeat(auto-fill,minmax(130px,1fr))]': compact,
-        'grid-cols-[repeat(auto-fill,minmax(250px,1fr))]': !compact,
+        'grid-cols-[repeat(auto-fill,minmax(200px,1fr))]': !compact,
       }"
     >
       <slot />

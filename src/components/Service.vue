@@ -4,7 +4,13 @@ import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import { EyeOffIcon } from "lucide-vue-next";
+import {
+  BubblesIcon,
+  EyeOffIcon,
+  MessageSquareIcon,
+  MessageSquareTextIcon,
+  TextIcon,
+} from "lucide-vue-next";
 import Tag from "./Tag.vue";
 
 const props = defineProps<{
@@ -48,7 +54,7 @@ const showPhysicalIndicator = computed(() => {
     class="block relative"
   >
     <div
-      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[100px_auto_auto]"
+      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[100px_auto_auto] overflow-hidden"
     >
       <div
         v-if="!isEnabled"
@@ -90,13 +96,22 @@ const showPhysicalIndicator = computed(() => {
           {{ title }}
         </div>
 
-        <div
-          class=" text-sm text-neutral-300"
-        >
-          {{ description }}
+        <div class="flex items-center gap-1">
+          <MessageSquareTextIcon
+            :size="16"
+            class="shrink-0 !text-neutral-300"
+          />
+
+          <div
+            class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
+          >
+            {{ description }}
+          </div>
         </div>
       </div>
-      <div class="border-t p-2 border-solid border-neutral-700 flex">
+      <div
+        class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden"
+      >
         <div
           class="flex overflow-auto"
           style="scrollbar-width: none"

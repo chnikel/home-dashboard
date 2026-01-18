@@ -32,7 +32,7 @@ const position = computed(() => {
       return "bottom-0 left-0 rounded-xl -translate-x-1/3 translate-y-1/3";
 
     case "top-right":
-      return "top-0 right-0 rounded-tr-xl rounded-bl-xl";
+      return "top-0 right-0 rounded-full";
 
     case "center-center":
       return "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl";
@@ -45,7 +45,7 @@ const position = computed(() => {
 
     case "top-left":
     default:
-      return "top-0 left-0 rounded-tl-xl rounded-br-xl";
+      return "top-0 left-0 rounded-full";
   }
 });
 </script>

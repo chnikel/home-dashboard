@@ -373,7 +373,7 @@ function handleTagRemove(id: number) {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="compact">
-              <div class="flex flex-wrap border rounded-lg p-3 h-[187.5px]">
+              <div class="flex flex-wrap border rounded-lg p-3">
                 <ServiceAppLayout
                   class="mx-auto"
                   :id="0"
@@ -389,7 +389,7 @@ function handleTagRemove(id: number) {
             </TabsContent>
             <TabsContent value="large">
               <div
-                class="flex flex-wrap items-center border rounded-lg p-3 h-[187.5px]"
+                class="flex flex-wrap items-center border rounded-lg p-3 "
               >
                 <Service
                   class="mx-auto"

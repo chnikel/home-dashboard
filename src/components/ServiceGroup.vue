@@ -71,7 +71,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
     @dragover="edit && onDragOver($event)"
     @dragleave="edit && (isOver = false)"
     @dragend="edit && (isOver = false)"
-    class="text-white outline rounded-lg bg-neutral-900"
+    class="text-white rounded-lg"
     :class="{
       'outline-2 outline-offset-4 rounded outline-blue-500 z-10': isOver,
       '': !isOver,
@@ -87,13 +87,18 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
         @edit="showGroupDialog = true"
         @delete="emit('delete')"
       >
-        <h2 class="text-2xl font-light inline px-5">
+        <h2 class="text-xl font-light inline px-3">
           {{ title }}
         </h2>
       </GroupContextMenuWrapper>
     </EditGroupWrapper>
-    <hr />
-    <div class="grid p-2.5 grid-cols-[repeat(auto-fill,minmax(130px,1fr))]">
+    <div
+      class="grid p-2.5 gap-3"
+      :class="{
+        'grid-cols-[repeat(auto-fill,minmax(130px,1fr))]': compact,
+        'grid-cols-[repeat(auto-fill,minmax(250px,1fr))]': !compact,
+      }"
+    >
       <slot />
     </div>
   </div>

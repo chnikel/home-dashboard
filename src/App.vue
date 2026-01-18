@@ -59,7 +59,7 @@ async function refreshServices() {
   const servicesWithGroupName = Object.entries(groupedServicesResponse).map(
     ([groupId, services]) => {
       const group = groupsResponse.find(
-        (group) => group.id?.toString() == groupId
+        (group) => group.id?.toString() == groupId,
       );
       const groupTitle = group?.title || "";
 
@@ -68,7 +68,7 @@ async function refreshServices() {
         title: groupTitle,
         services,
       };
-    }
+    },
   );
 
   if (servicesWithGroupName.findIndex((group) => group.id === "-1") === -1) {
@@ -305,7 +305,7 @@ onMounted(async () => {
                       return service.tags.some((tag) =>
                         tag.name
                           .toLowerCase()
-                          .includes(searchText.replace('#', '').toLowerCase())
+                          .includes(searchText.replace('#', '').toLowerCase()),
                       );
                     }
 
@@ -348,6 +348,7 @@ onMounted(async () => {
                       :icon_url="service.icon_url"
                       :icon_wrap="service.icon_wrap"
                       :tags="service.tags"
+                      :isEnabled="service.enabled"
                       :bgColor="service.bgColor"
                     />
                   </EditServiceWrapper>

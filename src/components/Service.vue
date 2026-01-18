@@ -3,7 +3,7 @@ import type { ServiceTag } from "../api";
 import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
-import { EyeOffIcon, MessageSquareTextIcon } from "lucide-vue-next";
+import { EyeOffIcon, MessageSquareIcon } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
@@ -99,10 +99,10 @@ const showPhysicalIndicator = computed(() => {
           {{ title }}
         </div>
 
-        <div v-if="description.trim()" class="flex items-center gap-1">
-          <MessageSquareTextIcon
-            :size="16"
-            class="shrink-0 !text-neutral-300"
+        <div v-if="description.trim()" class="flex items-center mt-1">
+          <MessageSquareIcon
+            :size="14"
+            class="shrink-0 !text-neutral-300 mr-2 ml-1" 
           />
 
           <div

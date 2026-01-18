@@ -36,7 +36,6 @@ import {
   LayoutListIcon,
   PenIcon,
   PlusIcon,
-  SaveIcon,
   SearchIcon,
   TagIcon,
 } from "lucide-vue-next";

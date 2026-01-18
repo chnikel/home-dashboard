@@ -4,7 +4,6 @@ import { computed } from "vue";
 import { store } from "@/store";
 import { preConfiguredIcons } from "@/lib/status-icons";
 import { EyeOffIcon, MessageSquareTextIcon } from "lucide-vue-next";
-import Tag from "./Tag.vue";
 import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{

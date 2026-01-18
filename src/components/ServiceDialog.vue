@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import z from "zod";
 import Button from "./ui/button/Button.vue";
 import { FormField } from "./ui/form";
@@ -42,6 +35,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InputGroup from "./ui/input-group/InputGroup.vue";
 import InputGroupAddon from "./ui/input-group/InputGroupAddon.vue";
 import InputGroupInput from "./ui/input-group/InputGroupInput.vue";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { useMediaQuery } from "@vueuse/core";
+import Drawer from "./ui/drawer/Drawer.vue";
+import DrawerContent from "./ui/drawer/DrawerContent.vue";
+import DrawerHeader from "./ui/drawer/DrawerHeader.vue";
+import DrawerTitle from "./ui/drawer/DrawerTitle.vue";
+import DrawerFooter from "./ui/drawer/DrawerFooter.vue";
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -134,25 +140,35 @@ function handleTagRemove(id: number) {
   const currentTagIds = form.values.tagIds || [];
   form.setFieldValue(
     "tagIds",
-    currentTagIds.filter((tagId) => tagId !== id)
+    currentTagIds.filter((tagId) => tagId !== id),
   );
 }
+
+const isDesktop = useMediaQuery("(min-width: 640px)");
+
+const Modal = computed(() => ({
+  Root: isDesktop.value ? Sheet : Drawer,
+  Content: isDesktop.value ? SheetContent : DrawerContent,
+  Header: isDesktop.value ? SheetHeader : DrawerHeader,
+  Title: isDesktop.value ? SheetTitle : DrawerTitle,
+  Footer: isDesktop.value ? SheetFooter : DrawerFooter,
+}));
 </script>
 
 <template>
-  <Dialog
+  <component
+    :is="Modal.Root"
     :open="open"
-    @update:open="handleClose"
   >
-    <DialogContent class="sm:max-w-[425px]">
-      <DialogHeader>
-        <DialogTitle>{{ title }}</DialogTitle>
-      </DialogHeader>
+    <component :is="Modal.Content">
+      <component :is="Modal.Header">
+        <component :is="Modal.Title">{{ title }}</component>
+      </component>
 
       <form
         id="dialogForm"
         @submit="onSubmit"
-        class="space-y-3"
+        class="space-y-3 px-4 overflow-auto"
       >
         <FormField
           v-slot="{ componentField }"
@@ -360,7 +376,7 @@ function handleTagRemove(id: number) {
 
         <hr />
 
-        <div class="sticky -top-1 bg-inherit pb-3 z-10">
+        <div class="bg-inherit pb-3 z-10">
           Vorschau
 
           <Tabs default-value="large">
@@ -407,7 +423,7 @@ function handleTagRemove(id: number) {
           </Tabs>
         </div>
 
-        <DialogFooter>
+        <component :is="Modal.Footer">
           <Button type="submit">
             {{ submitButton }}
           </Button>
@@ -418,8 +434,8 @@ function handleTagRemove(id: number) {
           >
             Schließen
           </Button>
-        </DialogFooter>
+        </component>
       </form>
-    </DialogContent>
-  </Dialog>
+    </component>
+  </component>
 </template>

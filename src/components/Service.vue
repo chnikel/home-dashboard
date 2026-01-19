@@ -109,6 +109,7 @@ const hasTag = (tag: string) =>
       </div>
       <div
         class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden"
+        v-if="tags.length > 0"
       >
         <ServiceTags
           class="flex overflow-auto"

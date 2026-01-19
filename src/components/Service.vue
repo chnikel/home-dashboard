@@ -5,7 +5,6 @@ import { store } from "@/store";
 import {
   EyeOffIcon,
   HardDriveIcon,
-  MessageSquareIcon,
   UnplugIcon,
 } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
@@ -82,7 +81,7 @@ const showPhysicalIndicator = computed(() => {
           >
             <UnplugIcon :size="16" />
           </div>
-</div>
+        </div>
 
         <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
           <div
@@ -105,11 +104,6 @@ const showPhysicalIndicator = computed(() => {
           v-if="description.trim()"
           class="flex items-center mt-1"
         >
-          <MessageSquareIcon
-            :size="14"
-            class="shrink-0 !text-neutral-300 mr-2 ml-1"
-          />
-
           <div
             class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
           >

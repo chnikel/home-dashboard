@@ -2,11 +2,7 @@
 import type { ServiceTag } from "../api";
 import { computed } from "vue";
 import { store } from "@/store";
-import {
-  EyeOffIcon,
-  HardDriveIcon,
-  UnplugIcon,
-} from "lucide-vue-next";
+import { EyeOffIcon, HardDriveIcon, UnplugIcon } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
@@ -55,6 +51,9 @@ const hasTag = (tag: string) =>
       }"
     >
       <div
+        class="absolute inset-0 justify-center items-center bg-neutral-900/50 rounded-lg z-[9] hidden group-hover:flex pointer-events-none"
+      ></div>
+      <div
         v-if="!isEnabled"
         class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-lg z-[9]"
       >
@@ -62,7 +61,7 @@ const hasTag = (tag: string) =>
       </div>
 
       <div
-        class="relative flex justify-center items-center border-b border-solid border-neutral-700 rounded-t-lg"
+        class="relative flex justify-center items-center border-b border-solid border-inherit rounded-t-lg"
         :style="`background-color: ${bgColor};`"
       >
         <img
@@ -108,7 +107,7 @@ const hasTag = (tag: string) =>
         </div>
       </div>
       <div
-        class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden"
+        class="border-t p-2 border-solid border-inherit flex overflow-hidden"
         v-if="tags.length > 0"
       >
         <ServiceTags

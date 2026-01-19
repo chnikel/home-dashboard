@@ -2,8 +2,12 @@
 import type { ServiceTag } from "../api";
 import { computed } from "vue";
 import { store } from "@/store";
-import { preConfiguredIcons } from "@/lib/status-icons";
-import { EyeOffIcon, MessageSquareIcon } from "lucide-vue-next";
+import {
+  EyeOffIcon,
+  HardDriveIcon,
+  MessageSquareIcon,
+  UnplugIcon,
+} from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
@@ -71,23 +75,15 @@ const showPhysicalIndicator = computed(() => {
         <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
           <div
             v-if="!isReachable"
-            class="rounded-lg p-1.5"
-            :class="preConfiguredIcons['disconnected'].colorClass"
+            class="rounded-lg p-1.5 bg-red-600"
           >
-            <component
-              :is="preConfiguredIcons['disconnected'].component"
-              :size="16"
-            ></component>
+            <UnplugIcon :size="16" />
           </div>
           <div
             v-if="showPhysicalIndicator"
-            class="rounded-lg p-1.5"
-            :class="preConfiguredIcons['device'].colorClass"
+            class="rounded-lg p-1.5 bg-neutral-900"
           >
-            <component
-              :is="preConfiguredIcons['device'].component"
-              :size="16"
-            ></component>
+            <HardDriveIcon :size="16" />
           </div>
         </div>
       </div>
@@ -99,10 +95,13 @@ const showPhysicalIndicator = computed(() => {
           {{ title }}
         </div>
 
-        <div v-if="description.trim()" class="flex items-center mt-1">
+        <div
+          v-if="description.trim()"
+          class="flex items-center mt-1"
+        >
           <MessageSquareIcon
             :size="14"
-            class="shrink-0 !text-neutral-300 mr-2 ml-1" 
+            class="shrink-0 !text-neutral-300 mr-2 ml-1"
           />
 
           <div

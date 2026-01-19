@@ -40,10 +40,6 @@ const isReachable = computed(() => {
 
 const hasTag = (tag: string) =>
   props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
-
-const showPhysicalIndicator = computed(() => {
-  return hasTag("physical");
-});
 </script>
 
 <template>

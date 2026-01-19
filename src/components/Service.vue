@@ -39,8 +39,11 @@ const isReachable = computed(() => {
   return pingData.isReachable;
 });
 
+const hasTag = (tag: string) =>
+  props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
+
 const showPhysicalIndicator = computed(() => {
-  return props.tags.findIndex((t) => t.name.toLowerCase() == "physical") != -1;
+  return hasTag("physical");
 });
 </script>
 
@@ -83,7 +86,7 @@ const showPhysicalIndicator = computed(() => {
 
         <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
           <div
-            v-if="showPhysicalIndicator"
+            v-if="hasTag('physical')"
             class="rounded-lg p-1.5 bg-neutral-900"
           >
             <HardDriveIcon :size="16" />

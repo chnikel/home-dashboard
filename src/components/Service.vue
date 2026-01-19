@@ -2,7 +2,12 @@
 import type { ServiceTag } from "../api";
 import { computed } from "vue";
 import { store } from "@/store";
-import { EyeOffIcon, HardDriveIcon, UnplugIcon } from "lucide-vue-next";
+import {
+  EyeOffIcon,
+  FlaskConicalIcon,
+  HardDriveIcon,
+  UnplugIcon,
+} from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
 
 const props = defineProps<{
@@ -92,7 +97,16 @@ const hasTag = (tag: string) =>
         <div
           class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
         >
-          {{ title }}
+          <div class="flex items-center gap-1">
+            <template v-if="hasTag('test') || hasTag('testen')">
+              <FlaskConicalIcon
+                :size="16"
+                class="text-yellow-500"
+              />
+              <template v-if="title.trim()"> • </template>
+            </template>
+            {{ title }}
+          </div>
         </div>
 
         <div

@@ -72,13 +72,16 @@ const showPhysicalIndicator = computed(() => {
           :src="icon_url"
         />
 
-        <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
+        <div class="absolute top-0 left-0 m-2 rounded-lg flex gap-1">
           <div
             v-if="!isReachable"
             class="rounded-lg p-1.5 bg-red-600"
           >
             <UnplugIcon :size="16" />
           </div>
+</div>
+
+        <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
           <div
             v-if="showPhysicalIndicator"
             class="rounded-lg p-1.5 bg-neutral-900"

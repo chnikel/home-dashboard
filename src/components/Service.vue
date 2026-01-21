@@ -5,10 +5,13 @@ import { store } from "@/store";
 import {
   EyeOffIcon,
   FlaskConicalIcon,
+  GlobeIcon,
   HardDriveIcon,
+  ShieldCheckIcon,
   UnplugIcon,
 } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
+import { cn } from "@/lib/utils";
 
 const props = defineProps<{
   id: number;
@@ -41,6 +44,27 @@ const isReachable = computed(() => {
 
 const hasTag = (tag: string) =>
   props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
+
+const indicators = [
+  {
+    when: props.link?.includes("chnikel.de"),
+    class: "bg-yellow-800",
+    icon: GlobeIcon,
+  },
+  {
+    when: props.link?.startsWith("https://"),
+    class: "bg-emerald-800",
+    icon: ShieldCheckIcon,
+  },
+];
+
+const imageIndicators = [
+  {
+    when: hasTag("physical"),
+    class: "bg-neutral-900",
+    icon: HardDriveIcon,
+  },
+];
 </script>
 
 <template>
@@ -84,12 +108,17 @@ const hasTag = (tag: string) =>
         </div>
 
         <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
-          <div
-            v-if="hasTag('physical')"
-            class="rounded-lg p-1.5 bg-neutral-900"
-          >
-            <HardDriveIcon :size="16" />
-          </div>
+          <template v-for="indicator in imageIndicators">
+            <div
+              v-if="indicator.when"
+              :class="cn('rounded-lg p-1.5 ', indicator.class)"
+            >
+              <component
+                :is="indicator.icon"
+                :size="16"
+              ></component>
+            </div>
+          </template>
         </div>
       </div>
 
@@ -120,6 +149,24 @@ const hasTag = (tag: string) =>
           </div>
         </div>
       </div>
+
+      <div
+        class="border-t p-2 border-solid border-neutral-700 flex overflow-hidden gap-1"
+        v-if="indicators.some((v) => v.when)"
+      >
+        <template v-for="indicator in indicators">
+          <div
+            v-if="indicator.when"
+            :class="cn('rounded-lg p-1.5 ', indicator.class)"
+          >
+            <component
+              :is="indicator.icon"
+              :size="16"
+            ></component>
+          </div>
+        </template>
+      </div>
+
       <div
         class="border-t p-2 border-solid border-inherit flex overflow-hidden"
         v-if="tags.length > 0"

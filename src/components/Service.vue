@@ -7,6 +7,8 @@ import {
   FlaskConicalIcon,
   HardDriveIcon,
   ShieldCheckIcon,
+  ShieldOffIcon,
+  ShieldQuestionMarkIcon,
   UnplugIcon,
 } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
@@ -44,6 +46,9 @@ const isReachable = computed(() => {
 const hasTag = (tag: string) =>
   props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
 
+  const isHttps = props.link?.startsWith("https://") || false
+  const isHttp = props.link?.startsWith("http://") || false
+
 const titleIndicators = [
   {
     when: hasTag("test") || hasTag("testen"),
@@ -51,9 +56,19 @@ const titleIndicators = [
     icon: FlaskConicalIcon,
   },
   {
-    when: props.link?.startsWith("https://"),
+    when: isHttps,
     class: "text-emerald-500",
     icon: ShieldCheckIcon,
+  },
+  {
+    when: isHttp,
+    class: "text-red-500",
+    icon: ShieldOffIcon,
+  },
+  {
+    when: !isHttps && !isHttp,
+    class: "text-yellow-500",
+    icon: ShieldQuestionMarkIcon,
   },
 ];
 

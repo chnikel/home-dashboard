@@ -6,6 +6,7 @@ import {
   EyeOffIcon,
   FlaskConicalIcon,
   HardDriveIcon,
+  ShieldCheckIcon,
   UnplugIcon,
 } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
@@ -41,6 +42,19 @@ const isReachable = computed(() => {
 
 const hasTag = (tag: string) =>
   props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
+
+const titleIndicators = [
+  {
+    when: hasTag("test") || hasTag("testen"),
+    class: "text-yellow-500",
+    icon: FlaskConicalIcon,
+  },
+  {
+    when: props.link?.startsWith("https://"),
+    class: "text-emerald-500",
+    icon: ShieldCheckIcon,
+  },
+];
 </script>
 
 <template>
@@ -97,15 +111,20 @@ const hasTag = (tag: string) =>
         <div
           class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
         >
-          <div class="flex items-center gap-1">
-            <template v-if="hasTag('test') || hasTag('testen')">
-              <FlaskConicalIcon
-                :size="16"
-                class="text-yellow-500"
-              />
-              <template v-if="title.trim()"> • </template>
-            </template>
-            {{ title }}
+          <div class="grid grid-cols-[1fr_auto] items-center gap-1">
+            <div class="overflow-ellipsis overflow-hidden">
+              {{ title }}
+            </div>
+            <div class="justify-end flex shrink-0 gap-0.5">
+              <template v-for="indicator in titleIndicators">
+                <component
+                  v-if="indicator.when"
+                  :is="indicator.icon"
+                  :size="16"
+                  :class="indicator.class"
+                ></component>
+              </template>
+            </div>
           </div>
         </div>
 

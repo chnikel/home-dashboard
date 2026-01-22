@@ -10,6 +10,7 @@ import {
   UnplugIcon,
 } from "lucide-vue-next";
 import ServiceTags from "./ServiceTags.vue";
+import { cn } from "@/lib/utils";
 
 const props = defineProps<{
   id: number;
@@ -55,6 +56,14 @@ const titleIndicators = [
     icon: ShieldCheckIcon,
   },
 ];
+
+const imageIndicators = [
+  {
+    when: hasTag("physical"),
+    class: "bg-neutral-900",
+    icon: HardDriveIcon,
+  },
+];
 </script>
 
 <template>
@@ -98,12 +107,17 @@ const titleIndicators = [
         </div>
 
         <div class="absolute bottom-0 right-0 m-2 rounded-lg flex gap-1">
-          <div
-            v-if="hasTag('physical')"
-            class="rounded-lg p-1.5 bg-neutral-900"
-          >
-            <HardDriveIcon :size="16" />
-          </div>
+          <template v-for="indicator in imageIndicators">
+            <div
+              v-if="indicator.when"
+              :class="cn('rounded-lg p-1.5 ', indicator.class)"
+            >
+              <component
+                :is="indicator.icon"
+                :size="16"
+              ></component>
+            </div>
+          </template>
         </div>
       </div>
 

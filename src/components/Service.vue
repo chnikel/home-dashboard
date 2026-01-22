@@ -75,7 +75,7 @@ const imageIndicators = [
     <div
       class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[120px_auto_auto] overflow-hidden"
       :class="{
-        'outline-3 outline-red-500': !isReachable,
+        'outline-3 outline-red-600': !isReachable,
       }"
     >
       <div

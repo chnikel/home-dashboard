@@ -249,3 +249,16 @@ export const toggleTag = async (serviceId: string, tagId: string) => {
     body: null,
   });
 };
+
+export const hasUpdates = async (serviceId: number) => {
+  const response = await fetch(`${host}/api/services/${serviceId}/updates`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const services = await response.json();
+
+  return services as any;
+};

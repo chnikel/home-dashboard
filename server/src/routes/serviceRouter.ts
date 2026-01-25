@@ -1,6 +1,7 @@
 import express from "express";
 import db from "../db";
 import { NewService } from "../db/schema";
+import { dockerManager } from "../utils/docker-manager";
 
 const serviceRouter = express.Router();
 
@@ -23,7 +24,7 @@ export const NEED_REFACTOR_getServices = async () => {
         tags,
         bgColor: entry.bgColor,
       };
-    })
+    }),
   );
 
   return services;
@@ -35,7 +36,7 @@ serviceRouter.get("", async (req, res) => {
   const groupBy = req.query.groupBy as string | undefined;
 
   if (groupBy) {
-    const FALLBACK_GROUP_ID = -1
+    const FALLBACK_GROUP_ID = -1;
     const servicesGrouped = services.reduce((acc: any, service: any) => {
       (acc[service[groupBy] || FALLBACK_GROUP_ID] ??= []).push(service);
       return acc;
@@ -67,7 +68,7 @@ serviceRouter.post("", async (req, res) => {
   await Promise.all(
     tags.map((tag) => {
       return db.tagToService(tag, Number(serviceId.lastInsertRowid));
-    })
+    }),
   );
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
@@ -110,7 +111,7 @@ serviceRouter.put("/:id", async (req, res) => {
       }
 
       return db.tagToService(tag, serviceId);
-    })
+    }),
   );
 
   await Promise.all(
@@ -122,7 +123,7 @@ serviceRouter.put("/:id", async (req, res) => {
       }
 
       return db.removeTagFromService(t.name, serviceId);
-    })
+    }),
   );
 
   res.json({ message: "Service erfolgreich aktualisiert" });
@@ -150,6 +151,52 @@ serviceRouter.delete("/:id", async (req, res) => {
   await db.deleteService(id);
 
   res.json({ message: "Service erfolgreich gelöscht" });
+});
+
+const fakeDB = {
+  4: {
+    currentTag: "2.19",
+    dockerHubImageName: "paperlessngx/paperless-ngx",
+    ignoreImageNames: ["latest", "dev"],
+  },
+  //  2: {
+  //   currentTag: "2.19",
+  //   dockerHubImageName: "paperlessngx/paperless-ngx",
+  //   ignoreImageNames: ["latest", "dev"],
+  // },
+};
+
+serviceRouter.get("/:id/updates", async (req, res) => {
+  const serviceId = req.params.id;
+
+  if (!serviceId) {
+    return res.status(404);
+  }
+
+  const data = (fakeDB as any)[serviceId];
+
+  if (!data) {
+    return res.status(404);
+  }
+
+  const items = await dockerManager.findImage(data.dockerHubImageName);
+  const filteredItems = items.filter(
+    (i) => !data.ignoreImageNames.includes(i.name),
+  );
+
+  const updatesBehind = filteredItems.findIndex(
+    (result) => result.name === data.currentTag,
+  );
+
+  const newestTag = filteredItems[0].name;
+
+  res.json({
+    currentTag: data.currentTag,
+    newestTag,
+    hasUpdates: data.currentTag !== newestTag,
+    dockerHubImageName: data.dockerHubImageName,
+    updatesBehind,
+  });
 });
 
 export default serviceRouter;

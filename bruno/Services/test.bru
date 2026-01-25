@@ -1,0 +1,15 @@
+meta {
+  name: test
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{host}}/api/services/:id/updates
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

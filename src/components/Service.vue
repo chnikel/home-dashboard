@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { ServiceTag } from "../api";
-import { computed } from "vue";
+import { hasUpdates, type ServiceTag } from "../api";
+import { computed, onMounted, ref } from "vue";
 import { store } from "@/store";
 import {
+  CloudDownloadIcon,
   EyeOffIcon,
   FlaskConicalIcon,
   HardDriveIcon,
@@ -46,8 +47,16 @@ const isReachable = computed(() => {
 const hasTag = (tag: string) =>
   props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
 
-  const isHttps = props.link?.startsWith("https://") || false
-  const isHttp = props.link?.startsWith("http://") || false
+const showUpdateIndicator = ref(false);
+
+onMounted(async () => {
+  const response = await hasUpdates(props.id);
+
+  showUpdateIndicator.value = response.hasUpdates;
+});
+
+const isHttps = props.link?.startsWith("https://") || false;
+const isHttp = props.link?.startsWith("http://") || false;
 
 const titleIndicators = [
   {
@@ -72,16 +81,22 @@ const titleIndicators = [
   },
 ];
 
-const imageIndicators = [
+const imageIndicators = computed(() => [
   {
     when: hasTag("physical"),
     class: "bg-neutral-900",
     icon: HardDriveIcon,
   },
-];
+  {
+    when: showUpdateIndicator.value,
+    class: "text-yellow-500 bg-neutral-900",
+    icon: CloudDownloadIcon,
+  },
+]);
 </script>
 
 <template>
+  {{ showUpdateIndicator }}
   <a
     :href="link || '#'"
     :target="link && '_blank'"

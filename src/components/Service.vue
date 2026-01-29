@@ -88,14 +88,11 @@ const imageIndicators = [
     class="block relative"
   >
     <div
-      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[120px_auto_auto] overflow-hidden"
+      class="border border-neutral-700 bg-neutral-800 rounded-lg grid grid-rows-[120px_auto_auto] overflow-hidden hover:scale-105 transition-all"
       :class="{
         'outline-3 outline-red-600': !isReachable,
       }"
     >
-      <div
-        class="absolute inset-0 justify-center items-center bg-neutral-900/50 rounded-lg z-[9] hidden group-hover:flex pointer-events-none"
-      ></div>
       <div
         v-if="!isEnabled"
         class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-lg z-[9]"

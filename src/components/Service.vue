@@ -62,12 +62,12 @@ const titleIndicators = [
   },
   {
     when: isHttp,
-    class: "text-red-500",
+    class: "text-orange-500",
     icon: ShieldOffIcon,
   },
   {
     when: !isHttps && !isHttp,
-    class: "text-yellow-500",
+    class: "text-red-500",
     icon: ShieldQuestionMarkIcon,
   },
 ];

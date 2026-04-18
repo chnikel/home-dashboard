@@ -46,10 +46,10 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="block relative"
+    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 rounded-xl "
   >
     <div
-      class="hover:bg-neutral-800 p-5 rounded-xl flex items-center justify-center flex-col"
+      class=" flex items-center justify-center flex-col"
     >
       <div
         v-if="!isEnabled"
@@ -61,7 +61,7 @@ const showPhysicalIndicator = computed(() => {
       <div class="relative">
         <div
           v-if="!isReachable"
-          class="absolute inset-0 flex justify-center items-center bg-neutral-900/70 z-[8] rounded-2xl"
+          class="absolute inset-0 flex justify-center items-center bg-neutral-900/50 z-[8] rounded-2xl"
         ></div>
 
         <ServiceIcon
@@ -94,7 +94,7 @@ const showPhysicalIndicator = computed(() => {
 
       <p
         style="grid-area: title"
-        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-sm"
+        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-xs"
       >
         {{ title }}
       </p>

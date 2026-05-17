@@ -87,7 +87,8 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
         @delete="emit('delete')"
       >
         <h2 class="text-xl p-4">
-          {{ title }}
+          <template v-if="id == '-1'"><i>Ungruppiert</i></template>
+          <template v-else>{{ title }}</template>
         </h2>
       </GroupContextMenuWrapper>
     </EditGroupWrapper>

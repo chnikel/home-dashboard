@@ -211,9 +211,9 @@ onMounted(async () => {
       <div class="overflow-auto">
         <div class="h-screen p-4 max-w-6xl mx-auto">
           <div
-            class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline"
+            class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline justify-between"
           >
-            <InputGroup>
+            <InputGroup class="w-80">
               <InputGroupInput
                 v-model="searchText"
                 placeholder="Search name, description or #tag"
@@ -223,39 +223,41 @@ onMounted(async () => {
               </InputGroupAddon>
             </InputGroup>
 
-            <Button
-              v-if="isEditMode"
-              class="!bg-orange-500"
-              @click="isEditMode = false"
-              size="icon"
-            >
-              <CheckIcon color="white" />
-            </Button>
-            <Button
-              v-if="!isEditMode"
-              variant="outline"
-              @click="isEditMode = true"
-              size="icon"
-            >
-              <PenIcon />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button v-if="isEditMode"> <PlusIcon /> </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem @click="showServiceDialog = true">
-                  <FilePlusIcon /> Service hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem @click="showGroupDialog = true">
-                  <FolderIcon /> Gruppe hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="showTagDialog = true">
-                  <TagIcon /> Tag hinzufügen
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div class="flex gap-2">
+              <Button
+                v-if="isEditMode"
+                class="!bg-orange-500"
+                @click="isEditMode = false"
+                size="icon"
+              >
+                <CheckIcon color="white" />
+              </Button>
+              <Button
+                v-if="!isEditMode"
+                variant="outline"
+                @click="isEditMode = true"
+                size="icon"
+              >
+                <PenIcon />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button v-if="isEditMode"> <PlusIcon /> </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem @click="showServiceDialog = true">
+                    <FilePlusIcon /> Service hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem @click="showGroupDialog = true">
+                    <FolderIcon /> Gruppe hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuItem @click="showTagDialog = true">
+                    <TagIcon /> Tag hinzufügen
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
 
           <ServiceDialog

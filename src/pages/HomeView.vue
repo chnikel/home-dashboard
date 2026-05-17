@@ -223,15 +223,7 @@ onMounted(async () => {
               </InputGroupAddon>
             </InputGroup>
 
-            <div class="flex gap-2">
-              <Button
-                v-if="isEditMode"
-                class="!bg-orange-500"
-                @click="isEditMode = false"
-                size="icon"
-              >
-                <CheckIcon color="white" />
-              </Button>
+            <div class="space-x-2">
               <Button
                 v-if="!isEditMode"
                 variant="outline"
@@ -240,9 +232,9 @@ onMounted(async () => {
               >
                 <PenIcon />
               </Button>
-              <DropdownMenu>
+              <DropdownMenu v-if="isEditMode">
                 <DropdownMenuTrigger>
-                  <Button v-if="isEditMode"> <PlusIcon /> </Button>
+                  <Button> <PlusIcon /> Hinzufügen </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem @click="showServiceDialog = true">
@@ -257,6 +249,14 @@ onMounted(async () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Button
+                v-if="isEditMode"
+                class="!bg-orange-500"
+                @click="isEditMode = false"
+                size="icon"
+              >
+                <CheckIcon color="white" />
+              </Button>
             </div>
           </div>
 

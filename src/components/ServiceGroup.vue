@@ -129,7 +129,7 @@ const toggleCollapsed = (groupId: string) => {
     </EditGroupWrapper>
     <div
       v-if="!isCollapsed"
-      class="grid p-4 justify-center sm:justify-start border-t bg-neutral-800/30 rounded-b-lg"
+      class="grid p-4 justify-center md:justify-start border-t bg-neutral-800/30 rounded-b-lg"
       :class="{
         'grid-cols-[repeat(auto-fit,120px)] gap-1': compact,
         'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,

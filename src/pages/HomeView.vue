@@ -269,6 +269,10 @@ const disableSaveSearch = computed(
     !searchText ||
     savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1,
 );
+
+const handleSavedSearchClick = (text: string) => {
+  searchText.value = searchText.value === text ? "" : text;
+};
 </script>
 
 <template>
@@ -361,7 +365,7 @@ const disableSaveSearch = computed(
                   <Button
                     class="cursor-pointer"
                     variant="outline"
-                    @click="searchText = savedTab.text"
+                    @click="handleSavedSearchClick(savedTab.text)"
                     :class="{
                       '!bg-accent': searchText === savedTab.text,
                     }"

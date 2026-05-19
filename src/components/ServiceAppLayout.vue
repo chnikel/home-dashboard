@@ -45,7 +45,7 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl border bg-neutral-800/30"
+    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
     }"

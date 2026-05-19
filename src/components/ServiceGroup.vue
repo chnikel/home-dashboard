@@ -114,7 +114,7 @@ const toggleCollapsed = (groupId: string) => {
     </EditGroupWrapper>
     <div
       v-if="!isCollapsed"
-      class="grid py-4 justify-center border-t"
+      class="grid py-4 justify-center border-t bg-neutral-800/30 rounded-b-lg"
       :class="{
         'grid-cols-[repeat(auto-fill,120px)] gap-1': compact,
         'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,

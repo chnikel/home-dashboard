@@ -383,6 +383,24 @@ const handleSavedSearchClick = (text: string) => {
                 </ContextMenuContent>
               </ContextMenu>
             </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                class="cursor-pointer"
+                :variant="compactMode ? 'outline' : 'default'"
+                size="icon"
+                @click="compactMode = false"
+              >
+                <LayoutListIcon />
+              </Button>
+              <Button
+                class="cursor-pointer"
+                :variant="compactMode ? 'default' : 'outline'"
+                size="icon"
+                @click="compactMode = true"
+              >
+                <LayoutGridIcon />
+              </Button>
+            </ButtonGroup>
           </div>
 
           <ServiceDialog

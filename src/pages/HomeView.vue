@@ -16,6 +16,7 @@ import {
 import { useUrlSearchParams } from "@vueuse/core";
 import {
   CheckIcon,
+  CircleXIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
@@ -50,6 +51,7 @@ import InputGroup from "../components/ui/input-group/InputGroup.vue";
 import InputGroupAddon from "../components/ui/input-group/InputGroupAddon.vue";
 import InputGroupInput from "../components/ui/input-group/InputGroupInput.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
+import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -263,7 +265,14 @@ const filteredServiceGroups = computed(() =>
                   placeholder="Search name, description or #tag"
                 />
                 <InputGroupAddon>
-                  <SearchIcon />
+                  <SearchIcon v-if="!searchText" />
+                  <InputGroupButton
+                    v-else
+                    size="icon-xs"
+                    @click="searchText = ''"
+                  >
+                    <CircleXIcon />
+                  </InputGroupButton>
                 </InputGroupAddon>
               </InputGroup>
 

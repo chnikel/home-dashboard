@@ -68,7 +68,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
   };
 });
 
-const isCollapsed = ref(localStorage.getItem(`collapsed_${props.id}`) ?? false);
+const isCollapsed = ref(localStorage.getItem(`collapsed_${props.id}`) == "true" || false);
 
 const toggleCollapsed = (groupId: string) => {
   isCollapsed.value = !isCollapsed.value;
@@ -91,6 +91,7 @@ const toggleCollapsed = (groupId: string) => {
   >
     <EditGroupWrapper
       :edit="edit"
+      :isCollapsed="isCollapsed"
       @edit="showGroupDialog = true"
       @delete="$emit('delete')"
     >

@@ -2,7 +2,10 @@
 import { inject } from "vue";
 import Button from "./ui/button/Button.vue";
 
-defineProps<{ edit: boolean }>();
+defineProps<{
+  edit: boolean;
+  isCollapsed?: boolean;
+}>();
 
 const editable = inject("editable");
 const deletable = inject("deletable");
@@ -18,6 +21,9 @@ const emit = defineEmits<{
     <div
       v-if="edit"
       class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-t-lg space-x-1 pointer-events-none"
+      :class="{
+        'rounded-b-lg': isCollapsed,
+      }"
     >
       <div class="flex gap-3 justify-center items-center h-full">
         <Button

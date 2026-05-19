@@ -298,6 +298,7 @@ const totalServiceCount = computed(() =>
                   <InputGroupInput
                     v-model="searchText"
                     placeholder="Search name, description or #tag"
+                    @keydown.enter="saveSearch()"
                   />
                   <InputGroupAddon>
                     <SearchIcon v-if="!searchText" />

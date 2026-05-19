@@ -209,7 +209,7 @@ onMounted(async () => {
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen p-4 max-w-6xl mx-auto">
+        <div class="h-screen p-1 sm:p-4 max-w-6xl mx-auto">
           <div
             class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline justify-between"
           >

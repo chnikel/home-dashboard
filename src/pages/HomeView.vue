@@ -355,11 +355,8 @@ const handleSavedSearchClick = (text: string) => {
             </div>
           </div>
 
-          <div
-            v-if="savedTabs.length > 0"
-            class="container mx-auto max-w-6xl p-4 flex gap-1 justify-end"
-          >
-            <ButtonGroup>
+          <div class="container mx-auto max-w-6xl p-4 flex gap-1 justify-end">
+            <ButtonGroup v-if="savedTabs.length > 0">
               <ContextMenu v-for="savedTab in savedTabs">
                 <ContextMenuTrigger>
                   <Button

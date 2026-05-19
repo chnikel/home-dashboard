@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ServiceTag } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
-import ServiceTags from "./ServiceTags.vue";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
 import { computed } from "vue";
 import { store } from "@/store";
@@ -46,9 +45,9 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl"
+    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl border bg-neutral-800/30"
     :class="{
-      'outline-3 outline-red-500': !isReachable,
+      'outline-2 outline-red-500': !isReachable,
     }"
   >
     <div

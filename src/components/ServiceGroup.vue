@@ -5,6 +5,8 @@ import { moveService, updateGroup } from "../api";
 import GroupDialog, { type GroupDialogFormData } from "./GroupDialog.vue";
 import { provide } from "vue";
 import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-vue-next";
+import Button from "./ui/button/Button.vue";
 
 const props = defineProps<{
   compact?: boolean;
@@ -63,6 +65,14 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
     title: props.title,
   };
 });
+
+const isCollapsed = ref(localStorage.getItem(`collapsed_${props.id}`) ?? false);
+
+const toggleCollapsed = (groupId: string) => {
+  isCollapsed.value = !isCollapsed.value;
+
+  localStorage.setItem(`collapsed_${groupId}`, isCollapsed.value.toString());
+};
 </script>
 
 <template>
@@ -86,14 +96,25 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
         @edit="showGroupDialog = true"
         @delete="emit('delete')"
       >
-        <h2 class="text-xl p-4 border-b">
-          <template v-if="id == '-1'"><i>Ungruppiert</i></template>
-          <template v-else>{{ title }}</template>
-        </h2>
+        <div class="p-4 flex justify-between items-center">
+          <h2 class="text-xl">
+            <template v-if="id == '-1'"><i>Ungruppiert</i></template>
+            <template v-else>{{ title }}</template>
+          </h2>
+          <Button
+            variant="outline"
+            size="icon"
+            @click="toggleCollapsed(id)"
+          >
+            <ChevronDownIcon v-if="isCollapsed" />
+            <ChevronUpIcon v-else />
+          </Button>
+        </div>
       </GroupContextMenuWrapper>
     </EditGroupWrapper>
     <div
-      class="grid py-4 justify-center"
+      v-if="!isCollapsed"
+      class="grid py-4 justify-center border-t"
       :class="{
         'grid-cols-[repeat(auto-fill,120px)] gap-1': compact,
         'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,

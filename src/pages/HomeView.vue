@@ -290,7 +290,7 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div class="flex gap-4 flex-col py-4">
+          <div class="flex gap-4 flex-col p-4">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="

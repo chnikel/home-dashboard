@@ -186,7 +186,11 @@ const showTagDialog = ref(false);
 
 const params = useUrlSearchParams("history");
 
-const compactMode = ref(params.compact === "1" || localStorage.getItem("compact_mode") == "true" || false);
+const compactMode = ref(
+  params.compact === "1" ||
+    localStorage.getItem("compact_mode") == "true" ||
+    false,
+);
 
 const searchText = ref("");
 
@@ -215,59 +219,61 @@ const setCompactMode = (value: boolean) => {
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen max-w-6xl mx-auto">
-          <div
-            class="p-4 mx-auto flex gap-2 shadow-lg justify-between border-b pb-4"
-          >
-            <div class="flex items-center">HomeLinker</div>
+        <div class="h-screen">
+          <div class="border-b">
+            <div
+              class="p-4 flex gap-2 shadow-lg justify-between pb-4 container mx-auto"
+            >
+              <div class="flex items-center">HomeLinker</div>
 
-            <InputGroup class="w-80 ml-auto md:ml-0">
-              <InputGroupInput
-                v-model="searchText"
-                placeholder="Search name, description or #tag"
-              />
-              <InputGroupAddon>
-                <SearchIcon />
-              </InputGroupAddon>
-            </InputGroup>
+              <InputGroup class="w-80 ml-auto md:ml-0">
+                <InputGroupInput
+                  v-model="searchText"
+                  placeholder="Search name, description or #tag"
+                />
+                <InputGroupAddon>
+                  <SearchIcon />
+                </InputGroupAddon>
+              </InputGroup>
 
-            <div class="space-x-2">
-              <Button
-                v-if="!isEditMode"
-                variant="outline"
-                @click="isEditMode = true"
-              >
-                <PenIcon />
-                <span class="text-white hidden md:inline">Bearbeiten</span>
-              </Button>
-              <DropdownMenu v-if="isEditMode">
-                <DropdownMenuTrigger>
-                  <Button>
-                    <PlusIcon />
-                    <span class="hidden md:inline">Hinzufügen</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem @click="showServiceDialog = true">
-                    <FilePlusIcon /> Service hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem @click="showGroupDialog = true">
-                    <FolderIcon /> Gruppe hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuItem @click="showTagDialog = true">
-                    <TagIcon /> Tag hinzufügen
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button
-                v-if="isEditMode"
-                class="!bg-orange-500"
-                @click="isEditMode = false"
-              >
-                <CheckIcon color="white" />
-                <span class="text-white hidden md:inline">Fertig</span>
-              </Button>
+              <div class="space-x-2">
+                <Button
+                  v-if="!isEditMode"
+                  variant="outline"
+                  @click="isEditMode = true"
+                >
+                  <PenIcon />
+                  <span class="text-white hidden md:inline">Bearbeiten</span>
+                </Button>
+                <DropdownMenu v-if="isEditMode">
+                  <DropdownMenuTrigger>
+                    <Button>
+                      <PlusIcon />
+                      <span class="hidden md:inline">Hinzufügen</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem @click="showServiceDialog = true">
+                      <FilePlusIcon /> Service hinzufügen
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem @click="showGroupDialog = true">
+                      <FolderIcon /> Gruppe hinzufügen
+                    </DropdownMenuItem>
+                    <DropdownMenuItem @click="showTagDialog = true">
+                      <TagIcon /> Tag hinzufügen
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <Button
+                  v-if="isEditMode"
+                  class="!bg-orange-500"
+                  @click="isEditMode = false"
+                >
+                  <CheckIcon color="white" />
+                  <span class="text-white hidden md:inline">Fertig</span>
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -296,7 +302,7 @@ const setCompactMode = (value: boolean) => {
             submitButton="Hinzufügen"
           />
 
-          <div class="flex gap-4 flex-col p-4">
+          <div class="flex gap-4 flex-col p-4 container mx-auto">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="

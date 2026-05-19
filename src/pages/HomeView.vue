@@ -243,7 +243,7 @@ const filteredServiceGroups = computed(() =>
         <div class="h-screen">
           <div class="border-b">
             <div
-              class="p-4 flex gap-2 shadow-lg justify-between pb-4 container mx-auto"
+              class="p-4 flex gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
             >
               <div class="flex items-center">HomeLinker</div>
 
@@ -323,7 +323,7 @@ const filteredServiceGroups = computed(() =>
             submitButton="Hinzufügen"
           />
 
-          <div class="flex gap-4 flex-col p-4 container mx-auto">
+          <div class="flex gap-4 flex-col p-4 container mx-auto max-w-6xl">
             <template v-for="item in filteredServiceGroups">
               <ServiceGroup
                 v-if="

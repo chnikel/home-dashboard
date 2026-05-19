@@ -216,21 +216,31 @@ const setCompactMode = (value: boolean) => {
 
 const filteredServiceGroups = computed(() =>
   store.groups.map((group) => {
+    const filteredServices = group.services.filter((service) => {
+      if (searchText.value.includes("#")) {
+        return service.tags.some((tag) =>
+          tag.name
+            .toLowerCase()
+            .includes(searchText.value.replace("#", "").toLowerCase()),
+        );
+      }
+
+      return (service.title + " " + service.description)
+        .toLowerCase()
+        .includes(searchText.value.toLowerCase());
+    });
+
+    const filteredEnabledServices = filteredServices.filter((service) => {
+      if (isEditMode.value) {
+        return true;
+      }
+
+      return service.enabled;
+    });
+
     return {
       group,
-      services: group.services.filter((service) => {
-        if (searchText.value.includes("#")) {
-          return service.tags.some((tag) =>
-            tag.name
-              .toLowerCase()
-              .includes(searchText.value.replace("#", "").toLowerCase()),
-          );
-        }
-
-        return (service.title + " " + service.description)
-          .toLowerCase()
-          .includes(searchText.value.toLowerCase());
-      }),
+      services: filteredEnabledServices,
     };
   }),
 );
@@ -326,11 +336,7 @@ const filteredServiceGroups = computed(() =>
           <div class="flex gap-4 flex-col p-4 container mx-auto max-w-6xl">
             <template v-for="item in filteredServiceGroups">
               <ServiceGroup
-                v-if="
-                  (item.services.length > 0 &&
-                    item.group.services.filter((s) => s.enabled).length > 0) ||
-                  isEditMode
-                "
+                v-if="item.services.length > 0 || isEditMode"
                 :serviceCount="item.services.length"
                 :compact="compactMode"
                 :id="item.group.id"

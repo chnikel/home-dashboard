@@ -8,6 +8,7 @@ import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-vue-next";
 import Button from "./ui/button/Button.vue";
 import Badge from "./ui/badge/Badge.vue";
+import { useLocalStorage } from "@vueuse/core";
 
 const props = defineProps<{
   compact?: boolean;
@@ -68,13 +69,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
   };
 });
 
-const isCollapsed = ref(localStorage.getItem(`collapsed_${props.id}`) == "true" || false);
-
-const toggleCollapsed = (groupId: string) => {
-  isCollapsed.value = !isCollapsed.value;
-
-  localStorage.setItem(`collapsed_${groupId}`, isCollapsed.value.toString());
-};
+const isCollapsed = useLocalStorage(`group_${props.id}_collapsed`, false);
 </script>
 
 <template>
@@ -101,7 +96,7 @@ const toggleCollapsed = (groupId: string) => {
       >
         <div
           class="p-4 flex justify-between items-center"
-          @click="toggleCollapsed(id)"
+          @click="isCollapsed = !isCollapsed"
         >
           <div>
             <h2 class="text-xl inline mr-2">

@@ -191,10 +191,9 @@ const showTagDialog = ref(false);
 
 const params = useUrlSearchParams("history");
 
-const compactMode = ref(
-  params.compact === "1" ||
-    localStorage.getItem("compact_mode") == "true" ||
-    false,
+const compactMode = useLocalStorage(
+  "compact_mode",
+  params.compact === "1" || false,
 );
 
 const searchText = ref("");
@@ -212,12 +211,6 @@ onMounted(async () => {
     clearInterval(pingInterval);
   };
 });
-
-const setCompactMode = (value: boolean) => {
-  compactMode.value = value;
-
-  localStorage.setItem(`compact_mode`, compactMode.value.toString());
-};
 
 const filteredServiceGroups = computed(() =>
   store.groups.map((group) => {
@@ -504,13 +497,13 @@ const disableSaveSearch = computed(
       <ContextMenuSeparator />
 
       <ContextMenuItem
-        @click="setCompactMode(false)"
+        @click="compactMode = false"
         :disabled="!compactMode"
       >
         <LayoutListIcon /> Normal View
       </ContextMenuItem>
       <ContextMenuItem
-        @click="setCompactMode(true)"
+        @click="compactMode = true"
         :disabled="compactMode"
       >
         <LayoutGridIcon /> Compact View

@@ -25,7 +25,7 @@ import {
   SearchIcon,
   TagIcon,
 } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
   addGroup,
   addService,
@@ -213,6 +213,27 @@ const setCompactMode = (value: boolean) => {
 
   localStorage.setItem(`compact_mode`, compactMode.value.toString());
 };
+
+const filteredServiceGroups = computed(() =>
+  store.groups.map((group) => {
+    return {
+      group,
+      services: group.services.filter((service) => {
+        if (searchText.value.includes("#")) {
+          return service.tags.some((tag) =>
+            tag.name
+              .toLowerCase()
+              .includes(searchText.value.replace("#", "").toLowerCase()),
+          );
+        }
+
+        return (service.title + " " + service.description)
+          .toLowerCase()
+          .includes(searchText.value.toLowerCase());
+      }),
+    };
+  }),
+);
 </script>
 
 <template>
@@ -303,36 +324,23 @@ const setCompactMode = (value: boolean) => {
           />
 
           <div class="flex gap-4 flex-col p-4 container mx-auto">
-            <template v-for="group in store.groups">
+            <template v-for="item in filteredServiceGroups">
               <ServiceGroup
                 v-if="
-                  (group.services.length > 0 &&
-                    group.services.filter((s) => s.enabled).length > 0) ||
+                  (item.services.length > 0 &&
+                    item.group.services.filter((s) => s.enabled).length > 0) ||
                   isEditMode
                 "
+                :serviceCount="item.services.length"
                 :compact="compactMode"
-                :id="group.id"
-                :title="group.id == null ? '' : group.title"
+                :id="item.group.id"
+                :title="item.group.id == null ? '' : item.group.title"
                 :edit="isEditMode"
                 @edit="onEditSuccess()"
-                @delete="handleDeleteGroup(group.id)"
+                @delete="handleDeleteGroup(item.group.id)"
                 @move="afterMove()"
               >
-                <template
-                  v-for="service in group.services.filter((service) => {
-                    if (searchText.includes('#')) {
-                      return service.tags.some((tag) =>
-                        tag.name
-                          .toLowerCase()
-                          .includes(searchText.replace('#', '').toLowerCase()),
-                      );
-                    }
-
-                    return (service.title + ' ' + service.description)
-                      .toLowerCase()
-                      .includes(searchText.toLowerCase());
-                  })"
-                >
+                <template v-for="service in item.services">
                   <EditServiceWrapper
                     v-if="service.enabled || isEditMode"
                     :draggable="isEditMode"

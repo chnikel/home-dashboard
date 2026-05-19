@@ -7,12 +7,14 @@ import { provide } from "vue";
 import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-vue-next";
 import Button from "./ui/button/Button.vue";
+import Badge from "./ui/badge/Badge.vue";
 
 const props = defineProps<{
   compact?: boolean;
   id: string;
   edit: boolean;
   title: string;
+  serviceCount?: number;
 }>();
 
 provide("editable", !!props.id);
@@ -96,27 +98,39 @@ const toggleCollapsed = (groupId: string) => {
         @edit="showGroupDialog = true"
         @delete="emit('delete')"
       >
-        <div class="p-4 flex justify-between items-center">
-          <h2 class="text-xl">
-            <template v-if="id == '-1'"><i>Ungruppiert</i></template>
-            <template v-else>{{ title }}</template>
-          </h2>
-          <Button
-            variant="outline"
-            size="icon"
-            @click="toggleCollapsed(id)"
-          >
-            <ChevronDownIcon v-if="isCollapsed" />
-            <ChevronUpIcon v-else />
-          </Button>
+        <div
+          class="p-4 flex justify-between items-center"
+          @click="toggleCollapsed(id)"
+        >
+          <div>
+            <h2 class="text-xl inline mr-2">
+              <template v-if="id == '-1'"><i>Ungruppiert</i></template>
+              <template v-else>{{ title }}</template>
+            </h2>
+            <Badge
+              class="inline"
+              variant="outline"
+              >{{ serviceCount }}</Badge
+            >
+          </div>
+
+          <div>
+            <Button
+              variant="outline"
+              size="icon"
+            >
+              <ChevronDownIcon v-if="isCollapsed" />
+              <ChevronUpIcon v-else />
+            </Button>
+          </div>
         </div>
       </GroupContextMenuWrapper>
     </EditGroupWrapper>
     <div
       v-if="!isCollapsed"
-      class="grid py-4 justify-center border-t bg-neutral-800/30 rounded-b-lg"
+      class="grid p-4 justify-center sm:justify-start border-t bg-neutral-800/30 rounded-b-lg"
       :class="{
-        'grid-cols-[repeat(auto-fill,120px)] gap-1': compact,
+        'grid-cols-[repeat(auto-fit,120px)] gap-1': compact,
         'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,
       }"
     >

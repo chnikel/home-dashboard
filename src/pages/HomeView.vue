@@ -365,13 +365,13 @@ const totalServiceCount = computed(() =>
           <div
             class="container mx-auto max-w-6xl p-4 flex gap-1 justify-between items-center"
           >
-            <div>
+            <div class="shrink-0">
               <Badge variant="outline">
                 {{ totalServiceCount }}
               </Badge>
               Services
             </div>
-            <ButtonGroup v-if="savedTabs.length > 0">
+            <ButtonGroup class="overflow-scroll [scrollbar-width:none]" v-if="savedTabs.length > 0">
               <ContextMenu v-for="savedTab in savedTabs">
                 <ContextMenuTrigger>
                   <Button

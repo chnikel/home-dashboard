@@ -397,6 +397,13 @@ const filteredServiceGroups = computed(() =>
                 </template>
               </ServiceGroup>
             </template>
+            <template v-if="filteredServiceGroups.length === 0">
+              <div
+                class="border p-8 rounded-xl text-center border-dashed text-white/30"
+              >
+                Keine Services
+              </div>
+            </template>
           </div>
         </div>
       </div>

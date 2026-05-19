@@ -266,7 +266,7 @@ const removeSavedSearchByText = (text: string) => {
 
 const disableSaveSearch = computed(
   () =>
-    !searchText ||
+    !searchText.value ||
     savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1,
 );
 

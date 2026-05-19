@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useUrlSearchParams } from "@vueuse/core";
+import { useLocalStorage, useUrlSearchParams } from "@vueuse/core";
 import {
   CheckIcon,
   CircleXIcon,
@@ -23,8 +23,10 @@ import {
   LayoutListIcon,
   PenIcon,
   PlusIcon,
+  SaveIcon,
   SearchIcon,
   TagIcon,
+  XIcon,
 } from "lucide-vue-next";
 import { computed, onMounted, ref } from "vue";
 import {
@@ -52,6 +54,7 @@ import InputGroupAddon from "../components/ui/input-group/InputGroupAddon.vue";
 import InputGroupInput from "../components/ui/input-group/InputGroupInput.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
 import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
+import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -246,6 +249,33 @@ const filteredServiceGroups = computed(() =>
     };
   }),
 );
+
+const savedTabs = useLocalStorage<{ text: string }[]>("saved_searches", []);
+
+const saveSearch = () => {
+  const found =
+    savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1;
+
+  if (found) {
+    return;
+  }
+
+  savedTabs.value.push({
+    text: searchText.value,
+  });
+};
+
+const removeSavedSearchByText = (text: string) => {
+  savedTabs.value = savedTabs.value.filter((value) => {
+    return value.text !== text;
+  });
+};
+
+const disableSaveSearch = computed(
+  () =>
+    !searchText ||
+    savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1,
+);
 </script>
 
 <template>
@@ -259,22 +289,33 @@ const filteredServiceGroups = computed(() =>
             >
               <div class="flex items-center">HomeLinker</div>
 
-              <InputGroup class="w-80 ml-auto md:ml-0">
-                <InputGroupInput
-                  v-model="searchText"
-                  placeholder="Search name, description or #tag"
-                />
-                <InputGroupAddon>
-                  <SearchIcon v-if="!searchText" />
-                  <InputGroupButton
-                    v-else
-                    size="icon-xs"
-                    @click="searchText = ''"
-                  >
-                    <CircleXIcon />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
+              <div class="flex gap-1">
+                <InputGroup class="w-80 ml-auto md:ml-0">
+                  <InputGroupInput
+                    v-model="searchText"
+                    placeholder="Search name, description or #tag"
+                  />
+                  <InputGroupAddon>
+                    <SearchIcon v-if="!searchText" />
+                    <InputGroupButton
+                      v-else
+                      size="icon-xs"
+                      @click="searchText = ''"
+                    >
+                      <CircleXIcon />
+                    </InputGroupButton>
+                  </InputGroupAddon>
+                </InputGroup>
+
+                <Button
+                  size="icon"
+                  variant="outline"
+                  :disabled="disableSaveSearch"
+                  @click="saveSearch()"
+                >
+                  <SaveIcon />
+                </Button>
+              </div>
 
               <div class="space-x-2">
                 <Button
@@ -315,6 +356,36 @@ const filteredServiceGroups = computed(() =>
                 </Button>
               </div>
             </div>
+          </div>
+
+          <div
+            v-if="savedTabs.length > 0"
+            class="container mx-auto max-w-6xl p-4 flex gap-1 justify-end"
+          >
+            <ButtonGroup>
+              <ContextMenu v-for="savedTab in savedTabs">
+                <ContextMenuTrigger>
+                  <Button
+                    class="cursor-pointer"
+                    variant="outline"
+                    @click="searchText = savedTab.text"
+                    :class="{
+                      '!bg-accent': searchText === savedTab.text,
+                    }"
+                  >
+                    {{ savedTab.text }}
+                  </Button>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                  <ContextMenuItem
+                    variant="destructive"
+                    @click="removeSavedSearchByText(savedTab.text)"
+                  >
+                    <XIcon /> Löschen
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
+            </ButtonGroup>
           </div>
 
           <ServiceDialog

@@ -441,7 +441,7 @@ const totalServiceCount = computed(() =>
             submitButton="Hinzufügen"
           />
 
-          <div class="flex gap-4 flex-col p-4 container mx-auto max-w-6xl">
+          <div class="flex gap-4 flex-col p-4 pt-0 container mx-auto max-w-6xl">
             <template v-for="item in filteredServiceGroups">
               <ServiceGroup
                 v-if="item.services.length > 0 || isEditMode"

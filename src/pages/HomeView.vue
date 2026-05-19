@@ -213,6 +213,23 @@ onMounted(async () => {
   };
 });
 
+const replaceSearchText = (text: string) => {
+  let updatedText = text;
+
+  const searchTextMapping = {
+    "-": "",
+    ö: "o",
+    ü: "u",
+    ä: "a",
+  };
+
+  Object.entries(searchTextMapping).forEach(([key, value]) => {
+    updatedText = updatedText.replace(key, value);
+  });
+
+  return updatedText;
+};
+
 const filteredServiceGroups = computed(() =>
   store.groups.map((group) => {
     const filteredServices = group.services.filter((service) => {
@@ -224,7 +241,13 @@ const filteredServiceGroups = computed(() =>
         );
       }
 
-      return (service.title + " " + service.description)
+      return [
+        service.title,
+        service.description,
+        replaceSearchText(service.title),
+        replaceSearchText(service.description),
+      ]
+        .join("")
         .toLowerCase()
         .includes(searchText.value.toLowerCase());
     });
@@ -372,7 +395,10 @@ const totalServiceCount = computed(() =>
               </Badge>
               Services
             </div>
-            <ButtonGroup class="overflow-scroll [scrollbar-width:none]" v-if="savedTabs.length > 0">
+            <ButtonGroup
+              class="overflow-scroll [scrollbar-width:none]"
+              v-if="savedTabs.length > 0"
+            >
               <ContextMenu v-for="savedTab in savedTabs">
                 <ContextMenuTrigger>
                   <Button

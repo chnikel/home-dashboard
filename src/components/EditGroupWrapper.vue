@@ -17,11 +17,12 @@ const emit = defineEmits<{
   <div class="relative group">
     <div
       v-if="edit"
-      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-t-lg space-x-1"
+      class="absolute inset-0 hidden group-hover:block bg-neutral-500/30 rounded-t-lg space-x-1 pointer-events-none"
     >
       <div class="flex gap-3 justify-center items-center h-full">
         <Button
           v-if="editable"
+          class="pointer-events-auto"
           data-variant="outline"
           @click="emit('edit')"
         >
@@ -29,6 +30,7 @@ const emit = defineEmits<{
         </Button>
         <Button
           v-if="deletable"
+          class="pointer-events-auto"
           variant="destructive"
           @click="emit('delete')"
         >

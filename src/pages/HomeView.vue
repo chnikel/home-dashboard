@@ -209,11 +209,13 @@ onMounted(async () => {
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="overflow-auto">
-        <div class="h-screen p-1 sm:p-4 max-w-6xl mx-auto">
+        <div class="h-screen max-w-6xl mx-auto">
           <div
-            class="mx-auto flex gap-2 rounded-lg bg-neutral-900 p-4 shadow-lg outline justify-between"
+            class="p-4 mx-auto flex gap-2 shadow-lg justify-between border-b pb-4"
           >
-            <InputGroup class="w-80">
+            <div class="flex items-center">HomeLinker</div>
+
+            <InputGroup class="w-80 ml-auto md:ml-0">
               <InputGroupInput
                 v-model="searchText"
                 placeholder="Search name, description or #tag"
@@ -228,16 +230,16 @@ onMounted(async () => {
                 v-if="!isEditMode"
                 variant="outline"
                 @click="isEditMode = true"
-                              >
+              >
                 <PenIcon />
-<span class="text-white hidden md:inline">Bearbeiten</span>
+                <span class="text-white hidden md:inline">Bearbeiten</span>
               </Button>
               <DropdownMenu v-if="isEditMode">
                 <DropdownMenuTrigger>
                   <Button>
-<PlusIcon />
+                    <PlusIcon />
                     <span class="hidden md:inline">Hinzufügen</span>
-</Button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem @click="showServiceDialog = true">
@@ -256,9 +258,9 @@ onMounted(async () => {
                 v-if="isEditMode"
                 class="!bg-orange-500"
                 @click="isEditMode = false"
-                              >
+              >
                 <CheckIcon color="white" />
-<span class="text-white hidden md:inline">Fertig</span>
+                <span class="text-white hidden md:inline">Fertig</span>
               </Button>
             </div>
           </div>
@@ -288,7 +290,7 @@ onMounted(async () => {
             submitButton="Hinzufügen"
           />
 
-          <div class="flex gap-4 flex-col mt-6">
+          <div class="flex gap-4 flex-col py-4">
             <template v-for="group in store.groups">
               <ServiceGroup
                 v-if="

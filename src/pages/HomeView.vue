@@ -228,13 +228,16 @@ onMounted(async () => {
                 v-if="!isEditMode"
                 variant="outline"
                 @click="isEditMode = true"
-                size="icon"
-              >
+                              >
                 <PenIcon />
+<span class="text-white hidden md:inline">Bearbeiten</span>
               </Button>
               <DropdownMenu v-if="isEditMode">
                 <DropdownMenuTrigger>
-                  <Button> <PlusIcon /> Hinzufügen </Button>
+                  <Button>
+<PlusIcon />
+                    <span class="hidden md:inline">Hinzufügen</span>
+</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem @click="showServiceDialog = true">
@@ -253,9 +256,9 @@ onMounted(async () => {
                 v-if="isEditMode"
                 class="!bg-orange-500"
                 @click="isEditMode = false"
-                size="icon"
-              >
+                              >
                 <CheckIcon color="white" />
+<span class="text-white hidden md:inline">Fertig</span>
               </Button>
             </div>
           </div>

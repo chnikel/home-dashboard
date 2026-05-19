@@ -186,7 +186,7 @@ const showTagDialog = ref(false);
 
 const params = useUrlSearchParams("history");
 
-const compactMode = ref(params.compact === "1");
+const compactMode = ref(params.compact === "1" || localStorage.getItem("compact_mode") == "true" || false);
 
 const searchText = ref("");
 
@@ -203,6 +203,12 @@ onMounted(async () => {
     clearInterval(pingInterval);
   };
 });
+
+const setCompactMode = (value: boolean) => {
+  compactMode.value = value;
+
+  localStorage.setItem(`compact_mode`, compactMode.value.toString());
+};
 </script>
 
 <template>
@@ -391,13 +397,13 @@ onMounted(async () => {
       <ContextMenuSeparator />
 
       <ContextMenuItem
-        @click="compactMode = false"
+        @click="setCompactMode(false)"
         :disabled="!compactMode"
       >
         <LayoutListIcon /> Normal View
       </ContextMenuItem>
       <ContextMenuItem
-        @click="compactMode = true"
+        @click="setCompactMode(true)"
         :disabled="compactMode"
       >
         <LayoutGridIcon /> Compact View

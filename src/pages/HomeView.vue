@@ -55,6 +55,7 @@ import InputGroupInput from "../components/ui/input-group/InputGroupInput.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
 import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
 import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
+import Badge from "@/components/ui/badge/Badge.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -273,6 +274,12 @@ const disableSaveSearch = computed(
 const handleSavedSearchClick = (text: string) => {
   searchText.value = searchText.value === text ? "" : text;
 };
+
+const totalServiceCount = computed(() =>
+  filteredServiceGroups.value
+    .flatMap((item) => item.services.length)
+    .reduce((acc, value) => acc + value),
+);
 </script>
 
 <template>
@@ -355,7 +362,15 @@ const handleSavedSearchClick = (text: string) => {
             </div>
           </div>
 
-          <div class="container mx-auto max-w-6xl p-4 flex gap-1 justify-end">
+          <div
+            class="container mx-auto max-w-6xl p-4 flex gap-1 justify-between items-center"
+          >
+            <div>
+              <Badge variant="outline">
+                {{ totalServiceCount }}
+              </Badge>
+              Services
+            </div>
             <ButtonGroup v-if="savedTabs.length > 0">
               <ContextMenu v-for="savedTab in savedTabs">
                 <ContextMenuTrigger>

@@ -27,7 +27,7 @@ const isReachable = computed(() => {
   }
 
   const pingData = store.servicePings.find(
-    (ping) => ping.serviceId == props.id
+    (ping) => ping.serviceId == props.id,
   );
 
   if (!pingData) {
@@ -46,65 +46,51 @@ const showPhysicalIndicator = computed(() => {
   <a
     :href="link || '#'"
     :target="link && '_blank'"
-    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 rounded-xl "
+    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl"
+    :class="{
+      'outline-3 outline-red-500': !isReachable,
+    }"
   >
     <div
-      class=" flex items-center justify-center flex-col"
+      v-if="!isEnabled"
+      class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
     >
-      <div
-        v-if="!isEnabled"
-        class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-2xl z-[9]"
-      >
-        <EyeOffIcon />
-      </div>
+      <EyeOffIcon />
+    </div>
 
-      <div class="relative">
-        <div
-          v-if="!isReachable"
-          class="absolute inset-0 flex justify-center items-center bg-neutral-900/50 z-[8] rounded-2xl"
-        ></div>
+    <div
+      v-if="!isReachable"
+      class="absolute inset-0 flex justify-center items-center bg-neutral-900/50 z-[9] rounded-2xl"
+    ></div>
 
-        <ServiceIcon
-          :class="{
-            'outline-3 outline-red-500': !isReachable,
-          }"
-          style="grid-area: icon"
-          :wrap="icon_wrap"
-          :url="icon_url"
-          :boxed="true"
-          :bg-color="bgColor"
-        />
+    <div class="relative">
+      <ServiceIcon
+        class="mx-auto"
+        :wrap="icon_wrap"
+        :url="icon_url"
+        :boxed="true"
+        :bg-color="bgColor"
+      />
 
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="top-left-out"
-          :show="!isReachable"
-          :component="preConfiguredIcons['disconnected'].component"
-          :colorClass="preConfiguredIcons['disconnected'].colorClass"
-        />
+      <ServiceInfoIcon
+        class="z-10"
+        position="top-left-out"
+        :show="!isReachable"
+        :component="preConfiguredIcons['disconnected'].component"
+        :colorClass="preConfiguredIcons['disconnected'].colorClass"
+      />
 
-        <ServiceInfoIcon
-          class="z-[8]"
-          position="bottom-right-out"
-          :show="showPhysicalIndicator"
-          :component="preConfiguredIcons['device'].component"
-          :colorClass="preConfiguredIcons['device'].colorClass"
-        />
-      </div>
-
-      <p
-        style="grid-area: title"
-        class="flex gap-2 items-center mt-2 overflow-hidden text-center text-xs"
-      >
-        {{ title }}
-      </p>
-
-      <ServiceTags
-        v-if="showTags"
-        class="mt-2"
-        :tags="tags"
-        :max="2"
+      <ServiceInfoIcon
+        class="z-[8]"
+        position="bottom-right-out"
+        :show="showPhysicalIndicator"
+        :component="preConfiguredIcons['device'].component"
+        :colorClass="preConfiguredIcons['device'].colorClass"
       />
     </div>
+
+    <p class="mt-2 overflow-hidden text-center text-xs min-h-8">
+      {{ title }}
+    </p>
   </a>
 </template>

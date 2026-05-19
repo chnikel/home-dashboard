@@ -95,7 +95,7 @@ const isCollapsed = useLocalStorage(`group_${props.id}_collapsed`, false);
         @delete="emit('delete')"
       >
         <div
-          class="p-4 flex justify-between items-center"
+          class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-900 rounded-t-lg"
           @click="isCollapsed = !isCollapsed"
         >
           <div>

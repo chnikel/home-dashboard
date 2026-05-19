@@ -96,7 +96,7 @@ const data = computed<Partial<GroupDialogFormData>>(() => {
       class="grid pb-4 justify-center"
       :class="{
         'grid-cols-[repeat(auto-fill,120px)]': compact,
-        'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4': !compact,
+        'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,
       }"
     >
       <slot />

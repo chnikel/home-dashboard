@@ -314,10 +314,10 @@ const totalServiceCount = computed(() =>
             <div
               class="p-4 flex gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
             >
-              <div class="flex items-center">HomeLinker</div>
+              <div class="items-center hidden sm:flex">HomeLinker</div>
 
               <div class="flex gap-1">
-                <InputGroup class="w-80 ml-auto md:ml-0">
+                <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
                   <InputGroupInput
                     v-model="searchText"
                     placeholder="Search name, description or #tag"

@@ -96,6 +96,9 @@ const isCollapsed = useLocalStorage(`group_${props.id}_collapsed`, false);
       >
         <div
           class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-900 rounded-t-lg"
+          :class="{
+            'rounded-b-lg': isCollapsed
+          }"
           @click="isCollapsed = !isCollapsed"
         >
           <div>

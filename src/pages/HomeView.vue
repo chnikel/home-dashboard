@@ -15,12 +15,7 @@ import {
   TagIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
-import {
-  addGroup,
-  deleteGroup,
-  getGroups,
-  type GetServicesResponse,
-} from "../api";
+import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
 import GroupDialog from "../components/GroupDialog.vue";
 import Service from "../components/Service.vue";
@@ -37,9 +32,10 @@ import AppsToolbar from "@/components/AppsToolbar.vue";
 import { useFilteredServices } from "@/composables/filtered-services";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
+import GroupRepository from "@/repositories/GroupRepository";
 
 async function refreshServices() {
-  const groupsResponse = await getGroups();
+  const groupsResponse = await GroupRepository.get();
 
   const groupedServicesResponse =
     await ServiceRepository.getGroupedBy("groupId");
@@ -100,7 +96,7 @@ const onEditSuccess = async () => {
 const handleDeleteGroup = async (groupId: string) => {
   if (confirm("Gruppe löschen?")) {
     try {
-      await deleteGroup(groupId);
+      await GroupRepository.delete(groupId);
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +154,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
 
 const onAddGroupSuccess = async (data: { title: string }) => {
   try {
-    await addGroup({
+    await GroupRepository.create({
       title: data.title,
     });
   } catch (error) {

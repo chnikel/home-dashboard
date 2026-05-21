@@ -51,14 +51,6 @@ export type GetGroupsResponse = {
   title: string;
 };
 
-export const getGroups = async () => {
-  const response = await fetch(`${host}/api/groups?services=true`);
-
-  const services = await response.json();
-
-  return services as GetGroupsResponse[];
-};
-
 export type GetServiceGroupsResponse = GetGroupsResponse & {
   services: GetServicesResponse[];
 };
@@ -69,47 +61,9 @@ export type AddGroupRequest = {
 
 export type AddGroupResponse = {};
 
-export const addGroup = async (data: AddGroupRequest) => {
-  const response = await fetch(`${host}/api/groups`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const services = await response.json();
-
-  return services as AddGroupResponse;
-};
-
 export type UpdateGroupResponse = {};
 
-export const updateGroup = async (id: string, data: AddGroupRequest) => {
-  const response = await fetch(`${host}/api/groups/${id}`, {
-    method: "put",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const services = await response.json();
-
-  return services as UpdateGroupResponse;
-};
-
 export type DeleteGroupResponse = {};
-
-export const deleteGroup = async (id: string) => {
-  const response = await fetch(`${host}/api/groups/${id}`, {
-    method: "delete",
-  });
-
-  const groups = await response.json();
-
-  return groups as DeleteGroupResponse;
-};
 
 export type AddTagRequest = {
   name: string;

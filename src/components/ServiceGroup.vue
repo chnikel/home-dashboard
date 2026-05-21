@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
-import { updateGroup } from "../api";
 import GroupDialog, { type GroupDialogFormData } from "./GroupDialog.vue";
 import { provide } from "vue";
 import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
@@ -10,6 +9,7 @@ import Button from "./ui/button/Button.vue";
 import Badge from "./ui/badge/Badge.vue";
 import { useLocalStorage } from "@vueuse/core";
 import ServiceRepository from "@/repositories/ServiceRepository";
+import GroupRepository from "@/repositories/GroupRepository";
 
 const props = defineProps<{
   compact?: boolean;
@@ -54,7 +54,7 @@ const showGroupDialog = ref(false);
 
 const onEditGroupSuccess = async (data: { title: string }) => {
   try {
-    await updateGroup(props.id, {
+    await GroupRepository.update(props.id, {
       title: data.title,
     });
   } catch (error) {
@@ -98,7 +98,7 @@ const isCollapsed = useLocalStorage(`group_${props.id}_collapsed`, false);
         <div
           class="p-4 flex justify-between items-center cursor-pointer hover:bg-neutral-900 rounded-t-lg"
           :class="{
-            'rounded-b-lg': isCollapsed
+            'rounded-b-lg': isCollapsed,
           }"
           @click="isCollapsed = !isCollapsed"
         >

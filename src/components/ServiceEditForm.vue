@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { getGroups, type GetTagsResponse, type ServiceTag } from "../api";
+import { type GetTagsResponse, type ServiceTag } from "../api";
 import Tag from "./Tag.vue";
 import TagRepository from "@/repositories/TagRepository";
+import GroupRepository from "@/repositories/GroupRepository";
 
 export type SubmitData = {
   title: string;
@@ -66,7 +67,7 @@ const onCancel = () => {
 const groupOptions = ref<{ label: string; value: number }[]>([]);
 
 onMounted(async () => {
-  const groups = await getGroups();
+  const groups = await GroupRepository.get();
 
   groupOptions.value = groups.map((group) => ({
     label: group.title,

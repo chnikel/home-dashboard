@@ -312,11 +312,11 @@ const totalServiceCount = computed(() =>
         <div class="h-screen">
           <div class="border-b">
             <div
-              class="p-4 flex gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
+              class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
             >
               <div class="items-center hidden sm:flex">HomeLinker</div>
 
-              <div class="flex gap-1">
+              <div class="flex gap-1 sm:justify-self-center">
                 <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
                   <InputGroupInput
                     v-model="searchText"
@@ -345,7 +345,7 @@ const totalServiceCount = computed(() =>
                 </Button>
               </div>
 
-              <div class="space-x-2">
+              <div class="space-x-2 justify-self-end">
                 <Button
                   v-if="!isEditMode"
                   variant="outline"
@@ -387,7 +387,7 @@ const totalServiceCount = computed(() =>
           </div>
 
           <div
-            class="container mx-auto max-w-6xl p-4 flex gap-1 justify-between items-center"
+            class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"
           >
             <div class="shrink-0">
               <Badge variant="outline">
@@ -396,7 +396,7 @@ const totalServiceCount = computed(() =>
               Services
             </div>
             <ButtonGroup
-              class="overflow-scroll [scrollbar-width:none]"
+              class="overflow-scroll [scrollbar-width:none] justify-self-center"
               v-if="savedTabs.length > 0"
             >
               <ContextMenu v-for="savedTab in savedTabs">
@@ -422,7 +422,7 @@ const totalServiceCount = computed(() =>
                 </ContextMenuContent>
               </ContextMenu>
             </ButtonGroup>
-            <ButtonGroup>
+            <ButtonGroup class="justify-self-end">
               <Button
                 class="cursor-pointer"
                 :variant="compactMode ? 'outline' : 'default'"

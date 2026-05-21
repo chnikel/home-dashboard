@@ -14,7 +14,7 @@ import {
   LayoutListIcon,
   TagIcon,
 } from "lucide-vue-next";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import {
   addGroup,
   addService,
@@ -38,6 +38,7 @@ import { findTag, store, updateLocalServicePings } from "../store";
 import Header from "@/components/Header.vue";
 import { useSavedSearch } from "@/composables/saved-search";
 import AppsToolbar from "@/components/AppsToolbar.vue";
+import { useFilteredServices } from "@/composables/filtered-services";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -193,23 +194,6 @@ onMounted(async () => {
   };
 });
 
-const replaceSearchText = (text: string) => {
-  let updatedText = text;
-
-  const searchTextMapping = {
-    "-": "",
-    ö: "o",
-    ü: "u",
-    ä: "a",
-  };
-
-  Object.entries(searchTextMapping).forEach(([key, value]) => {
-    updatedText = updatedText.replace(key, value);
-  });
-
-  return updatedText;
-};
-
 const {
   searchText,
   removeItem: removeSavedSearchByText,
@@ -219,48 +203,8 @@ const {
   canSave: canSaveSearch,
 } = useSavedSearch();
 
-const filteredServiceGroups = computed(() =>
-  store.groups.map((group) => {
-    const filteredServices = group.services.filter((service) => {
-      if (searchText.value.includes("#")) {
-        return service.tags.some((tag) =>
-          tag.name
-            .toLowerCase()
-            .includes(searchText.value.replace("#", "").toLowerCase()),
-        );
-      }
-
-      return [
-        service.title,
-        service.description,
-        replaceSearchText(service.title),
-        replaceSearchText(service.description),
-      ]
-        .join("")
-        .toLowerCase()
-        .includes(searchText.value.toLowerCase());
-    });
-
-    const filteredEnabledServices = filteredServices.filter((service) => {
-      if (isEditMode.value) {
-        return true;
-      }
-
-      return service.enabled;
-    });
-
-    return {
-      group,
-      services: filteredEnabledServices,
-    };
-  }),
-);
-
-const totalServiceCount = computed(() =>
-  filteredServiceGroups.value
-    .flatMap((item) => item.services.length)
-    .reduce((acc, value) => acc + value, 0),
-);
+const { services: filteredServiceGroups, totalCount: totalServiceCount } =
+  useFilteredServices(searchText, isEditMode);
 </script>
 
 <template>

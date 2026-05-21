@@ -8,10 +8,16 @@ import {
 } from "@/components/ui/context-menu";
 import { useLocalStorage, useUrlSearchParams } from "@vueuse/core";
 import {
+  CheckIcon,
+  CircleXIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
+  PenIcon,
+  PlusIcon,
+  SaveIcon,
+  SearchIcon,
   TagIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
@@ -34,6 +40,16 @@ import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
 import GroupRepository from "@/repositories/GroupRepository";
 import PageContent from "@/components/PageContent.vue";
+import InputGroup from "@/components/ui/input-group/InputGroup.vue";
+import InputGroupInput from "@/components/ui/input-group/InputGroupInput.vue";
+import InputGroupAddon from "@/components/ui/input-group/InputGroupAddon.vue";
+import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
+import Button from "@/components/ui/button/Button.vue";
+import DropdownMenu from "@/components/ui/dropdown-menu/DropdownMenu.vue";
+import DropdownMenuTrigger from "@/components/ui/dropdown-menu/DropdownMenuTrigger.vue";
+import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuContent.vue";
+import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue";
+import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -207,15 +223,74 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="h-screen overflow-auto">
-        <Header
-          v-model:editMode="isEditMode"
-          v-model:searchText="searchText"
-          :disableSaveSearch="!canSaveSearch"
-          @addGroup="showGroupDialog = true"
-          @addService="showServiceDialog = true"
-          @addTags="showTagDialog = true"
-          @saveSearch="saveSearch()"
-        />
+        <Header>
+          <template #center>
+            <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
+              <InputGroupInput
+                v-model="searchText"
+                placeholder="Search name, description or #tag"
+                @keydown.enter="saveSearch()"
+              />
+              <InputGroupAddon>
+                <SearchIcon v-if="!searchText" />
+                <InputGroupButton
+                  v-else
+                  size="icon-xs"
+                  @click="searchText = ''"
+                >
+                  <CircleXIcon />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+
+            <Button
+              size="icon"
+              variant="outline"
+              :disabled="!canSaveSearch"
+              @click="saveSearch()"
+            >
+              <SaveIcon />
+            </Button>
+          </template>
+          <template #end>
+            <Button
+              v-if="!isEditMode"
+              variant="outline"
+              @click="isEditMode = true"
+            >
+              <PenIcon />
+              <span class="text-white hidden md:inline">Bearbeiten</span>
+            </Button>
+            <DropdownMenu v-if="isEditMode">
+              <DropdownMenuTrigger>
+                <Button>
+                  <PlusIcon />
+                  <span class="hidden md:inline">Hinzufügen</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem @click="showServiceDialog = true">
+                  <FilePlusIcon /> Service hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem @click="showGroupDialog = true">
+                  <FolderIcon /> Gruppe hinzufügen
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="showTagDialog = true">
+                  <TagIcon /> Tag hinzufügen
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              v-if="isEditMode"
+              class="!bg-orange-500"
+              @click="isEditMode = false"
+            >
+              <CheckIcon color="white" />
+              <span class="text-white hidden md:inline">Fertig</span>
+            </Button>
+          </template>
+        </Header>
 
         <AppsToolbar
           :totalCount="totalServiceCount"

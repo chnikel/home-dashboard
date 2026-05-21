@@ -119,41 +119,9 @@ export type AddTagRequest = {
 
 export type AddTagResponse = {};
 
-export const addTag = async (data: AddTagRequest) => {
-  const response = await fetch(`${host}/api/tags`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const services = await response.json();
-
-  return services as AddTagResponse;
-};
-
 export type GetTagsResponse = {
   id: number;
   name: string;
   color: TagColors;
   weight: number;
-};
-
-export const getTags = async () => {
-  const response = await fetch(`${host}/api/tags`);
-
-  const services = await response.json();
-
-  return services as GetTagsResponse[];
-};
-
-export const toggleTag = async (serviceId: string, tagId: string) => {
-  await fetch(`${host}/api/tags/${tagId}/toggle/${serviceId}`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: null,
-  });
 };

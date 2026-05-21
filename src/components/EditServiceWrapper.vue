@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Button from "./ui/button/Button.vue";
-import { toggleTag, type GetServicesResponse } from "@/api";
+import { type GetServicesResponse } from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
 import { findTag } from "@/store";
 import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
 import ServiceRepository from "@/repositories/ServiceRepository";
+import TagRepository from "@/repositories/TagRepository";
 
 const props = defineProps<{
   id: number;
@@ -80,7 +81,10 @@ async function toggleServiceVisibility() {
 }
 
 async function handleToggleTag(tagId: number) {
-  await toggleTag(props.service.id.toString(), tagId.toString());
+  await TagRepository.toggleVisibility(
+    props.service.id.toString(),
+    tagId.toString(),
+  );
 
   emit("toggleTag");
 }

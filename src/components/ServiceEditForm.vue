@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import {
-  getGroups,
-  getTags,
-  type GetTagsResponse,
-  type ServiceTag,
-} from "../api";
+import { getGroups, type GetTagsResponse, type ServiceTag } from "../api";
 import Tag from "./Tag.vue";
+import TagRepository from "@/repositories/TagRepository";
 
 export type SubmitData = {
   title: string;
@@ -83,7 +79,7 @@ const initialSelectedTag = "";
 const tags = ref<GetTagsResponse[]>([]);
 
 onMounted(async () => {
-  const _tags = await getTags();
+  const _tags = await TagRepository.get();
 
   tags.value = _tags;
 });
@@ -98,7 +94,7 @@ const selectedTag = ref(initialSelectedTag);
 
 const addSelectedTag = () => {
   const foundTag = availableTags.value.find(
-    (tag) => tag.name === selectedTag.value
+    (tag) => tag.name === selectedTag.value,
   );
 
   if (!foundTag) {

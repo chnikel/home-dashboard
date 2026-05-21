@@ -1,6 +1,7 @@
 import { computed, reactive } from "vue";
-import { getTags, type GetServicesResponse, type GetTagsResponse } from "./api";
+import { type GetServicesResponse, type GetTagsResponse } from "./api";
 import PingService from "./services/PingService";
+import TagRepository from "./repositories/TagRepository";
 
 const pingService = new PingService();
 
@@ -20,7 +21,7 @@ export const store = reactive({
 });
 
 export async function updateLocalTags() {
-  const tags = await getTags();
+  const tags = await TagRepository.get();
   store.tags = tags;
 }
 
@@ -34,7 +35,7 @@ export function tagsSortedByWeight() {
   return computed(() =>
     store.tags.sort((a, b) => {
       return b.weight - a.weight;
-    })
+    }),
   );
 }
 

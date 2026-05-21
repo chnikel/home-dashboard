@@ -17,7 +17,6 @@ import {
 import { onMounted, ref } from "vue";
 import {
   addGroup,
-  addTag,
   deleteGroup,
   getGroups,
   type GetServicesResponse,
@@ -37,11 +36,13 @@ import { useSavedSearch } from "@/composables/saved-search";
 import AppsToolbar from "@/components/AppsToolbar.vue";
 import { useFilteredServices } from "@/composables/filtered-services";
 import ServiceRepository from "@/repositories/ServiceRepository";
+import TagRepository from "@/repositories/TagRepository";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
 
-  const groupedServicesResponse = await ServiceRepository.getGroupedBy("groupId");
+  const groupedServicesResponse =
+    await ServiceRepository.getGroupedBy("groupId");
 
   const servicesWithGroupName = Object.entries(groupedServicesResponse).map(
     ([groupId, services]) => {
@@ -114,7 +115,7 @@ const afterMove = async () => {
 
 const onAddTagSuccess = async (data: TagDialogFormData) => {
   try {
-    await addTag({
+    await TagRepository.create({
       name: data.name,
       color: data.color,
       weight: data.weight,

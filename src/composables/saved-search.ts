@@ -1,10 +1,12 @@
 import { useLocalStorage } from "@vueuse/core";
 import { computed, ref } from "vue";
 
+export type SavedTab = { text: string }
+
 export function useSavedSearch() {
   const searchText = ref("");
 
-  const savedTabs = useLocalStorage<{ text: string }[]>("saved_searches", []);
+  const savedTabs = useLocalStorage<SavedTab[]>("saved_searches", []);
 
   const saveSearch = () => {
     const found =

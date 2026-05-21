@@ -6,27 +6,13 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useLocalStorage, useUrlSearchParams } from "@vueuse/core";
 import {
-  CheckIcon,
-  CircleXIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
-  PenIcon,
-  PlusIcon,
-  SaveIcon,
-  SearchIcon,
   TagIcon,
-  XIcon,
 } from "lucide-vue-next";
 import { computed, onMounted, ref } from "vue";
 import {
@@ -48,17 +34,10 @@ import ServiceDialog, {
 } from "../components/ServiceDialog.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
-import Button from "../components/ui/button/Button.vue";
-import InputGroup from "../components/ui/input-group/InputGroup.vue";
-import InputGroupAddon from "../components/ui/input-group/InputGroupAddon.vue";
-import InputGroupInput from "../components/ui/input-group/InputGroupInput.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
-import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
-import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
-import Badge from "@/components/ui/badge/Badge.vue";
-import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
 import Header from "@/components/Header.vue";
 import { useSavedSearch } from "@/composables/saved-search";
+import AppsToolbar from "@/components/AppsToolbar.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -298,44 +277,14 @@ const totalServiceCount = computed(() =>
           @saveSearch="saveSearch()"
         />
 
-        <div
-          class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"
-        >
-          <div class="shrink-0">
-            <Badge variant="outline">
-              {{ totalServiceCount }}
-            </Badge>
-            Services
-          </div>
-          <ButtonGroup
-            class="overflow-scroll [scrollbar-width:none] justify-self-center"
-            v-if="savedTabs.length > 0"
-          >
-            <ContextMenu v-for="savedTab in savedTabs">
-              <ContextMenuTrigger>
-                <Button
-                  class="cursor-pointer"
-                  variant="outline"
-                  @click="handleSavedSearchClick(savedTab.text)"
-                  :class="{
-                    '!bg-accent': searchText === savedTab.text,
-                  }"
-                >
-                  {{ savedTab.text }}
-                </Button>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuItem
-                  variant="destructive"
-                  @click="removeSavedSearchByText(savedTab.text)"
-                >
-                  <XIcon /> Löschen
-                </ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-          </ButtonGroup>
-          <LayoutSwitcher v-model="compactMode" />
-        </div>
+        <AppsToolbar
+          :totalCount="totalServiceCount"
+          :savedTabs="savedTabs"
+          :searchText="searchText"
+          v-model:compactMode="compactMode"
+          @saveSearch="handleSavedSearchClick($event)"
+          @removeSearch="removeSavedSearchByText($event)"
+        />
 
         <ServiceDialog
           :open="showServiceDialog"

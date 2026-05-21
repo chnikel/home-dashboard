@@ -309,211 +309,209 @@ const totalServiceCount = computed(() =>
 <template>
   <ContextMenu>
     <ContextMenuTrigger>
-      <div class="overflow-auto">
-        <div class="h-screen">
-          <div class="border-b">
-            <div
-              class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
-            >
-              <div class="items-center hidden sm:flex">HomeLinker</div>
-
-              <div class="flex gap-1 sm:justify-self-center">
-                <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
-                  <InputGroupInput
-                    v-model="searchText"
-                    placeholder="Search name, description or #tag"
-                    @keydown.enter="saveSearch()"
-                  />
-                  <InputGroupAddon>
-                    <SearchIcon v-if="!searchText" />
-                    <InputGroupButton
-                      v-else
-                      size="icon-xs"
-                      @click="searchText = ''"
-                    >
-                      <CircleXIcon />
-                    </InputGroupButton>
-                  </InputGroupAddon>
-                </InputGroup>
-
-                <Button
-                  size="icon"
-                  variant="outline"
-                  :disabled="disableSaveSearch"
-                  @click="saveSearch()"
-                >
-                  <SaveIcon />
-                </Button>
-              </div>
-
-              <div class="space-x-2 justify-self-end">
-                <Button
-                  v-if="!isEditMode"
-                  variant="outline"
-                  @click="isEditMode = true"
-                >
-                  <PenIcon />
-                  <span class="text-white hidden md:inline">Bearbeiten</span>
-                </Button>
-                <DropdownMenu v-if="isEditMode">
-                  <DropdownMenuTrigger>
-                    <Button>
-                      <PlusIcon />
-                      <span class="hidden md:inline">Hinzufügen</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem @click="showServiceDialog = true">
-                      <FilePlusIcon /> Service hinzufügen
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem @click="showGroupDialog = true">
-                      <FolderIcon /> Gruppe hinzufügen
-                    </DropdownMenuItem>
-                    <DropdownMenuItem @click="showTagDialog = true">
-                      <TagIcon /> Tag hinzufügen
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Button
-                  v-if="isEditMode"
-                  class="!bg-orange-500"
-                  @click="isEditMode = false"
-                >
-                  <CheckIcon color="white" />
-                  <span class="text-white hidden md:inline">Fertig</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-
+      <div class="h-screen overflow-auto">
+        <div class="border-b">
           <div
-            class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"
+            class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
           >
-            <div class="shrink-0">
-              <Badge variant="outline">
-                {{ totalServiceCount }}
-              </Badge>
-              Services
+            <div class="items-center hidden sm:flex">HomeLinker</div>
+
+            <div class="flex gap-1 sm:justify-self-center">
+              <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
+                <InputGroupInput
+                  v-model="searchText"
+                  placeholder="Search name, description or #tag"
+                  @keydown.enter="saveSearch()"
+                />
+                <InputGroupAddon>
+                  <SearchIcon v-if="!searchText" />
+                  <InputGroupButton
+                    v-else
+                    size="icon-xs"
+                    @click="searchText = ''"
+                  >
+                    <CircleXIcon />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+
+              <Button
+                size="icon"
+                variant="outline"
+                :disabled="disableSaveSearch"
+                @click="saveSearch()"
+              >
+                <SaveIcon />
+              </Button>
             </div>
-            <ButtonGroup
-              class="overflow-scroll [scrollbar-width:none] justify-self-center"
-              v-if="savedTabs.length > 0"
-            >
-              <ContextMenu v-for="savedTab in savedTabs">
-                <ContextMenuTrigger>
-                  <Button
-                    class="cursor-pointer"
-                    variant="outline"
-                    @click="handleSavedSearchClick(savedTab.text)"
-                    :class="{
-                      '!bg-accent': searchText === savedTab.text,
-                    }"
-                  >
-                    {{ savedTab.text }}
+
+            <div class="space-x-2 justify-self-end">
+              <Button
+                v-if="!isEditMode"
+                variant="outline"
+                @click="isEditMode = true"
+              >
+                <PenIcon />
+                <span class="text-white hidden md:inline">Bearbeiten</span>
+              </Button>
+              <DropdownMenu v-if="isEditMode">
+                <DropdownMenuTrigger>
+                  <Button>
+                    <PlusIcon />
+                    <span class="hidden md:inline">Hinzufügen</span>
                   </Button>
-                </ContextMenuTrigger>
-                <ContextMenuContent>
-                  <ContextMenuItem
-                    variant="destructive"
-                    @click="removeSavedSearchByText(savedTab.text)"
-                  >
-                    <XIcon /> Löschen
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
-            </ButtonGroup>
-            <LayoutSwitcher v-model="compactMode" />
-          </div>
-
-          <ServiceDialog
-            :open="showServiceDialog"
-            :handleClose="() => (showServiceDialog = false)"
-            @submit="onAddService"
-            title="Service hinzufügen"
-            submitButton="Hinzufügen"
-          />
-
-          <GroupDialog
-            :open="showGroupDialog"
-            :data="editData"
-            :handleClose="() => (showGroupDialog = false)"
-            @submit="onAddGroupSuccess"
-            title="Gruppe hinzufügen"
-            submitButton="Hinzufügen"
-          />
-
-          <TagDialog
-            :open="showTagDialog"
-            :handleClose="() => (showTagDialog = false)"
-            @submit="onAddTagSuccess"
-            title="Tag hinzufügen"
-            submitButton="Hinzufügen"
-          />
-
-          <div class="flex gap-4 flex-col p-4 pt-0 container mx-auto max-w-6xl">
-            <template v-for="item in filteredServiceGroups">
-              <ServiceGroup
-                v-if="item.services.length > 0 || isEditMode"
-                :serviceCount="item.services.length"
-                :compact="compactMode"
-                :id="item.group.id"
-                :title="item.group.id == null ? '' : item.group.title"
-                :edit="isEditMode"
-                @edit="onEditSuccess()"
-                @delete="handleDeleteGroup(item.group.id)"
-                @move="afterMove()"
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem @click="showServiceDialog = true">
+                    <FilePlusIcon /> Service hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem @click="showGroupDialog = true">
+                    <FolderIcon /> Gruppe hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuItem @click="showTagDialog = true">
+                    <TagIcon /> Tag hinzufügen
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                v-if="isEditMode"
+                class="!bg-orange-500"
+                @click="isEditMode = false"
               >
-                <template v-for="service in item.services">
-                  <EditServiceWrapper
-                    v-if="service.enabled || isEditMode"
-                    :draggable="isEditMode"
+                <CheckIcon color="white" />
+                <span class="text-white hidden md:inline">Fertig</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"
+        >
+          <div class="shrink-0">
+            <Badge variant="outline">
+              {{ totalServiceCount }}
+            </Badge>
+            Services
+          </div>
+          <ButtonGroup
+            class="overflow-scroll [scrollbar-width:none] justify-self-center"
+            v-if="savedTabs.length > 0"
+          >
+            <ContextMenu v-for="savedTab in savedTabs">
+              <ContextMenuTrigger>
+                <Button
+                  class="cursor-pointer"
+                  variant="outline"
+                  @click="handleSavedSearchClick(savedTab.text)"
+                  :class="{
+                    '!bg-accent': searchText === savedTab.text,
+                  }"
+                >
+                  {{ savedTab.text }}
+                </Button>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem
+                  variant="destructive"
+                  @click="removeSavedSearchByText(savedTab.text)"
+                >
+                  <XIcon /> Löschen
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+          </ButtonGroup>
+          <LayoutSwitcher v-model="compactMode" />
+        </div>
+
+        <ServiceDialog
+          :open="showServiceDialog"
+          :handleClose="() => (showServiceDialog = false)"
+          @submit="onAddService"
+          title="Service hinzufügen"
+          submitButton="Hinzufügen"
+        />
+
+        <GroupDialog
+          :open="showGroupDialog"
+          :data="editData"
+          :handleClose="() => (showGroupDialog = false)"
+          @submit="onAddGroupSuccess"
+          title="Gruppe hinzufügen"
+          submitButton="Hinzufügen"
+        />
+
+        <TagDialog
+          :open="showTagDialog"
+          :handleClose="() => (showTagDialog = false)"
+          @submit="onAddTagSuccess"
+          title="Tag hinzufügen"
+          submitButton="Hinzufügen"
+        />
+
+        <div class="flex gap-4 flex-col p-4 pt-0 container mx-auto max-w-6xl">
+          <template v-for="item in filteredServiceGroups">
+            <ServiceGroup
+              v-if="item.services.length > 0 || isEditMode"
+              :serviceCount="item.services.length"
+              :compact="compactMode"
+              :id="item.group.id"
+              :title="item.group.id == null ? '' : item.group.title"
+              :edit="isEditMode"
+              @edit="onEditSuccess()"
+              @delete="handleDeleteGroup(item.group.id)"
+              @move="afterMove()"
+            >
+              <template v-for="service in item.services">
+                <EditServiceWrapper
+                  v-if="service.enabled || isEditMode"
+                  :draggable="isEditMode"
+                  :id="service.id"
+                  :service="service"
+                  :edit="isEditMode"
+                  @edit="onEditServiceSuccess()"
+                  @toggleVisibility="refreshServices()"
+                  @toggleTag="refreshServices()"
+                  @delete="handleDeleteService(service)"
+                >
+                  <Service
+                    v-if="!compactMode"
+                    :compact="compactMode"
                     :id="service.id"
-                    :service="service"
-                    :edit="isEditMode"
-                    @edit="onEditServiceSuccess()"
-                    @toggleVisibility="refreshServices()"
-                    @toggleTag="refreshServices()"
-                    @delete="handleDeleteService(service)"
-                  >
-                    <Service
-                      v-if="!compactMode"
-                      :compact="compactMode"
-                      :id="service.id"
-                      :title="service.title"
-                      :description="service.description"
-                      :link="service.link"
-                      :icon_url="service.icon_url"
-                      :icon_wrap="service.icon_wrap"
-                      :tags="service.tags"
-                      :isEnabled="service.enabled"
-                      :bgColor="service.bgColor"
-                    />
-                    <ServiceAppLayout
-                      v-else
-                      :compact="compactMode"
-                      :id="service.id"
-                      :title="service.title"
-                      :description="service.description"
-                      :link="service.link"
-                      :icon_url="service.icon_url"
-                      :icon_wrap="service.icon_wrap"
-                      :tags="service.tags"
-                      :isEnabled="service.enabled"
-                      :bgColor="service.bgColor"
-                    />
-                  </EditServiceWrapper>
-                </template>
-              </ServiceGroup>
-            </template>
-            <template v-if="filteredServiceGroups.length === 0">
-              <div
-                class="border p-8 rounded-xl text-center border-dashed text-white/30"
-              >
-                Keine Services
-              </div>
-            </template>
-          </div>
+                    :title="service.title"
+                    :description="service.description"
+                    :link="service.link"
+                    :icon_url="service.icon_url"
+                    :icon_wrap="service.icon_wrap"
+                    :tags="service.tags"
+                    :isEnabled="service.enabled"
+                    :bgColor="service.bgColor"
+                  />
+                  <ServiceAppLayout
+                    v-else
+                    :compact="compactMode"
+                    :id="service.id"
+                    :title="service.title"
+                    :description="service.description"
+                    :link="service.link"
+                    :icon_url="service.icon_url"
+                    :icon_wrap="service.icon_wrap"
+                    :tags="service.tags"
+                    :isEnabled="service.enabled"
+                    :bgColor="service.bgColor"
+                  />
+                </EditServiceWrapper>
+              </template>
+            </ServiceGroup>
+          </template>
+          <template v-if="filteredServiceGroups.length === 0">
+            <div
+              class="border p-8 rounded-xl text-center border-dashed text-white/30"
+            >
+              Keine Services
+            </div>
+          </template>
         </div>
       </div>
     </ContextMenuTrigger>

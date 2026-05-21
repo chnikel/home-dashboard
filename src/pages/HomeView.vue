@@ -56,6 +56,7 @@ import { findTag, store, updateLocalServicePings } from "../store";
 import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
 import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
+import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -422,24 +423,7 @@ const totalServiceCount = computed(() =>
                 </ContextMenuContent>
               </ContextMenu>
             </ButtonGroup>
-            <ButtonGroup class="justify-self-end">
-              <Button
-                class="cursor-pointer"
-                :variant="compactMode ? 'outline' : 'default'"
-                size="icon"
-                @click="compactMode = false"
-              >
-                <LayoutListIcon />
-              </Button>
-              <Button
-                class="cursor-pointer"
-                :variant="compactMode ? 'default' : 'outline'"
-                size="icon"
-                @click="compactMode = true"
-              >
-                <LayoutGridIcon />
-              </Button>
-            </ButtonGroup>
+            <LayoutSwitcher v-model="compactMode" />
           </div>
 
           <ServiceDialog

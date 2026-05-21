@@ -40,7 +40,7 @@ const props = defineProps<{
 <template>
   <div class="border-b">
     <PageContent
-      class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4"
+      class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 min-h-[70px]"
     >
       <div class="items-center hidden sm:flex">HomeLinker</div>
 

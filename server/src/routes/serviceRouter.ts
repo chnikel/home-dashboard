@@ -23,7 +23,7 @@ export const NEED_REFACTOR_getServices = async () => {
         tags,
         bgColor: entry.bgColor,
       };
-    })
+    }),
   );
 
   return services;
@@ -35,7 +35,7 @@ serviceRouter.get("", async (req, res) => {
   const groupBy = req.query.groupBy as string | undefined;
 
   if (groupBy) {
-    const FALLBACK_GROUP_ID = -1
+    const FALLBACK_GROUP_ID = -1;
     const servicesGrouped = services.reduce((acc: any, service: any) => {
       (acc[service[groupBy] || FALLBACK_GROUP_ID] ??= []).push(service);
       return acc;
@@ -46,6 +46,15 @@ serviceRouter.get("", async (req, res) => {
   }
 
   res.json(services);
+});
+
+serviceRouter.get("/:id", async (req, res) => {
+  const services = await NEED_REFACTOR_getServices();
+  const service = services.find(
+    (service) => service.id.toString() === req.params.id,
+  );
+
+  res.json(service);
 });
 
 serviceRouter.post("", async (req, res) => {
@@ -67,7 +76,7 @@ serviceRouter.post("", async (req, res) => {
   await Promise.all(
     tags.map((tag) => {
       return db.tagToService(tag, Number(serviceId.lastInsertRowid));
-    })
+    }),
   );
 
   res.json({ message: "Service erfolgreich hinzugefügt" });
@@ -110,7 +119,7 @@ serviceRouter.put("/:id", async (req, res) => {
       }
 
       return db.tagToService(tag, serviceId);
-    })
+    }),
   );
 
   await Promise.all(
@@ -122,7 +131,7 @@ serviceRouter.put("/:id", async (req, res) => {
       }
 
       return db.removeTagFromService(t.name, serviceId);
-    })
+    }),
   );
 
   res.json({ message: "Service erfolgreich aktualisiert" });

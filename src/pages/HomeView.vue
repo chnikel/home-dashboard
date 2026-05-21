@@ -33,6 +33,7 @@ import { useFilteredServices } from "@/composables/filtered-services";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
 import GroupRepository from "@/repositories/GroupRepository";
+import PageContent from "@/components/PageContent.vue";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -250,7 +251,7 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
           submitButton="Hinzufügen"
         />
 
-        <div class="flex gap-4 flex-col p-4 pt-0 container mx-auto max-w-6xl">
+        <PageContent class="flex gap-4 flex-col p-4 pt-0">
           <template v-for="item in filteredServiceGroups">
             <ServiceGroup
               v-if="item.services.length > 0 || isEditMode"
@@ -312,7 +313,7 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
               Keine Services
             </div>
           </template>
-        </div>
+        </PageContent>
       </div>
     </ContextMenuTrigger>
     <ContextMenuContent>

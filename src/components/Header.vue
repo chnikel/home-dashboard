@@ -20,6 +20,7 @@ import DropdownMenuTrigger from "./ui/dropdown-menu/DropdownMenuTrigger.vue";
 import DropdownMenuContent from "./ui/dropdown-menu/DropdownMenuContent.vue";
 import DropdownMenuItem from "./ui/dropdown-menu/DropdownMenuItem.vue";
 import DropdownMenuSeparator from "./ui/dropdown-menu/DropdownMenuSeparator.vue";
+import PageContent from "./PageContent.vue";
 
 const emit = defineEmits<{
   (e: "addService"): void;
@@ -38,8 +39,8 @@ const props = defineProps<{
 
 <template>
   <div class="border-b">
-    <div
-      class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
+    <PageContent
+      class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4"
     >
       <div class="items-center hidden sm:flex">HomeLinker</div>
 
@@ -110,6 +111,6 @@ const props = defineProps<{
           <span class="text-white hidden md:inline">Fertig</span>
         </Button>
       </div>
-    </div>
+    </PageContent>
   </div>
 </template>

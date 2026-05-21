@@ -57,6 +57,8 @@ import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
 import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
 import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
+import Header from "@/components/Header.vue";
+import { useSavedSearch } from "@/composables/saved-search";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
@@ -198,8 +200,6 @@ const compactMode = useLocalStorage(
   params.compact === "1" || false,
 );
 
-const searchText = ref("");
-
 onMounted(async () => {
   updateLocalServicePings();
 
@@ -230,6 +230,15 @@ const replaceSearchText = (text: string) => {
 
   return updatedText;
 };
+
+const {
+  searchText,
+  removeItem: removeSavedSearchByText,
+  savedTabs,
+  toggle: handleSavedSearchClick,
+  saveItem: saveSearch,
+  canSave: canSaveSearch,
+} = useSavedSearch();
 
 const filteredServiceGroups = computed(() =>
   store.groups.map((group) => {
@@ -268,37 +277,6 @@ const filteredServiceGroups = computed(() =>
   }),
 );
 
-const savedTabs = useLocalStorage<{ text: string }[]>("saved_searches", []);
-
-const saveSearch = () => {
-  const found =
-    savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1;
-
-  if (found) {
-    return;
-  }
-
-  savedTabs.value.push({
-    text: searchText.value,
-  });
-};
-
-const removeSavedSearchByText = (text: string) => {
-  savedTabs.value = savedTabs.value.filter((value) => {
-    return value.text !== text;
-  });
-};
-
-const disableSaveSearch = computed(
-  () =>
-    !searchText.value ||
-    savedTabs.value.findIndex((item) => item.text === searchText.value) !== -1,
-);
-
-const handleSavedSearchClick = (text: string) => {
-  searchText.value = searchText.value === text ? "" : text;
-};
-
 const totalServiceCount = computed(() =>
   filteredServiceGroups.value
     .flatMap((item) => item.services.length)
@@ -310,81 +288,15 @@ const totalServiceCount = computed(() =>
   <ContextMenu>
     <ContextMenuTrigger>
       <div class="h-screen overflow-auto">
-        <div class="border-b">
-          <div
-            class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_2fr_1fr] gap-2 shadow-lg justify-between pb-4 container mx-auto max-w-6xl"
-          >
-            <div class="items-center hidden sm:flex">HomeLinker</div>
-
-            <div class="flex gap-1 sm:justify-self-center">
-              <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
-                <InputGroupInput
-                  v-model="searchText"
-                  placeholder="Search name, description or #tag"
-                  @keydown.enter="saveSearch()"
-                />
-                <InputGroupAddon>
-                  <SearchIcon v-if="!searchText" />
-                  <InputGroupButton
-                    v-else
-                    size="icon-xs"
-                    @click="searchText = ''"
-                  >
-                    <CircleXIcon />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
-
-              <Button
-                size="icon"
-                variant="outline"
-                :disabled="disableSaveSearch"
-                @click="saveSearch()"
-              >
-                <SaveIcon />
-              </Button>
-            </div>
-
-            <div class="space-x-2 justify-self-end">
-              <Button
-                v-if="!isEditMode"
-                variant="outline"
-                @click="isEditMode = true"
-              >
-                <PenIcon />
-                <span class="text-white hidden md:inline">Bearbeiten</span>
-              </Button>
-              <DropdownMenu v-if="isEditMode">
-                <DropdownMenuTrigger>
-                  <Button>
-                    <PlusIcon />
-                    <span class="hidden md:inline">Hinzufügen</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem @click="showServiceDialog = true">
-                    <FilePlusIcon /> Service hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem @click="showGroupDialog = true">
-                    <FolderIcon /> Gruppe hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuItem @click="showTagDialog = true">
-                    <TagIcon /> Tag hinzufügen
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button
-                v-if="isEditMode"
-                class="!bg-orange-500"
-                @click="isEditMode = false"
-              >
-                <CheckIcon color="white" />
-                <span class="text-white hidden md:inline">Fertig</span>
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Header
+          v-model:editMode="isEditMode"
+          v-model:searchText="searchText"
+          :disableSaveSearch="!canSaveSearch"
+          @addGroup="showGroupDialog = true"
+          @addService="showServiceDialog = true"
+          @addTags="showTagDialog = true"
+          @saveSearch="saveSearch()"
+        />
 
         <div
           class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"

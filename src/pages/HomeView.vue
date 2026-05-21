@@ -301,7 +301,7 @@ const handleSavedSearchClick = (text: string) => {
 const totalServiceCount = computed(() =>
   filteredServiceGroups.value
     .flatMap((item) => item.services.length)
-    .reduce((acc, value) => acc + value),
+    .reduce((acc, value) => acc + value, 0),
 );
 </script>
 

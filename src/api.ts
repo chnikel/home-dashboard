@@ -26,24 +26,6 @@ export type GetServicesGroupedResponse = {
   [key: string]: GetServicesResponse[];
 };
 
-export const getServicesGroupBy = async (
-  groupBy?: keyof GetServicesResponse
-) => {
-  let query = "";
-
-  if (groupBy) {
-    query = new URLSearchParams({
-      groupBy,
-    }).toString();
-  }
-
-  const response = await fetch(`${host}/api/services?${query}`);
-
-  const services = await response.json();
-
-  return services as GetServicesGroupedResponse;
-};
-
 export type AddServiceRequest = {
   title: string;
   description: string;
@@ -58,65 +40,11 @@ export type AddServiceRequest = {
 
 export type AddServiceResponse = {};
 
-export const addService = async (data: AddServiceRequest) => {
-  const response = await fetch(`${host}/api/services`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const services = await response.json();
-
-  return services as AddServiceResponse;
-};
-
 export type EditServiceResponse = {};
-
-export const updateService = async (id: string, data: AddServiceRequest) => {
-  const response = await fetch(`${host}/api/services/${id}`, {
-    method: "put",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const services = await response.json();
-
-  return services as EditServiceResponse;
-};
 
 export type MoveServiceResponse = {};
 
-export const moveService = async (
-  serviceId: string,
-  groupId: string | null
-) => {
-  const response = await fetch(
-    `${host}/api/services/${serviceId}/group/${groupId}`,
-    {
-      method: "post",
-    }
-  );
-
-  const services = await response.json();
-
-  return services as MoveServiceResponse;
-};
-
 export type DeleteServiceResponse = {};
-
-export const deleteService = async (id: number) => {
-  const response = await fetch(`${host}/api/services/${id}`, {
-    method: "delete",
-  });
-
-  const services = await response.json();
-
-  return services as DeleteServiceResponse;
-};
 
 export type GetGroupsResponse = {
   id: number;
@@ -218,26 +146,6 @@ export const getTags = async () => {
   const services = await response.json();
 
   return services as GetTagsResponse[];
-};
-
-export const disableService = async (id: string) => {
-  await fetch(`${host}/api/services/${id}/disable`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: null,
-  });
-};
-
-export const enableService = async (id: string) => {
-  await fetch(`${host}/api/services/${id}/enable`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: null,
-  });
 };
 
 export const toggleTag = async (serviceId: string, tagId: string) => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import EditGroupWrapper from "./EditGroupWrapper.vue";
-import { moveService, updateGroup } from "../api";
+import { updateGroup } from "../api";
 import GroupDialog, { type GroupDialogFormData } from "./GroupDialog.vue";
 import { provide } from "vue";
 import GroupContextMenuWrapper from "./GroupContextMenuWrapper.vue";
@@ -9,6 +9,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-vue-next";
 import Button from "./ui/button/Button.vue";
 import Badge from "./ui/badge/Badge.vue";
 import { useLocalStorage } from "@vueuse/core";
+import ServiceRepository from "@/repositories/ServiceRepository";
 
 const props = defineProps<{
   compact?: boolean;
@@ -41,7 +42,7 @@ const onDrop = async (event: DragEvent) => {
     return;
   }
 
-  await moveService(serviceId, props.id?.toString() || null);
+  await ServiceRepository.moveToGroup(serviceId, props.id?.toString() || null);
 
   emit("move");
 

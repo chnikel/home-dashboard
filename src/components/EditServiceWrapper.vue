@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import Button from "./ui/button/Button.vue";
-import {
-  disableService,
-  enableService,
-  toggleTag,
-  updateService,
-  type GetServicesResponse,
-} from "@/api";
+import { toggleTag, type GetServicesResponse } from "@/api";
 import type { ServiceDialogFormData } from "./ServiceDialog.vue";
 import ServiceDialog from "./ServiceDialog.vue";
 import { findTag } from "@/store";
 import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
+import ServiceRepository from "@/repositories/ServiceRepository";
 
 const props = defineProps<{
   id: number;
@@ -56,7 +51,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
   }, []);
 
   try {
-    await updateService(props.service.id.toString(), {
+    await ServiceRepository.update(props.service.id.toString(), {
       title: data.title,
       description: data.description,
       link: data.link,
@@ -76,9 +71,9 @@ const onEditService = async (data: ServiceDialogFormData) => {
 
 async function toggleServiceVisibility() {
   if (props.service.enabled) {
-    await disableService(props.service.id.toString());
+    await ServiceRepository.disable(props.service.id.toString());
   } else {
-    await enableService(props.service.id.toString());
+    await ServiceRepository.enable(props.service.id.toString());
   }
 
   emit("toggleVisibility");

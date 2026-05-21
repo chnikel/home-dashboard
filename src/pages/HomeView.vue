@@ -17,12 +17,9 @@ import {
 import { onMounted, ref } from "vue";
 import {
   addGroup,
-  addService,
   addTag,
   deleteGroup,
-  deleteService,
   getGroups,
-  getServicesGroupBy,
   type GetServicesResponse,
 } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
@@ -39,11 +36,12 @@ import Header from "@/components/Header.vue";
 import { useSavedSearch } from "@/composables/saved-search";
 import AppsToolbar from "@/components/AppsToolbar.vue";
 import { useFilteredServices } from "@/composables/filtered-services";
+import ServiceRepository from "@/repositories/ServiceRepository";
 
 async function refreshServices() {
   const groupsResponse = await getGroups();
 
-  const groupedServicesResponse = await getServicesGroupBy("groupId");
+  const groupedServicesResponse = await ServiceRepository.getGroupedBy("groupId");
 
   const servicesWithGroupName = Object.entries(groupedServicesResponse).map(
     ([groupId, services]) => {
@@ -85,7 +83,7 @@ const onEditServiceSuccess = async () => {
 const handleDeleteService = async (service: GetServicesResponse) => {
   if (confirm("Service löschen?")) {
     try {
-      await deleteService(service.id);
+      await ServiceRepository.delete(service.id);
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +137,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
   }, []);
 
   try {
-    await addService({
+    await ServiceRepository.create({
       title: data.title,
       description: data.description,
       link: data.link,

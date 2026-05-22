@@ -11,7 +11,7 @@ import PageContent from "./PageContent.vue";
       <div class="justify-self-end sm:justify-self-center">
         <slot name="center"></slot>
       </div>
-      <div class="justify-self-start sm:justify-self-end">
+      <div class="col-start-2 justify-self-end sm:justify-self-end sm:col-start-auto">
         <slot name="end"></slot>
       </div>
     </PageContent>

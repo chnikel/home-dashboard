@@ -26,11 +26,7 @@ import SelectValue from "@/components/ui/select/SelectValue.vue";
 import { Separator } from "@/components/ui/separator";
 import Switch from "@/components/ui/switch/Switch.vue";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
-import Toggle from "@/components/ui/toggle/Toggle.vue";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Tooltip from "@/components/ui/tooltip/Tooltip.vue";
-import TooltipContent from "@/components/ui/tooltip/TooltipContent.vue";
-import TooltipTrigger from "@/components/ui/tooltip/TooltipTrigger.vue";
 import { useGroups } from "@/composables/group";
 import { usePinnedServices } from "@/composables/pinned-service";
 import { useService } from "@/composables/service";
@@ -283,22 +279,20 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
           <FormItem>
             <FormControl>
               <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger as-child>
-                    <Toggle
-                      class="cursor-pointer"
-                      variant="outline"
-                      @click="setValue(!value)"
-                    >
-                      <EyeIcon v-if="value" />
-                      <EyeOffIcon v-else />
-                    </Toggle>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p v-if="value">Verstecken</p>
-                    <p v-else>Anzeigen</p>
-                  </TooltipContent>
-                </Tooltip>
+                <Button
+                  class="cursor-pointer"
+                  variant="outline"
+                  @click="setValue(!value)"
+                >
+                  <template v-if="value">
+                    <EyeOffIcon />
+                    <span class="hidden md:inline">Verstecken</span>
+                  </template>
+                  <template v-else>
+                    <EyeIcon />
+                    <span class="hidden md:inline">Anzeigen</span>
+                  </template>
+                </Button>
               </TooltipProvider>
             </FormControl>
           </FormItem>

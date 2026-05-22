@@ -211,6 +211,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             :url="serviceData?.icon_url"
             :bg-color="serviceData?.bgColor"
             :boxed="true"
+            :wrap="serviceData?.icon_wrap"
           />
           <div class="overflow-hidden m-2">
             <div

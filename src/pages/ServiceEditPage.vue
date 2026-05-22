@@ -193,7 +193,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     </div>
 
     <ToolBar
-      class="relative sm:sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
+      class="sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
       content-class="grid-cols-2"
     >
       <div class="flex items-center gap-3">

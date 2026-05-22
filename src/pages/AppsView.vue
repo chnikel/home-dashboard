@@ -39,6 +39,7 @@ import {
   SaveIcon,
   SearchIcon,
   TagIcon,
+  XIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { type GetServicesResponse } from "../api";
@@ -52,6 +53,9 @@ import ServiceDialog, {
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
+import Badge from "@/components/ui/badge/Badge.vue";
+import ToolBar from "@/components/ToolBar.vue";
+import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -254,14 +258,44 @@ const { isPinned } = usePinnedServices();
           <template #end> </template>
         </Header>
 
-        <AppsToolbar
-          :totalCount="totalServiceCount"
-          :savedTabs="savedTabs"
-          :searchText="searchText"
-          @saveSearch="handleSavedSearchClick($event)"
-          @removeSearch="removeSavedSearchByText($event)"
-        >
-          <template #end>
+        <ToolBar content-class="grid-cols-2 sm:grid-cols-3">
+          <div class="justify-self-start shrink-0">
+            <Badge variant="outline">
+              {{ totalServiceCount }}
+            </Badge>
+            Services
+          </div>
+
+          <ButtonGroup
+            class="overflow-scroll [scrollbar-width:none] justify-self-end sm:justify-self-center"
+            v-if="savedTabs.length > 0"
+          >
+            <ContextMenu v-for="savedTab in savedTabs">
+              <ContextMenuTrigger>
+                <Button
+                  class="cursor-pointer"
+                  :variant="
+                    searchText === savedTab.text ? 'default' : 'outline'
+                  "
+                  @click="handleSavedSearchClick(savedTab.text)"
+                >
+                  {{ savedTab.text }}
+                </Button>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem
+                  variant="destructive"
+                  @click="removeSavedSearchByText(savedTab.text)"
+                >
+                  <XIcon /> Löschen
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+          </ButtonGroup>
+
+          <div
+            class="col-start-2 justify-self-end sm:justify-self-end sm:col-start-auto"
+          >
             <div class="flex items-center gap-3">
               <LayoutSwitcher />
               <Button
@@ -301,8 +335,8 @@ const { isPinned } = usePinnedServices();
                 <span class="text-white hidden md:inline">Fertig</span>
               </Button>
             </div>
-          </template>
-        </AppsToolbar>
+          </div>
+        </ToolBar>
 
         <ServiceDialog
           :open="showServiceDialog"

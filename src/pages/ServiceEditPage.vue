@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { GetTagsResponse } from "@/api";
-import Header from "@/components/Header.vue";
 import PageContent from "@/components/PageContent.vue";
 import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import ServiceIcon from "@/components/ServiceIcon.vue";
@@ -47,7 +46,7 @@ import {
   LoaderCircleIcon,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, useTemplateRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import z from "zod";
 
@@ -183,6 +182,9 @@ const serviceTags = computed(() => {
 });
 
 const { isPinned } = usePinnedServices();
+
+const customColorInput = useTemplateRef('custom-color')
+const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
 </script>
 
 <template>
@@ -442,19 +444,62 @@ const { isPinned } = usePinnedServices();
           </FormItem>
         </FormField>
         <FormField
-          v-slot="{ componentField }"
+          v-slot="{ componentField, setValue, value }"
           name="bgColor"
         >
           <FormItem>
             <FormLabel>Hintergrundfarbe</FormLabel>
             <FormControl>
-              <InputGroup>
+              <div class="flex gap-3">
+                <template v-for="color in suggestedColors">
+                  <ServiceIcon
+                    v-if="color !== serviceData?.bgColor"
+                    :url="form.values.icon_url"
+                    :bg-color="form.values.bgColor"
+                    :boxed="true"
+                    :wrap="form.values.icon_wrap"
+                    :style="`background-color: ${color};`"
+                    :class="{
+                      'outline-4 outline-blue-500': value === color,
+                    }"
+                    @click="setValue(color)"
+                  />
+                </template>
+
+                <ServiceIcon
+                  :url="form.values.icon_url"
+                  :bg-color="serviceData?.bgColor"
+                  :boxed="true"
+                  :wrap="form.values.icon_wrap"
+                  :class="{
+                    'outline-4 outline-blue-500':
+                      value === serviceData?.bgColor,
+                  }"
+                  @click="setValue(serviceData?.bgColor)"
+                />
+
+                <Separator
+                  orientation="vertical"
+                  class="ml-auto"
+                />
+
+                <ServiceIcon
+                  :url="form.values.icon_url"
+                  :bg-color="form.values.bgColor"
+                  :boxed="true"
+                  :wrap="form.values.icon_wrap"
+                  @click="customColorInput?.$el.click()"
+                />
+              </div>
+
+              <InputGroup class="mt-1">
                 <InputGroupInput
                   type="text"
                   v-bind="componentField"
                 />
                 <InputGroupAddon>
                   <InputGroupInput
+                    ref="custom-color"
                     class="w-20"
                     type="color"
                     v-bind="componentField"

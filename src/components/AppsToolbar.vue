@@ -45,11 +45,8 @@ const emit = defineEmits<{
           <ContextMenuTrigger>
             <Button
               class="cursor-pointer"
-              variant="outline"
+              :variant="searchText === savedTab.text ? 'default' : 'outline'"
               @click="emit('saveSearch', savedTab.text)"
-              :class="{
-                '!bg-accent': searchText === savedTab.text,
-              }"
             >
               {{ savedTab.text }}
             </Button>

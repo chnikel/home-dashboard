@@ -33,6 +33,7 @@ import Tooltip from "@/components/ui/tooltip/Tooltip.vue";
 import TooltipContent from "@/components/ui/tooltip/TooltipContent.vue";
 import TooltipTrigger from "@/components/ui/tooltip/TooltipTrigger.vue";
 import { useGroups } from "@/composables/group";
+import { usePinnedServices } from "@/composables/pinned-service";
 import { useService } from "@/composables/service";
 import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
@@ -180,6 +181,8 @@ const serviceTags = computed(() => {
     return acc;
   }, []);
 });
+
+const { isPinned } = usePinnedServices();
 </script>
 
 <template>
@@ -211,6 +214,12 @@ const serviceTags = computed(() => {
             class="bg-orange-300"
           >
             Versteckt
+          </Badge>
+          <Badge
+            v-if="serviceData ? isPinned(serviceData.id.toString()) : false"
+            class="bg-blue-500 text-white"
+          >
+            Angeheftet
           </Badge>
         </div>
       </template>

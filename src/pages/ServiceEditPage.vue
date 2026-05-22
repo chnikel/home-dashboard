@@ -204,7 +204,7 @@ const serviceTags = computed(() => {
             @click="goBack()"
           >
             <ArrowLeftIcon />
-            Back
+            Zurück
           </Button>
           <Badge
             v-if="!form.values.enabled"

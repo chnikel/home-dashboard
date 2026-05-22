@@ -18,6 +18,7 @@ const props = defineProps<{
   isEnabled?: boolean;
   showTags?: boolean;
   bgColor?: string;
+  isPinned?: boolean;
 }>();
 
 const isReachable = computed(() => {
@@ -48,6 +49,7 @@ const showPhysicalIndicator = computed(() => {
     class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
+      'outline-2 outline-blue-500': isPinned,
     }"
   >
     <div
@@ -61,7 +63,13 @@ const showPhysicalIndicator = computed(() => {
       v-if="!isReachable"
       class="absolute inset-0 flex justify-center items-center bg-neutral-900/50 z-[9] rounded-2xl"
     ></div>
-
+    <ServiceInfoIcon
+      class="z-10"
+      position="top-left"
+      :show="isPinned"
+      :component="preConfiguredIcons['pinned'].component"
+      :colorClass="preConfiguredIcons['pinned'].colorClass"
+    />
     <div class="relative">
       <ServiceIcon
         class="mx-auto"

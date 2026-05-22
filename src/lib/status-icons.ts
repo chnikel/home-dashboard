@@ -2,6 +2,7 @@ import {
   CloudOffIcon,
   ConstructionIcon,
   HardDriveIcon,
+  PinIcon,
   RadioIcon,
   UnplugIcon,
 } from "lucide-vue-next";
@@ -26,5 +27,9 @@ export const preConfiguredIcons = {
   device: {
     component: HardDriveIcon,
     colorClass: "bg-neutral-900",
+  },
+  pinned: {
+    component: PinIcon,
+    colorClass: "bg-blue-500",
   },
 };

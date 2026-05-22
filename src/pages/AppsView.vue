@@ -50,6 +50,7 @@ import DropdownMenuTrigger from "@/components/ui/dropdown-menu/DropdownMenuTrigg
 import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuContent.vue";
 import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue";
 import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
+import { usePinnedServices } from "@/composables/pinned-service";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -217,6 +218,9 @@ const {
 
 const { services: filteredServiceGroups, totalCount: totalServiceCount } =
   useFilteredServices(searchText, isEditMode);
+
+  
+const { isPinned } = usePinnedServices();
 </script>
 
 <template>
@@ -376,6 +380,7 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
                     :tags="service.tags"
                     :isEnabled="service.enabled"
                     :bgColor="service.bgColor"
+                    :isPinned="isPinned(service.id.toString())"
                   />
                 </EditServiceWrapper>
               </template>

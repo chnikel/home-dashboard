@@ -11,6 +11,7 @@ import {
   EyeOffIcon,
   PenIcon,
   PinIcon,
+  PinOffIcon,
   Trash2Icon,
 } from "lucide-vue-next";
 import ContextMenuCheckboxItem from "./ui/context-menu/ContextMenuCheckboxItem.vue";
@@ -22,6 +23,7 @@ import ContextMenuSubContent from "./ui/context-menu/ContextMenuSubContent.vue";
 
 defineProps<{
   isEnabled?: boolean;
+  isPinned?: boolean;
   tags: string[];
 }>();
 
@@ -53,7 +55,8 @@ const sortedTags = tagsSortedByWeight();
         <template v-else> <EyeIcon /> Anzeigen </template>
       </ContextMenuItem>
       <ContextMenuItem @click="$emit('togglePinned')">
-        <PinIcon /> Anheften
+        <template v-if="isPinned"> <PinOffIcon /> Lösen </template>
+        <template v-else> <PinIcon /> Anheften </template>
       </ContextMenuItem>
 
       <ContextMenuSeparator />

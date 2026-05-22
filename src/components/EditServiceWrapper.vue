@@ -45,7 +45,7 @@ async function handleToggleTag(tagId: number) {
   emit("toggleTag");
 }
 
-const { toggle: handleTogglePinned } = usePinnedServices();
+const { toggle: handleTogglePinned, isPinned } = usePinnedServices();
 
 const router = useRouter();
 
@@ -65,6 +65,7 @@ const onEditClick = () => {
     <ServiceContextMenuWrapper
       :isEnabled="service.enabled"
       :tags="service.tags.map((t) => t.name)"
+      :isPinned="isPinned(service.id.toString())"
       @toggle-visibility="toggleServiceVisibility()"
       @edit="onEditClick()"
       @delete="emit('delete')"

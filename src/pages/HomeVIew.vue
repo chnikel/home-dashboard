@@ -10,26 +10,32 @@ import { usePinnedServices } from "@/composables/pinned-service";
 import { PinOffIcon } from "lucide-vue-next";
 
 const { services, unpin: unpinService } = usePinnedServices();
+
+const navigationRoutes = [
+  {
+    text: "Home",
+    to: "/",
+  },
+  {
+    text: "Apps",
+    to: "apps",
+  },
+];
 </script>
 
 <template>
   <div class="h-screen grid grid-rows-[auto_1fr]">
     <Header>
       <template #end>
-        <RouterLink to="/">
+        <RouterLink
+          v-for="route in navigationRoutes"
+          :to="route.to"
+        >
           <Button
             class="cursor-pointer"
             variant="ghost"
           >
-            Home
-          </Button>
-        </RouterLink>
-        <RouterLink to="/apps">
-          <Button
-            class="cursor-pointer"
-            variant="ghost"
-          >
-            Apps
+            {{ route.text }}
           </Button>
         </RouterLink>
       </template>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import AppsToolbar from "@/components/AppsToolbar.vue";
 import Header from "@/components/Header.vue";
 import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
 import PageContent from "@/components/PageContent.vue";
+import ToolBar from "@/components/ToolBar.vue";
+import Badge from "@/components/ui/badge/Badge.vue";
+import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 import Button from "@/components/ui/button/Button.vue";
 import {
   ContextMenu,
@@ -53,9 +55,6 @@ import ServiceDialog, {
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
-import Badge from "@/components/ui/badge/Badge.vue";
-import ToolBar from "@/components/ToolBar.vue";
-import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();

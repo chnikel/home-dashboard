@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Header from "@/components/Header.vue";
+import PageContent from "@/components/PageContent.vue";
 import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import Button from "@/components/ui/button/Button.vue";
 import ContextMenu from "@/components/ui/context-menu/ContextMenu.vue";
@@ -41,32 +42,32 @@ const navigationRoutes = [
       </template>
     </Header>
 
-    <div class="flex items-center justify-center">
-      <div class="flex flex-wrap justify-center gap-3">
-        <template v-for="service in services">
-          <ContextMenu>
-            <ContextMenuTrigger>
-              <ServiceAppLayout
-                class="max-w-[120px]"
-                :id="service.id"
-                :title="service.title"
-                :description="service.description"
-                :link="service.link"
-                :icon_url="service.icon_url"
-                :icon_wrap="service.icon_wrap"
-                :tags="service.tags"
-                :isEnabled="service.enabled"
-                :bgColor="service.bgColor"
-              />
-            </ContextMenuTrigger>
-            <ContextMenuContent>
-              <ContextMenuItem @click="unpinService(service.id.toString())">
-                <PinOffIcon /> Lösen
-              </ContextMenuItem>
-            </ContextMenuContent>
-          </ContextMenu>
-        </template>
+    <PageContent class="flex items-center justify-center p-4">
+        <div class="flex flex-wrap justify-center gap-3">
+          <template v-for="service in services">
+            <ContextMenu>
+              <ContextMenuTrigger>
+                <ServiceAppLayout
+                  class="max-w-[120px]"
+                  :id="service.id"
+                  :title="service.title"
+                  :description="service.description"
+                  :link="service.link"
+                  :icon_url="service.icon_url"
+                  :icon_wrap="service.icon_wrap"
+                  :tags="service.tags"
+                  :isEnabled="service.enabled"
+                  :bgColor="service.bgColor"
+                />
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem @click="unpinService(service.id.toString())">
+                  <PinOffIcon /> Lösen
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+          </template>
       </div>
-    </div>
+    </PageContent>
   </div>
 </template>

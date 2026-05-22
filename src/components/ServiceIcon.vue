@@ -17,8 +17,15 @@ defineProps<{
     :style="`background-color: ${bgColor};`"
   >
     <img
+      v-if="url"
       class="block h-full w-full rounded-lg"
       :src="url"
     />
+    <div
+      v-else
+      class="grid place-content-center h-full"
+    >
+      <slot>X</slot>
+    </div>
   </div>
 </template>

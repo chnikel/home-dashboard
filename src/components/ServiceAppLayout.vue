@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { preConfiguredIcons } from "@/lib/status-icons";
+import { store } from "@/store";
+import { AppWindowIcon, EyeOffIcon } from "lucide-vue-next";
+import { computed } from "vue";
 import type { GetServicesResponse } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
 import ServiceInfoIcon from "./ServiceInfoIcon.vue";
-import { computed } from "vue";
-import { store } from "@/store";
-import { preConfiguredIcons } from "@/lib/status-icons";
-import { EyeOffIcon } from "lucide-vue-next";
 
 const props = defineProps<{
   data: GetServicesResponse;
@@ -70,7 +70,9 @@ const showPhysicalIndicator = computed(() => {
         :url="data.icon_url"
         :boxed="true"
         :bg-color="data.bgColor"
-      />
+      >
+        <AppWindowIcon />
+      </ServiceIcon>
 
       <ServiceInfoIcon
         class="z-10"

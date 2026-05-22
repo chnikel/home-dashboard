@@ -26,7 +26,6 @@ import SelectValue from "@/components/ui/select/SelectValue.vue";
 import { Separator } from "@/components/ui/separator";
 import Switch from "@/components/ui/switch/Switch.vue";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { useGroups } from "@/composables/group";
 import { usePinnedServices } from "@/composables/pinned-service";
 import { useService } from "@/composables/service";
@@ -34,12 +33,14 @@ import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
-  ArrowLeftIcon,
+  ChevronLeftIcon,
   ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
   GroupIcon,
   LoaderCircleIcon,
+  SaveIcon,
+  XIcon,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, useTemplateRef } from "vue";
@@ -195,67 +196,64 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
       <LoaderCircleIcon class="animate-spin" />
     </div>
 
-    <ToolBar>
-      <div class="flex items-center gap-3 mb-3">
+    <ToolBar
+      class="relative sm:sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
+      content-class="grid-cols-2"
+    >
+      <div class="flex items-center gap-3">
         <Button
           variant="outline"
           class="cursor-pointer"
           @click="goBack()"
+          size="icon"
         >
-          <ArrowLeftIcon />
-          Zurück
+          <ChevronLeftIcon />
         </Button>
-        <Button
-          class="ml-auto"
-          type="submit"
-        >
-          Speichern
+        <div class="flex gap-2">
+          <ServiceIcon
+            class="!size-12 rounded-xl"
+            :url="serviceData?.icon_url"
+            :bg-color="serviceData?.bgColor"
+            :boxed="true"
+          />
+          <div class="overflow-hidden m-2">
+            <div
+              class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
+            >
+              <div class="grid grid-cols-[1fr_auto] items-center gap-1">
+                <div class="overflow-ellipsis overflow-hidden">
+                  {{ serviceData?.title || "---" }}
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <div
+                class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
+              >
+                {{ serviceData?.description || "---" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1 sm:gap-3 justify-self-end">
+        <Button type="submit">
+          <SaveIcon />
+          <span class="hidden sm:inline">Speichern</span>
         </Button>
         <Button
           type="button"
           variant="secondary"
           @click="goBack()"
         >
-          Abbrechen
+          <XIcon />
+          <span class="hidden sm:inline">Abbrechen</span>
         </Button>
-      </div>
-      <div class="flex gap-2">
-        <ServiceIcon
-          class="!size-12 rounded-xl"
-          :url="serviceData?.icon_url"
-          :bg-color="serviceData?.bgColor"
-          :boxed="true"
-        />
-
-        <div class="overflow-hidden m-2">
-          <div
-            class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
-          >
-            <div class="grid grid-cols-[1fr_auto] items-center gap-1">
-              <div class="overflow-ellipsis overflow-hidden">
-                {{ serviceData?.title }}
-              </div>
-            </div>
-          </div>
-
-          <div
-            v-if="serviceData?.description.trim()"
-            class="flex items-center mt-1"
-          >
-            <div
-              class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
-            >
-              {{ serviceData?.description }}
-            </div>
-          </div>
-        </div>
       </div>
     </ToolBar>
 
-    <ToolBar
-      class="relative sm:sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
-      content-class="grid-cols-2"
-    >
+    <ToolBar content-class="grid-cols-2">
       <div class="flex gap-3 items-center justify-self-start">
         <Badge
           v-if="!form.values.enabled"
@@ -270,7 +268,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
           Angeheftet
         </Badge>
       </div>
-
       <div class="flex items-center gap-3 justify-self-end">
         <FormField
           v-slot="{ value, setValue }"
@@ -278,22 +275,20 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
         >
           <FormItem>
             <FormControl>
-              <TooltipProvider>
-                <Button
-                  class="cursor-pointer"
-                  variant="outline"
-                  @click="setValue(!value)"
-                >
-                  <template v-if="value">
-                    <EyeOffIcon />
-                    <span class="hidden md:inline">Verstecken</span>
-                  </template>
-                  <template v-else>
-                    <EyeIcon />
-                    <span class="hidden md:inline">Anzeigen</span>
-                  </template>
-                </Button>
-              </TooltipProvider>
+              <Button
+                class="cursor-pointer"
+                variant="outline"
+                @click="setValue(!value)"
+              >
+                <template v-if="value">
+                  <EyeOffIcon />
+                  <span class="hidden md:inline">Verstecken</span>
+                </template>
+                <template v-else>
+                  <EyeIcon />
+                  <span class="hidden md:inline">Anzeigen</span>
+                </template>
+              </Button>
             </FormControl>
           </FormItem>
         </FormField>
@@ -311,7 +306,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
               >
                 <SelectTrigger class="w-full">
                   <GroupIcon />
-                  <SelectValue placeholder="" />
+                  <SelectValue placeholder="Keine" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -533,7 +528,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
                 v-bind="componentField"
               >
                 <SelectTrigger class="w-full">
-                  <SelectValue placeholder="" />
+                  <SelectValue placeholder="Keine" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>

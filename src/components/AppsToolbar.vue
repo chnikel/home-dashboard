@@ -9,6 +9,7 @@ import ContextMenuContent from "./ui/context-menu/ContextMenuContent.vue";
 import ContextMenuItem from "./ui/context-menu/ContextMenuItem.vue";
 import { XIcon } from "lucide-vue-next";
 import LayoutSwitcher from "./LayoutSwitcher.vue";
+import ToolBar from "./ToolBar.vue";
 
 const compactMode = defineModel("compactMode");
 
@@ -25,9 +26,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div
-    class="container mx-auto max-w-6xl p-4 flex justify-between items-center gap-2"
-  >
+  <ToolBar>
     <div class="shrink-0">
       <Badge variant="outline">
         {{ totalCount }}
@@ -62,5 +61,5 @@ const emit = defineEmits<{
       </ContextMenu>
     </ButtonGroup>
     <LayoutSwitcher v-model="compactMode" />
-  </div>
+  </ToolBar>
 </template>

@@ -274,6 +274,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             <FormControl>
               <Button
                 class="cursor-pointer"
+                type="button"
                 variant="outline"
                 @click="setValue(!value)"
               >

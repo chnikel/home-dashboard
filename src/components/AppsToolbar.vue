@@ -23,45 +23,43 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <ToolBar>
-    <template #start>
-      <div class="shrink-0">
-        <Badge variant="outline">
-          {{ totalCount }}
-        </Badge>
-        Services
-      </div>
-    </template>
+  <ToolBar content-class="grid-cols-2 sm:grid-cols-3">
+    <div class="justify-self-start shrink-0">
+      <Badge variant="outline">
+        {{ totalCount }}
+      </Badge>
+      Services
+    </div>
 
-    <template #center>
-      <ButtonGroup
-        class="overflow-scroll [scrollbar-width:none] justify-self-center"
-        v-if="savedTabs.length > 0"
-      >
-        <ContextMenu v-for="savedTab in savedTabs">
-          <ContextMenuTrigger>
-            <Button
-              class="cursor-pointer"
-              :variant="searchText === savedTab.text ? 'default' : 'outline'"
-              @click="emit('saveSearch', savedTab.text)"
-            >
-              {{ savedTab.text }}
-            </Button>
-          </ContextMenuTrigger>
-          <ContextMenuContent>
-            <ContextMenuItem
-              variant="destructive"
-              @click="emit('removeSearch', savedTab.text)"
-            >
-              <XIcon /> Löschen
-            </ContextMenuItem>
-          </ContextMenuContent>
-        </ContextMenu>
-      </ButtonGroup>
-    </template>
+    <ButtonGroup
+      class="overflow-scroll [scrollbar-width:none] justify-self-end sm:justify-self-center"
+      v-if="savedTabs.length > 0"
+    >
+      <ContextMenu v-for="savedTab in savedTabs">
+        <ContextMenuTrigger>
+          <Button
+            class="cursor-pointer"
+            :variant="searchText === savedTab.text ? 'default' : 'outline'"
+            @click="emit('saveSearch', savedTab.text)"
+          >
+            {{ savedTab.text }}
+          </Button>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem
+            variant="destructive"
+            @click="emit('removeSearch', savedTab.text)"
+          >
+            <XIcon /> Löschen
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </ButtonGroup>
 
-    <template #end>
+    <div
+      class="col-start-2 justify-self-end sm:justify-self-end sm:col-start-auto"
+    >
       <slot name="end"></slot>
-    </template>
+    </div>
   </ToolBar>
 </template>

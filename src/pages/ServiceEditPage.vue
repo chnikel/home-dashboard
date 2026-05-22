@@ -198,142 +198,142 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     >
       <LoaderCircleIcon class="animate-spin" />
     </div>
-    <div class="border-b">
-      <PageContent class="p-4">
+
+    <ToolBar>
+      <div class="flex items-center gap-3 mb-3">
         <Button
           variant="outline"
-          class="cursor-pointer mb-3"
+          class="cursor-pointer"
           @click="goBack()"
         >
           <ArrowLeftIcon />
           Zurück
         </Button>
-        <div class="flex gap-2">
-          <ServiceIcon
-            class="!size-12 rounded-xl"
-            :url="serviceData?.icon_url"
-            :bg-color="serviceData?.bgColor"
-            :boxed="true"
-          />
+        <Button
+          class="ml-auto"
+          type="submit"
+        >
+          Speichern
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          @click="goBack()"
+        >
+          Abbrechen
+        </Button>
+      </div>
+      <div class="flex gap-2">
+        <ServiceIcon
+          class="!size-12 rounded-xl"
+          :url="serviceData?.icon_url"
+          :bg-color="serviceData?.bgColor"
+          :boxed="true"
+        />
 
-          <div class="overflow-hidden m-2">
-            <div
-              class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
-            >
-              <div class="grid grid-cols-[1fr_auto] items-center gap-1">
-                <div class="overflow-ellipsis overflow-hidden">
-                  {{ serviceData?.title }}
-                </div>
-              </div>
-            </div>
-
-            <div
-              v-if="serviceData?.description.trim()"
-              class="flex items-center mt-1"
-            >
-              <div
-                class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
-              >
-                {{ serviceData?.description }}
+        <div class="overflow-hidden m-2">
+          <div
+            class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
+          >
+            <div class="grid grid-cols-[1fr_auto] items-center gap-1">
+              <div class="overflow-ellipsis overflow-hidden">
+                {{ serviceData?.title }}
               </div>
             </div>
           </div>
-        </div>
-      </PageContent>
-    </div>
 
-    <ToolBar class="relative sm:sticky top-0 bg-neutral-950 z-10">
-      <template #start>
-        <div class="flex gap-3 items-center">
-          <Badge
-            v-if="!form.values.enabled"
-            class="bg-orange-300"
+          <div
+            v-if="serviceData?.description.trim()"
+            class="flex items-center mt-1"
           >
-            Versteckt
-          </Badge>
-          <Badge
-            v-if="serviceData ? isPinned(serviceData.id.toString()) : false"
-            class="bg-blue-500 text-white"
-          >
-            Angeheftet
-          </Badge>
+            <div
+              class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
+            >
+              {{ serviceData?.description }}
+            </div>
+          </div>
         </div>
-      </template>
+      </div>
+    </ToolBar>
 
-      <template #center>
-        <div class="flex items-center gap-3">
-          <Button type="submit"> Speichern </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            @click="goBack()"
-          >
-            Abbrechen
-          </Button>
-        </div>
-      </template>
+    <ToolBar
+      class="relative sm:sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
+      content-class="grid-cols-2"
+    >
+      <div class="flex gap-3 items-center justify-self-start">
+        <Badge
+          v-if="!form.values.enabled"
+          class="bg-orange-300"
+        >
+          Versteckt
+        </Badge>
+        <Badge
+          v-if="serviceData ? isPinned(serviceData.id.toString()) : false"
+          class="bg-blue-500 text-white"
+        >
+          Angeheftet
+        </Badge>
+      </div>
 
-      <template #end>
-        <div class="flex items-center gap-3 justify-self-end">
-          <FormField
-            v-slot="{ value, setValue }"
-            name="enabled"
-          >
-            <FormItem>
-              <FormControl>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger as-child>
-                      <Toggle
-                        class="cursor-pointer"
-                        variant="outline"
-                        @click="setValue(!value)"
-                      >
-                        <EyeIcon v-if="value" />
-                        <EyeOffIcon v-else />
-                      </Toggle>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p v-if="value">Verstecken</p>
-                      <p v-else>Anzeigen</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </FormControl>
-            </FormItem>
-          </FormField>
-          <FormField
-            v-slot="{ componentField }"
-            name="groupId"
-          >
-            <FormItem>
-              <FormControl>
-                <div v-if="isFetchingGroups">Gruppen werden geladen...</div>
+      <div class="flex items-center gap-3 justify-self-end">
+        <FormField
+          v-slot="{ value, setValue }"
+          name="enabled"
+        >
+          <FormItem>
+            <FormControl>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <Toggle
+                      class="cursor-pointer"
+                      variant="outline"
+                      @click="setValue(!value)"
+                    >
+                      <EyeIcon v-if="value" />
+                      <EyeOffIcon v-else />
+                    </Toggle>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p v-if="value">Verstecken</p>
+                    <p v-else>Anzeigen</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </FormControl>
+          </FormItem>
+        </FormField>
+        <FormField
+          v-slot="{ componentField }"
+          name="groupId"
+        >
+          <FormItem>
+            <FormControl>
+              <div v-if="isFetchingGroups">Gruppen werden geladen...</div>
 
-                <Select
-                  v-else
-                  v-bind="componentField"
-                >
-                  <SelectTrigger class="w-full">
-                    <GroupIcon />
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem
-                        v-for="group in groups"
-                        :value="Number(group.id)"
-                      >
-                        {{ group.title || "-" }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-            </FormItem>
-          </FormField>
-        </div>
-      </template>
+              <Select
+                v-else
+                v-bind="componentField"
+              >
+                <SelectTrigger class="w-full">
+                  <GroupIcon />
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem
+                      v-for="group in groups"
+                      :value="Number(group.id)"
+                    >
+                      {{ group.title || "-" }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </FormControl>
+          </FormItem>
+        </FormField>
+      </div>
     </ToolBar>
     <PageContent class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 pt-4">
       <div class="space-y-8 px-4 overflow-auto max-w-xl">

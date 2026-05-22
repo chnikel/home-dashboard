@@ -300,7 +300,7 @@ const { isPinned } = usePinnedServices();
       </template>
     </ToolBar>
     <PageContent class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 pt-4">
-      <div class="space-y-3 px-4 overflow-auto max-w-xl">
+      <div class="space-y-8 px-4 overflow-auto max-w-xl">
         <FormField
           v-slot="{ componentField }"
           name="title"
@@ -521,7 +521,7 @@ const { isPinned } = usePinnedServices();
         </FormField>
       </div>
 
-      <div class="space-y-6 mr-4 mt-8 sm:mt-0">
+      <div class="space-y-8 mt-8 sm:mt-0 px-4">
         <div class="flex flex-wrap border rounded-lg py-6 px-3">
           <ServiceAppLayout
             class="mx-auto w-[100px]"
@@ -541,7 +541,7 @@ const { isPinned } = usePinnedServices();
         </div>
 
         <div
-          class="border-t p-2 border-solid border-inherit flex overflow-hidden"
+          class="border-b pb-6 border-solid border-inherit flex overflow-hidden"
         >
           <ServiceTags
             class="flex overflow-auto"

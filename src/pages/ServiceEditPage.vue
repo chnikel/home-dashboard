@@ -525,14 +525,18 @@ const { isPinned } = usePinnedServices();
         <div class="flex flex-wrap border rounded-lg py-6 px-3">
           <ServiceAppLayout
             class="mx-auto w-[100px]"
-            :id="0"
-            :title="form.values.title || ''"
-            :description="form.values.description || ''"
-            :icon_url="form.values.icon_url || ''"
-            :icon_wrap="form.values.icon_wrap || false"
-            :tags="[]"
-            :bgColor="form.values.bgColor || ''"
-            :is-enabled="form.values.enabled"
+            :data="{
+              id: 0,
+              title: form.values.title || '',
+              description: form.values.description || '',
+              icon_url: form.values.icon_url || '',
+              icon_wrap: form.values.icon_wrap || false,
+              tags: [],
+              bgColor: form.values.bgColor || '',
+              enabled: form.values.enabled || false,
+              link: '',
+              groupId: -1,
+            }"
           />
         </div>
 

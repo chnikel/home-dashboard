@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ServiceTag } from "../api";
+import type { GetServicesResponse } from "../api";
 import { computed } from "vue";
 import { store } from "@/store";
 import {
@@ -15,25 +15,16 @@ import ServiceTags from "./ServiceTags.vue";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{
-  id: number;
-  title: string;
-  description: string;
-  link?: string;
-  icon_url: string;
-  icon_wrap: boolean;
-  tags: ServiceTag[];
-  isEnabled?: boolean;
-  showTags?: boolean;
-  bgColor?: string;
+  data: GetServicesResponse;
 }>();
 
 const isReachable = computed(() => {
-  if (store.servicePings.length === 0 || !props.link) {
+  if (store.servicePings.length === 0 || !props.data.link) {
     return true;
   }
 
   const pingData = store.servicePings.find(
-    (ping) => ping.serviceId == props.id,
+    (ping) => ping.serviceId == props.data.id,
   );
 
   if (!pingData) {
@@ -44,10 +35,10 @@ const isReachable = computed(() => {
 });
 
 const hasTag = (tag: string) =>
-  props.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
+  props.data.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
 
-  const isHttps = props.link?.startsWith("https://") || false
-  const isHttp = props.link?.startsWith("http://") || false
+const isHttps = props.data.link?.startsWith("https://") || false;
+const isHttp = props.data.link?.startsWith("http://") || false;
 
 const titleIndicators = [
   {
@@ -83,8 +74,8 @@ const imageIndicators = [
 
 <template>
   <a
-    :href="link || '#'"
-    :target="link && '_blank'"
+    :href="data.link || '#'"
+    :target="data.link && '_blank'"
     class="block relative"
   >
     <div
@@ -94,7 +85,7 @@ const imageIndicators = [
       }"
     >
       <div
-        v-if="!isEnabled"
+        v-if="!data.enabled"
         class="absolute inset-0 flex justify-center items-center bg-neutral-900/80 rounded-lg z-[9]"
       >
         <EyeOffIcon />
@@ -102,11 +93,11 @@ const imageIndicators = [
 
       <div
         class="relative flex justify-center items-center border-b border-solid border-inherit rounded-t-lg"
-        :style="`background-color: ${bgColor};`"
+        :style="`background-color: ${data.bgColor};`"
       >
         <img
           class="size-16"
-          :src="icon_url"
+          :src="data.icon_url"
         />
 
         <div class="absolute top-0 left-0 m-2 rounded-lg flex gap-1">
@@ -139,7 +130,7 @@ const imageIndicators = [
         >
           <div class="grid grid-cols-[1fr_auto] items-center gap-1">
             <div class="overflow-ellipsis overflow-hidden">
-              {{ title }}
+              {{ data.title }}
             </div>
             <div class="justify-end flex shrink-0 gap-0.5">
               <template v-for="indicator in titleIndicators">
@@ -155,24 +146,24 @@ const imageIndicators = [
         </div>
 
         <div
-          v-if="description.trim()"
+          v-if="data.description.trim()"
           class="flex items-center mt-1"
         >
           <div
             class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
           >
-            {{ description }}
+            {{ data.description }}
           </div>
         </div>
       </div>
       <div
         class="border-t p-2 border-solid border-inherit flex overflow-hidden"
-        v-if="tags.length > 0"
+        v-if="data.tags.length > 0"
       >
         <ServiceTags
           class="flex overflow-auto"
           style="scrollbar-width: none"
-          :tags="tags"
+          :tags="data.tags"
           :max="2"
         />
       </div>

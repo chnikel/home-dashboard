@@ -356,27 +356,11 @@ const { isPinned } = usePinnedServices();
                 >
                   <Service
                     v-if="!compactMode"
-                    :id="service.id"
-                    :title="service.title"
-                    :description="service.description"
-                    :link="service.link"
-                    :icon_url="service.icon_url"
-                    :icon_wrap="service.icon_wrap"
-                    :tags="service.tags"
-                    :isEnabled="service.enabled"
-                    :bgColor="service.bgColor"
+                    :data="service"
                   />
                   <ServiceAppLayout
                     v-else
-                    :id="service.id"
-                    :title="service.title"
-                    :description="service.description"
-                    :link="service.link"
-                    :icon_url="service.icon_url"
-                    :icon_wrap="service.icon_wrap"
-                    :tags="service.tags"
-                    :isEnabled="service.enabled"
-                    :bgColor="service.bgColor"
+                    :data="service"
                     :isPinned="isPinned(service.id.toString())"
                   />
                 </EditServiceWrapper>

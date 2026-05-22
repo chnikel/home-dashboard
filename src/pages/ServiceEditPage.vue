@@ -196,29 +196,27 @@ const serviceTags = computed(() => {
     <Header> </Header>
 
     <ToolBar class="relative sm:sticky top-0 bg-neutral-950 z-10">
-      <template
-        #start
-        class="flex gap-3 items-center"
-      >
-        <Button
-          variant="outline"
-          class="cursor-pointer"
-          @click="goBack()"
-        >
-          <ArrowLeftIcon />
-          Back
-        </Button>
-      </template>
-
-      <template #center>
-        <div class="flex items-center gap-3">
+      <template #start>
+        <div class="flex gap-3 items-center">
+          <Button
+            variant="outline"
+            class="cursor-pointer"
+            @click="goBack()"
+          >
+            <ArrowLeftIcon />
+            Back
+          </Button>
           <Badge
             v-if="!form.values.enabled"
             class="bg-orange-300"
           >
             Versteckt
           </Badge>
+        </div>
+      </template>
 
+      <template #center>
+        <div class="flex items-center gap-3">
           <Button type="submit"> Speichern </Button>
           <Button
             type="button"
@@ -323,7 +321,6 @@ const serviceTags = computed(() => {
             </FormControl>
           </FormItem>
         </FormField>
-        <Separator class="my-6" />
         <FormField
           v-slot="{ componentField }"
           name="link"
@@ -339,6 +336,7 @@ const serviceTags = computed(() => {
             </FormControl>
           </FormItem>
         </FormField>
+        <Separator class="my-6" />
         <FormField
           v-slot="{ componentField, value }"
           name="icon_url"

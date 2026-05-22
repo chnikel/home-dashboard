@@ -8,10 +8,7 @@ import Button from "./ui/button/Button.vue";
 import ContextMenuContent from "./ui/context-menu/ContextMenuContent.vue";
 import ContextMenuItem from "./ui/context-menu/ContextMenuItem.vue";
 import { XIcon } from "lucide-vue-next";
-import LayoutSwitcher from "./LayoutSwitcher.vue";
 import ToolBar from "./ToolBar.vue";
-
-const compactMode = defineModel("compactMode");
 
 defineProps<{
   totalCount: number;
@@ -64,7 +61,7 @@ const emit = defineEmits<{
     </template>
 
     <template #end>
-      <LayoutSwitcher v-model="compactMode" />
+      <slot name="end"></slot>
     </template>
   </ToolBar>
 </template>

@@ -20,7 +20,7 @@ import {
   SearchIcon,
   TagIcon,
 } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { onMounted, provide, ref } from "vue";
 import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
 import GroupDialog from "../components/GroupDialog.vue";
@@ -51,6 +51,8 @@ import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuConte
 import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue";
 import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
 import { usePinnedServices } from "@/composables/pinned-service";
+import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
+import type { ModeRepository } from "@/composables/layout-mode";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -219,8 +221,9 @@ const {
 const { services: filteredServiceGroups, totalCount: totalServiceCount } =
   useFilteredServices(searchText, isEditMode);
 
-  
 const { isPinned } = usePinnedServices();
+
+provide<ModeRepository>("mode-repository", { compactMode });
 </script>
 
 <template>
@@ -256,54 +259,58 @@ const { isPinned } = usePinnedServices();
               <SaveIcon />
             </Button>
           </template>
-          <template #end>
-            <Button
-              v-if="!isEditMode"
-              variant="outline"
-              @click="isEditMode = true"
-            >
-              <PenIcon />
-              <span class="text-white hidden md:inline">Bearbeiten</span>
-            </Button>
-            <DropdownMenu v-if="isEditMode">
-              <DropdownMenuTrigger>
-                <Button>
-                  <PlusIcon />
-                  <span class="hidden md:inline">Hinzufügen</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem @click="showServiceDialog = true">
-                  <FilePlusIcon /> Service hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem @click="showGroupDialog = true">
-                  <FolderIcon /> Gruppe hinzufügen
-                </DropdownMenuItem>
-                <DropdownMenuItem @click="showTagDialog = true">
-                  <TagIcon /> Tag hinzufügen
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              v-if="isEditMode"
-              class="!bg-orange-500"
-              @click="isEditMode = false"
-            >
-              <CheckIcon color="white" />
-              <span class="text-white hidden md:inline">Fertig</span>
-            </Button>
-          </template>
+          <template #end> </template>
         </Header>
 
         <AppsToolbar
           :totalCount="totalServiceCount"
           :savedTabs="savedTabs"
           :searchText="searchText"
-          v-model:compactMode="compactMode"
           @saveSearch="handleSavedSearchClick($event)"
           @removeSearch="removeSavedSearchByText($event)"
-        />
+        >
+          <template #end>
+            <div class="flex items-center gap-3">
+              <LayoutSwitcher />
+              <Button
+                v-if="!isEditMode"
+                variant="outline"
+                @click="isEditMode = true"
+              >
+                <PenIcon />
+                <span class="text-white hidden md:inline">Bearbeiten</span>
+              </Button>
+              <DropdownMenu v-if="isEditMode">
+                <DropdownMenuTrigger>
+                  <Button>
+                    <PlusIcon />
+                    <span class="hidden md:inline">Hinzufügen</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem @click="showServiceDialog = true">
+                    <FilePlusIcon /> Service hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem @click="showGroupDialog = true">
+                    <FolderIcon /> Gruppe hinzufügen
+                  </DropdownMenuItem>
+                  <DropdownMenuItem @click="showTagDialog = true">
+                    <TagIcon /> Tag hinzufügen
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                v-if="isEditMode"
+                class="!bg-orange-500"
+                @click="isEditMode = false"
+              >
+                <CheckIcon color="white" />
+                <span class="text-white hidden md:inline">Fertig</span>
+              </Button>
+            </div>
+          </template>
+        </AppsToolbar>
 
         <ServiceDialog
           :open="showServiceDialog"
@@ -357,7 +364,6 @@ const { isPinned } = usePinnedServices();
                 >
                   <Service
                     v-if="!compactMode"
-                    :compact="compactMode"
                     :id="service.id"
                     :title="service.title"
                     :description="service.description"
@@ -370,7 +376,6 @@ const { isPinned } = usePinnedServices();
                   />
                   <ServiceAppLayout
                     v-else
-                    :compact="compactMode"
                     :id="service.id"
                     :title="service.title"
                     :description="service.description"

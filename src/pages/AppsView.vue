@@ -6,7 +6,6 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useLocalStorage, useUrlSearchParams } from "@vueuse/core";
 import {
   CheckIcon,
   CircleXIcon,
@@ -52,7 +51,7 @@ import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue
 import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
 import { usePinnedServices } from "@/composables/pinned-service";
 import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
-import type { ModeRepository } from "@/composables/layout-mode";
+import { useLayoutMode } from "@/composables/layout-mode";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -188,12 +187,7 @@ const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
 
-const params = useUrlSearchParams("history");
-
-const compactMode = useLocalStorage(
-  "compact_mode",
-  params.compact === "1" || false,
-);
+const { isCompact: compactMode } = useLayoutMode();
 
 onMounted(async () => {
   updateLocalServicePings();
@@ -222,8 +216,6 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
   useFilteredServices(searchText, isEditMode);
 
 const { isPinned } = usePinnedServices();
-
-provide<ModeRepository>("mode-repository", { compactMode });
 </script>
 
 <template>

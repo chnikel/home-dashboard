@@ -1,18 +1,9 @@
-import type { RemovableRef } from "@vueuse/core";
-import { inject } from "vue";
-
-export type ModeRepository = {
-  compactMode: RemovableRef<boolean>;
-};
+import { useLocalStorage } from "@vueuse/core";
 
 export function useLayoutMode() {
-  const modeRepository = inject<ModeRepository>("mode-repository");
-
-  if (!modeRepository) {
-    throw new Error("No mode repository provided");
-  }
+  const compactMode = useLocalStorage("compact_mode", true);
 
   return {
-    isCompact: modeRepository.compactMode,
+    isCompact: compactMode,
   };
 }

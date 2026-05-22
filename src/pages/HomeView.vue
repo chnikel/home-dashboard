@@ -326,7 +326,7 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
           submitButton="Hinzufügen"
         />
 
-        <PageContent class="flex gap-4 flex-col p-4 pt-0">
+        <PageContent class="flex gap-4 flex-col p-4">
           <template v-for="item in filteredServiceGroups">
             <ServiceGroup
               v-if="item.services.length > 0 || isEditMode"

@@ -40,8 +40,8 @@ import { toTypedSchema } from "@vee-validate/zod";
 import {
   ArrowLeftIcon,
   ExternalLinkIcon,
-  EyeClosedIcon,
   EyeIcon,
+  EyeOffIcon,
   GroupIcon,
   LoaderCircleIcon,
 } from "lucide-vue-next";
@@ -244,7 +244,7 @@ const serviceTags = computed(() => {
                         variant="outline"
                         @click="setValue(!value)"
                       >
-                        <EyeClosedIcon v-if="value" />
+                        <EyeOffIcon v-if="value" />
                         <EyeIcon v-else />
                       </Toggle>
                     </TooltipTrigger>

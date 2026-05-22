@@ -196,7 +196,41 @@ const { isPinned } = usePinnedServices();
     >
       <LoaderCircleIcon class="animate-spin" />
     </div>
-    <Header> </Header>
+    <div class="border-b">
+      <PageContent class="p-4">
+        <div class="flex gap-2">
+          <ServiceIcon
+            class="!size-12 rounded-xl"
+            :url="serviceData?.icon_url"
+            :bg-color="serviceData?.bgColor"
+            :boxed="true"
+          />
+
+          <div class="overflow-hidden m-2">
+            <div
+              class="text-blue-300 text-sm text-nowrap overflow-ellipsis overflow-hidden"
+            >
+              <div class="grid grid-cols-[1fr_auto] items-center gap-1">
+                <div class="overflow-ellipsis overflow-hidden">
+                  {{ serviceData?.title }}
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="serviceData?.description.trim()"
+              class="flex items-center mt-1"
+            >
+              <div
+                class="text-sm text-neutral-300 text-nowrap overflow-ellipsis overflow-hidden"
+              >
+                {{ serviceData?.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </PageContent>
+    </div>
 
     <ToolBar class="relative sm:sticky top-0 bg-neutral-950 z-10">
       <template #start>

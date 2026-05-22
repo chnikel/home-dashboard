@@ -27,39 +27,47 @@ const emit = defineEmits<{
 
 <template>
   <ToolBar>
-    <div class="shrink-0">
-      <Badge variant="outline">
-        {{ totalCount }}
-      </Badge>
-      Services
-    </div>
-    <ButtonGroup
-      class="overflow-scroll [scrollbar-width:none] justify-self-center"
-      v-if="savedTabs.length > 0"
-    >
-      <ContextMenu v-for="savedTab in savedTabs">
-        <ContextMenuTrigger>
-          <Button
-            class="cursor-pointer"
-            variant="outline"
-            @click="emit('saveSearch', savedTab.text)"
-            :class="{
-              '!bg-accent': searchText === savedTab.text,
-            }"
-          >
-            {{ savedTab.text }}
-          </Button>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem
-            variant="destructive"
-            @click="emit('removeSearch', savedTab.text)"
-          >
-            <XIcon /> Löschen
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenu>
-    </ButtonGroup>
-    <LayoutSwitcher v-model="compactMode" />
+    <template #start>
+      <div class="shrink-0">
+        <Badge variant="outline">
+          {{ totalCount }}
+        </Badge>
+        Services
+      </div>
+    </template>
+
+    <template #center>
+      <ButtonGroup
+        class="overflow-scroll [scrollbar-width:none] justify-self-center"
+        v-if="savedTabs.length > 0"
+      >
+        <ContextMenu v-for="savedTab in savedTabs">
+          <ContextMenuTrigger>
+            <Button
+              class="cursor-pointer"
+              variant="outline"
+              @click="emit('saveSearch', savedTab.text)"
+              :class="{
+                '!bg-accent': searchText === savedTab.text,
+              }"
+            >
+              {{ savedTab.text }}
+            </Button>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem
+              variant="destructive"
+              @click="emit('removeSearch', savedTab.text)"
+            >
+              <XIcon /> Löschen
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      </ButtonGroup>
+    </template>
+
+    <template #end>
+      <LayoutSwitcher v-model="compactMode" />
+    </template>
   </ToolBar>
 </template>

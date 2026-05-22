@@ -461,15 +461,17 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
                 </template>
 
                 <ServiceIcon
+                  v-if="serviceData?.bgColor"
                   :url="form.values.icon_url"
                   :bg-color="serviceData?.bgColor"
                   :boxed="true"
                   :wrap="form.values.icon_wrap"
                   :class="{
-                    'outline-4 outline-blue-500':
-                      value === serviceData?.bgColor,
+                    'outline-4 outline-blue-500': value == serviceData?.bgColor,
+                    'outline-4 outline-yellow-500':
+                      value != serviceData?.bgColor,
                   }"
-                  @click="setValue(serviceData?.bgColor)"
+                  @click="setValue(serviceData?.bgColor || '')"
                 />
 
                 <Separator
@@ -641,7 +643,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
           <code
             class="border-input dark:bg-input/30 flex min-h-16 rounded-md border bg-transparent px-3 py-2 shadow-xs md:text-sm"
           >
-            <pre class="overflow-auto">{{ serviceData }}</pre>
+            <pre class="overflow-auto">{{ form.values }}</pre>
           </code>
         </div>
       </div>

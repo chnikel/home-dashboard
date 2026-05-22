@@ -88,10 +88,6 @@ const ServiceDialogFormData = z.object({
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
 
-const emit = defineEmits<{
-  (e: "submit", data: ServiceDialogFormData): void;
-}>();
-
 const formSchema = toTypedSchema(ServiceDialogFormData);
 
 const form = useForm<ServiceDialogFormData>({

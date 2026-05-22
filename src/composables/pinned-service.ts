@@ -4,7 +4,7 @@ import PinServiceRepository from "@/repositories/PinServiceRepository";
 import { computed } from "vue";
 
 export function usePinnedServices() {
-  const { services } = useServices();
+  const { services, isLoading } = useServices();
 
   const toggle = (serviceId: string) => {
     if (isPinned(serviceId)) {
@@ -29,6 +29,7 @@ export function usePinnedServices() {
     toggle,
     isPinned,
     pin: PinServiceRepository.pin,
-    unpin: PinServiceRepository.unpin
+    unpin: PinServiceRepository.unpin,
+    isLoading
   };
 }

@@ -287,8 +287,8 @@ const { isPinned } = usePinnedServices();
                         variant="outline"
                         @click="setValue(!value)"
                       >
-                        <EyeOffIcon v-if="value" />
-                        <EyeIcon v-else />
+                        <EyeIcon v-if="value" />
+                        <EyeOffIcon v-else />
                       </Toggle>
                     </TooltipTrigger>
                     <TooltipContent>

@@ -5,6 +5,9 @@ import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
 import { useRouter } from "vue-router";
+import { store } from "@/store";
+import PinServiceRepository from "@/repositories/PinServiceRepository";
+import { usePinnedServices } from "@/composables/pinned-service";
 
 const props = defineProps<{
   id: number;
@@ -42,6 +45,8 @@ async function handleToggleTag(tagId: number) {
   emit("toggleTag");
 }
 
+const { toggle: handleTogglePinned } = usePinnedServices();
+
 const router = useRouter();
 
 const onEditClick = () => {
@@ -64,6 +69,7 @@ const onEditClick = () => {
       @edit="onEditClick()"
       @delete="emit('delete')"
       @toggle-tag="handleToggleTag"
+      @toggle-pinned="handleTogglePinned(service.id.toString())"
     >
       <div
         v-if="edit"

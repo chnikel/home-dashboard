@@ -9,3 +9,12 @@ export function useService(id: string) {
 
   return { service: state, isReady, isLoading, error };
 }
+
+export function useServices() {
+  const { state, isReady, isLoading, error } = useAsyncState(
+    ServiceRepository.get(),
+    null,
+  );
+
+  return { services: state, isReady, isLoading, error };
+}

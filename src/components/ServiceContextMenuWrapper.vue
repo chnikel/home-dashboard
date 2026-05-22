@@ -6,7 +6,13 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { EyeIcon, EyeOffIcon, PenIcon, Trash2Icon } from "lucide-vue-next";
+import {
+  EyeIcon,
+  EyeOffIcon,
+  PenIcon,
+  PinIcon,
+  Trash2Icon,
+} from "lucide-vue-next";
 import ContextMenuCheckboxItem from "./ui/context-menu/ContextMenuCheckboxItem.vue";
 import { tagsSortedByWeight } from "@/store";
 import Tag from "./Tag.vue";
@@ -24,6 +30,7 @@ const emit = defineEmits<{
   (e: "toggleVisibility"): void;
   (e: "delete"): void;
   (e: "toggleTag", tagId: number): void;
+  (e: "togglePinned"): void;
 }>();
 
 const sortedTags = tagsSortedByWeight();
@@ -38,9 +45,15 @@ const sortedTags = tagsSortedByWeight();
       <ContextMenuItem @click="emit('edit')">
         <PenIcon /> Bearbeiten
       </ContextMenuItem>
+
+      <ContextMenuSeparator />
+
       <ContextMenuItem @click="emit('toggleVisibility')">
         <template v-if="isEnabled"> <EyeOffIcon /> Verstecken </template>
         <template v-else> <EyeIcon /> Anzeigen </template>
+      </ContextMenuItem>
+      <ContextMenuItem @click="$emit('togglePinned')">
+        <PinIcon /> Anheften
       </ContextMenuItem>
 
       <ContextMenuSeparator />
@@ -60,6 +73,8 @@ const sortedTags = tagsSortedByWeight();
           </ContextMenuCheckboxItem>
         </ContextMenuSubContent>
       </ContextMenuSub>
+
+      <ContextMenuSeparator />
 
       <ContextMenuItem
         variant="destructive"

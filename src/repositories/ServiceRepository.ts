@@ -26,6 +26,12 @@ export default {
 
     return services as GetServicesGroupedResponse;
   },
+  get: async () => {
+    const response = await fetch(resource);
+    const services = await response.json();
+
+    return services as GetServicesResponse[];
+  },
   getById: async (id: string) => {
     const response = await fetch(`${resource}/${id}`);
     const services = await response.json();

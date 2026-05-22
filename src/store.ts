@@ -2,6 +2,7 @@ import { computed, reactive } from "vue";
 import { type GetServicesResponse, type GetTagsResponse } from "./api";
 import PingService from "./services/PingService";
 import TagRepository from "./repositories/TagRepository";
+import { useLocalStorage } from "@vueuse/core";
 
 const pingService = new PingService();
 
@@ -18,6 +19,7 @@ export const store = reactive({
   }[],
   tags: [] as GetTagsResponse[],
   servicePings: [] as ServicePing[],
+  pinnedServiceIds: useLocalStorage<string[]>("pinned_service_ids", []),
 });
 
 export async function updateLocalTags() {

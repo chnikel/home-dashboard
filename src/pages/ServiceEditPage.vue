@@ -131,7 +131,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
 };
 
 const goBack = () => {
-  router.push("/");
+  router.push({ name: "apps" });
 };
 
 const onSubmit = form.handleSubmit((values) => {

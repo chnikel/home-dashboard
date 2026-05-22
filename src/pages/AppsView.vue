@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import AppsToolbar from "@/components/AppsToolbar.vue";
+import Header from "@/components/Header.vue";
+import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
+import PageContent from "@/components/PageContent.vue";
+import Button from "@/components/ui/button/Button.vue";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -6,6 +11,22 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import DropdownMenu from "@/components/ui/dropdown-menu/DropdownMenu.vue";
+import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuContent.vue";
+import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue";
+import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
+import DropdownMenuTrigger from "@/components/ui/dropdown-menu/DropdownMenuTrigger.vue";
+import InputGroup from "@/components/ui/input-group/InputGroup.vue";
+import InputGroupAddon from "@/components/ui/input-group/InputGroupAddon.vue";
+import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
+import InputGroupInput from "@/components/ui/input-group/InputGroupInput.vue";
+import { useFilteredServices } from "@/composables/filtered-services";
+import { useLayoutMode } from "@/composables/layout-mode";
+import { usePinnedServices } from "@/composables/pinned-service";
+import { useSavedSearch } from "@/composables/saved-search";
+import GroupRepository from "@/repositories/GroupRepository";
+import ServiceRepository from "@/repositories/ServiceRepository";
+import TagRepository from "@/repositories/TagRepository";
 import {
   CheckIcon,
   CircleXIcon,
@@ -19,7 +40,7 @@ import {
   SearchIcon,
   TagIcon,
 } from "lucide-vue-next";
-import { onMounted, provide, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
 import GroupDialog from "../components/GroupDialog.vue";
@@ -31,27 +52,6 @@ import ServiceDialog, {
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { findTag, store, updateLocalServicePings } from "../store";
-import Header from "@/components/Header.vue";
-import { useSavedSearch } from "@/composables/saved-search";
-import AppsToolbar from "@/components/AppsToolbar.vue";
-import { useFilteredServices } from "@/composables/filtered-services";
-import ServiceRepository from "@/repositories/ServiceRepository";
-import TagRepository from "@/repositories/TagRepository";
-import GroupRepository from "@/repositories/GroupRepository";
-import PageContent from "@/components/PageContent.vue";
-import InputGroup from "@/components/ui/input-group/InputGroup.vue";
-import InputGroupInput from "@/components/ui/input-group/InputGroupInput.vue";
-import InputGroupAddon from "@/components/ui/input-group/InputGroupAddon.vue";
-import InputGroupButton from "@/components/ui/input-group/InputGroupButton.vue";
-import Button from "@/components/ui/button/Button.vue";
-import DropdownMenu from "@/components/ui/dropdown-menu/DropdownMenu.vue";
-import DropdownMenuTrigger from "@/components/ui/dropdown-menu/DropdownMenuTrigger.vue";
-import DropdownMenuContent from "@/components/ui/dropdown-menu/DropdownMenuContent.vue";
-import DropdownMenuItem from "@/components/ui/dropdown-menu/DropdownMenuItem.vue";
-import DropdownMenuSeparator from "@/components/ui/dropdown-menu/DropdownMenuSeparator.vue";
-import { usePinnedServices } from "@/composables/pinned-service";
-import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
-import { useLayoutMode } from "@/composables/layout-mode";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();

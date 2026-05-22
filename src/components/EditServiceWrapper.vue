@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import Button from "./ui/button/Button.vue";
 import { type GetServicesResponse } from "@/api";
-import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
+import { usePinnedServices } from "@/composables/pinned-service";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
 import { useRouter } from "vue-router";
-import { store } from "@/store";
-import PinServiceRepository from "@/repositories/PinServiceRepository";
-import { usePinnedServices } from "@/composables/pinned-service";
+import ServiceContextMenuWrapper from "./ServiceContextMenuWrapper.vue";
+import Button from "./ui/button/Button.vue";
 
 const props = defineProps<{
   id: number;

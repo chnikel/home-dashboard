@@ -381,18 +381,13 @@ const { isPinned } = usePinnedServices();
         </FormField>
         <Separator class="my-6" />
         <FormField
-          v-slot="{ componentField, value }"
+          v-slot="{ componentField }"
           name="icon_url"
         >
           <FormItem>
-            <FormLabel>Icon</FormLabel>
+            <FormLabel>Icon (URL)</FormLabel>
             <FormControl>
               <div class="flex items-center gap-2">
-                <ServiceIcon
-                  :url="value"
-                  :bg-color="form.values.bgColor"
-                  :wrap="form.values.icon_wrap || false"
-                />
                 <Input
                   type="text"
                   autocomplete="off"
@@ -402,7 +397,7 @@ const { isPinned } = usePinnedServices();
               </div>
             </FormControl>
             <FormDescription>
-              Tip: Nutze
+              Tipp: Nutze
               <a
                 class="inline-flex items-center gap-0.5 hover:text-white"
                 :href="`https://dashboardicons.com/icons?q=${form.values.title}`"
@@ -415,16 +410,34 @@ const { isPinned } = usePinnedServices();
           </FormItem>
         </FormField>
         <FormField
-          v-slot="{ value, handleChange }"
+          v-slot="{ value, setValue }"
           name="icon_wrap"
         >
           <FormItem>
-            <FormLabel>Icon wrap</FormLabel>
+            <FormLabel>Abstand auswählen</FormLabel>
             <FormControl>
-              <Switch
-                :model-value="value"
-                @update:model-value="handleChange"
-              />
+              <div class="flex gap-3">
+                <ServiceIcon
+                  :url="form.values.icon_url"
+                  :bg-color="form.values.bgColor"
+                  :boxed="true"
+                  :wrap="false"
+                  :class="{
+                    'outline-4 outline-blue-500': !value,
+                  }"
+                  @click="setValue(false)"
+                />
+                <ServiceIcon
+                  :url="form.values.icon_url"
+                  :bg-color="form.values.bgColor"
+                  :boxed="true"
+                  :wrap="true"
+                  :class="{
+                    'outline-4 outline-blue-500': value,
+                  }"
+                  @click="setValue(true)"
+                />
+              </div>
             </FormControl>
           </FormItem>
         </FormField>

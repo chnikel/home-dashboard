@@ -128,10 +128,10 @@ const isCollapsed = useLocalStorage(`group_${props.id}_collapsed`, false);
     </EditGroupWrapper>
     <div
       v-if="!isCollapsed"
-      class="grid p-4 justify-center md:justify-start border-t bg-neutral-800/30 rounded-b-lg"
+      class="grid justify-center md:justify-start border-t bg-neutral-800/30 rounded-b-lg"
       :class="{
-        'grid-cols-[repeat(auto-fit,120px)] gap-1': compact,
-        'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 px-4': !compact,
+        'grid-cols-[repeat(auto-fit,100px)] gap-1 py-4 sm:p-4': compact,
+        'grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4': !compact,
       }"
     >
       <slot />

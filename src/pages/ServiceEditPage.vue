@@ -515,7 +515,7 @@ const serviceTags = computed(() => {
       <div class="space-y-6 mr-4 mt-8 sm:mt-0">
         <div class="flex flex-wrap border rounded-lg py-6 px-3">
           <ServiceAppLayout
-            class="mx-auto w-[120px]"
+            class="mx-auto w-[100px]"
             :id="0"
             :title="form.values.title || ''"
             :description="form.values.description || ''"

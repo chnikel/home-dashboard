@@ -183,7 +183,7 @@ const serviceTags = computed(() => {
 
 const { isPinned } = usePinnedServices();
 
-const customColorInput = useTemplateRef('custom-color')
+const customColorInput = useTemplateRef("custom-color");
 const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
 </script>
 
@@ -200,6 +200,14 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     </div>
     <div class="border-b">
       <PageContent class="p-4">
+        <Button
+          variant="outline"
+          class="cursor-pointer mb-3"
+          @click="goBack()"
+        >
+          <ArrowLeftIcon />
+          Zurück
+        </Button>
         <div class="flex gap-2">
           <ServiceIcon
             class="!size-12 rounded-xl"
@@ -237,14 +245,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     <ToolBar class="relative sm:sticky top-0 bg-neutral-950 z-10">
       <template #start>
         <div class="flex gap-3 items-center">
-          <Button
-            variant="outline"
-            class="cursor-pointer"
-            @click="goBack()"
-          >
-            <ArrowLeftIcon />
-            Zurück
-          </Button>
           <Badge
             v-if="!form.values.enabled"
             class="bg-orange-300"

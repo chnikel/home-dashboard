@@ -26,11 +26,11 @@ const {
   <div class="h-screen grid grid-rows-[auto_1fr]">
     <Header />
 
-    <PageContent class="flex items-center justify-center p-4">
+    <PageContent class="relative flex items-center justify-center">
       <div class="flex flex-wrap justify-center gap-3">
         <div
           v-if="isLoadingServices"
-          class="absolute inset-0 bg-neutral-800/80 z-40 flex items-center justify-center"
+          class="absolute inset-0 z-40 flex items-center justify-center"
         >
           <LoaderCircleIcon class="animate-spin" />
         </div>

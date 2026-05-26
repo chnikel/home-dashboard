@@ -5,7 +5,6 @@ import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import ServiceIcon from "@/components/ServiceIcon.vue";
 import Tag from "@/components/Tag.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import Badge from "@/components/ui/badge/Badge.vue";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form";
 import FormControl from "@/components/ui/form/FormControl.vue";

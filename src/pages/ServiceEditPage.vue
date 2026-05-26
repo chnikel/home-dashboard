@@ -6,7 +6,6 @@ import ServiceIcon from "@/components/ServiceIcon.vue";
 import ServiceTags from "@/components/ServiceTags.vue";
 import Tag from "@/components/Tag.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import Badge from "@/components/ui/badge/Badge.vue";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form";
 import FormControl from "@/components/ui/form/FormControl.vue";
@@ -27,7 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import Switch from "@/components/ui/switch/Switch.vue";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
 import { useGroups } from "@/composables/group";
-import { usePinnedServices } from "@/composables/pinned-service";
 import { useService } from "@/composables/service";
 import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
@@ -174,8 +172,6 @@ const serviceTags = computed(() => {
   }, []);
 });
 
-const { isPinned } = usePinnedServices();
-
 const customColorInput = useTemplateRef("custom-color");
 const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
 </script>
@@ -251,9 +247,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
 
     <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
       <div class="justify-self-start">
-        <h2 class="text-lg">
-          Service bearbeiten
-        </h2>
+        <h2 class="text-lg">Service bearbeiten</h2>
       </div>
       <div class="flex items-center gap-3 justify-self-end">
         <FormField

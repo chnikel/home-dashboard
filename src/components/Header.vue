@@ -1,5 +1,17 @@
 <script setup lang="ts">
 import PageContent from "./PageContent.vue";
+import Button from "./ui/button/Button.vue";
+
+const navigationRoutes = [
+  {
+    text: "Home",
+    to: "/",
+  },
+  {
+    text: "Apps",
+    to: "apps",
+  },
+];
 </script>
 
 <template>
@@ -19,7 +31,17 @@ import PageContent from "./PageContent.vue";
       </div>
 
       <div class="space-x-2 justify-self-end">
-        <slot name="end"></slot>
+        <RouterLink
+          v-for="route in navigationRoutes"
+          :to="route.to"
+        >
+          <Button
+            class="cursor-pointer"
+            variant="ghost"
+          >
+            {{ route.text }}
+          </Button>
+        </RouterLink>
       </div>
     </PageContent>
   </div>

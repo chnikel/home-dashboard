@@ -20,36 +20,11 @@ const {
   unpin: unpinService,
   isLoading: isLoadingServices,
 } = usePinnedServices();
-
-const navigationRoutes = [
-  {
-    text: "Home",
-    to: "/",
-  },
-  {
-    text: "Apps",
-    to: "apps",
-  },
-];
 </script>
 
 <template>
   <div class="h-screen grid grid-rows-[auto_1fr]">
-    <Header>
-      <template #end>
-        <RouterLink
-          v-for="route in navigationRoutes"
-          :to="route.to"
-        >
-          <Button
-            class="cursor-pointer"
-            variant="ghost"
-          >
-            {{ route.text }}
-          </Button>
-        </RouterLink>
-      </template>
-    </Header>
+    <Header />
 
     <PageContent class="flex items-center justify-center p-4">
       <div class="flex flex-wrap justify-center gap-3">

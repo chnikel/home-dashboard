@@ -250,7 +250,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
       </div>
     </ToolBar>
 
-    <ToolBar content-class="grid-cols-2">
+    <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
       <div class="flex gap-3 items-center justify-self-start">
         <Badge
           v-if="!form.values.enabled"
@@ -321,8 +321,8 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
           </FormItem>
         </FormField>
       </div>
-    </ToolBar>
-    <PageContent class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 pt-4">
+    </PageContent>
+    <PageContent class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
       <div class="space-y-8 px-4 overflow-auto max-w-xl">
         <FormField
           v-slot="{ componentField }"

@@ -257,7 +257,9 @@ const { isPinned } = usePinnedServices();
           <template #end> </template>
         </Header>
 
-        <ToolBar content-class="grid-cols-2 sm:grid-cols-3">
+        <PageContent
+          class="p-4 grid gap-2 items-center grid-cols-2 sm:grid-cols-3"
+        >
           <div class="justify-self-start shrink-0">
             <Badge variant="outline">
               {{ totalServiceCount }}
@@ -335,7 +337,7 @@ const { isPinned } = usePinnedServices();
               </Button>
             </div>
           </div>
-        </ToolBar>
+        </PageContent>
 
         <ServiceDialog
           :open="showServiceDialog"
@@ -362,7 +364,7 @@ const { isPinned } = usePinnedServices();
           submitButton="Hinzufügen"
         />
 
-        <PageContent class="flex gap-4 flex-col p-4">
+        <PageContent class="flex gap-4 flex-col px-4 pb-4">
           <template v-for="item in filteredServiceGroups">
             <ServiceGroup
               v-if="item.services.length > 0 || isEditMode"

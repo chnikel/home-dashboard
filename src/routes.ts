@@ -1,5 +1,5 @@
 import AppsView from "./pages/AppsView.vue";
-import HomeView from "./pages/HomeView.vue";
+import HomeView from "./pages/HomeVIew.vue";
 import ServiceAddPage from "./pages/ServiceAddPage.vue";
 import ServiceEditPage from "./pages/ServiceEditPage.vue";
 

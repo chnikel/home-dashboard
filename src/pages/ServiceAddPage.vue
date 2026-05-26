@@ -3,7 +3,6 @@ import type { GetTagsResponse } from "@/api";
 import PageContent from "@/components/PageContent.vue";
 import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import ServiceIcon from "@/components/ServiceIcon.vue";
-import ServiceTags from "@/components/ServiceTags.vue";
 import Tag from "@/components/Tag.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
@@ -27,8 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import Switch from "@/components/ui/switch/Switch.vue";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
 import { useGroups } from "@/composables/group";
-import { usePinnedServices } from "@/composables/pinned-service";
-import { useService } from "@/composables/service";
 import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -38,18 +35,15 @@ import {
   EyeIcon,
   EyeOffIcon,
   GroupIcon,
-  LoaderCircleIcon,
   PlusIcon,
-  SaveIcon,
   XIcon,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
-import { computed, onMounted, useTemplateRef } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { computed, useTemplateRef } from "vue";
+import { useRouter } from "vue-router";
 import z from "zod";
 
 const router = useRouter();
-const route = useRoute();
 
 const ServiceDialogFormData = z.object({
   title: z.string(),
@@ -151,8 +145,6 @@ const serviceTags = computed(() => {
   }, []);
 });
 
-const { isPinned } = usePinnedServices();
-
 const customColorInput = useTemplateRef("custom-color");
 const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
 </script>
@@ -162,13 +154,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     id="form"
     @submit="onSubmit"
   >
-    <!-- <div
-      v-if="isServiceLoading"
-      class="absolute inset-0 bg-neutral-800/80 z-40 flex items-center justify-center"
-    >
-      <LoaderCircleIcon class="animate-spin" />
-    </div> -->
-
     <ToolBar
       class="sticky top-0 bg-neutral-950 z-10 grid-cols-2 sm:grid-cols-3"
       content-class="grid-cols-2"

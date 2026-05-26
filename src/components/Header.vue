@@ -17,7 +17,7 @@ const navigationRoutes = [
 <template>
   <div class="border-b">
     <PageContent
-      class="p-4 grid grid-cols-2 sm:grid-cols-[1fr_3fr_1fr] gap-2 shadow-lg justify-between min-h-[70px]"
+      class="p-4 grid grid-cols-2 gap-2 shadow-lg justify-between min-h-[70px]"
     >
       <RouterLink
         to="/"
@@ -25,10 +25,6 @@ const navigationRoutes = [
       >
         HomeLinker
       </RouterLink>
-
-      <div class="flex gap-1 sm:justify-self-center">
-        <slot name="center"></slot>
-      </div>
 
       <div class="space-x-2 justify-self-end">
         <RouterLink

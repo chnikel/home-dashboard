@@ -34,8 +34,14 @@ const navigationRoutes = [
         <RouterLink
           v-for="route in navigationRoutes"
           :to="route.to"
+          v-slot="{ isActive }"
         >
-          <Button variant="ghost">
+          <Button
+            variant="ghost"
+            :class="{
+              underline: isActive,
+            }"
+          >
             {{ route.text }}
           </Button>
         </RouterLink>

@@ -251,19 +251,10 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     </ToolBar>
 
     <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
-      <div class="flex gap-3 items-center justify-self-start">
-        <Badge
-          v-if="!form.values.enabled"
-          class="bg-orange-300"
-        >
-          Versteckt
-        </Badge>
-        <Badge
-          v-if="serviceData ? isPinned(serviceData.id.toString()) : false"
-          class="bg-blue-500 text-white"
-        >
-          Angeheftet
-        </Badge>
+      <div class="justify-self-start">
+        <h2 class="text-lg">
+          Service bearbeiten
+        </h2>
       </div>
       <div class="flex items-center gap-3 justify-self-end">
         <FormField

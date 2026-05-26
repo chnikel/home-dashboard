@@ -49,10 +49,7 @@ const {
           </div>
 
           <RouterLink :to="{ name: 'apps' }">
-            <Button
-              class="cursor-pointer"
-              variant="default"
-            >
+            <Button variant="default">
               <PlusIcon />
               Apps anheften
             </Button>

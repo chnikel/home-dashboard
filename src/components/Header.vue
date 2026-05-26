@@ -35,10 +35,7 @@ const navigationRoutes = [
           v-for="route in navigationRoutes"
           :to="route.to"
         >
-          <Button
-            class="cursor-pointer"
-            variant="ghost"
-          >
+          <Button variant="ghost">
             {{ route.text }}
           </Button>
         </RouterLink>

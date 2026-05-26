@@ -161,7 +161,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
       <div class="flex items-center gap-3">
         <Button
           variant="outline"
-          class="cursor-pointer"
           @click="goBack()"
           size="icon"
         >
@@ -226,7 +225,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
           <FormItem>
             <FormControl>
               <Button
-                class="cursor-pointer"
                 type="button"
                 variant="outline"
                 @click="setValue(!value)"

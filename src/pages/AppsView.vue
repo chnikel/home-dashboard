@@ -38,7 +38,7 @@ import {
   PlusIcon,
   SaveIcon,
   TagIcon,
-  XIcon
+  XIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -242,7 +242,6 @@ const onNewServiceClick = () => {
             <ContextMenu v-for="savedTab in savedTabs">
               <ContextMenuTrigger>
                 <Button
-                  class="cursor-pointer"
                   :variant="
                     searchText === savedTab.text ? 'default' : 'outline'
                   "

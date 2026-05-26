@@ -10,7 +10,6 @@ const { isCompact } = useLayoutMode();
 <template>
   <ButtonGroup>
     <Button
-      class="cursor-pointer"
       :variant="isCompact ? 'outline' : 'default'"
       size="icon"
       @click="isCompact = false"
@@ -18,7 +17,6 @@ const { isCompact } = useLayoutMode();
       <LayoutListIcon />
     </Button>
     <Button
-      class="cursor-pointer"
       :variant="isCompact ? 'default' : 'outline'"
       size="icon"
       @click="isCompact = true"

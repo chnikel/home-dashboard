@@ -1,23 +1,20 @@
-import AppsView from "./pages/AppsView.vue";
 import HomeView from "./pages/HomeVIew.vue";
-import ServiceAddPage from "./pages/ServiceAddPage.vue";
-import ServiceEditPage from "./pages/ServiceEditPage.vue";
 
 export const routes = [
   {
     path: "/apps",
     name: "apps",
-    component: AppsView,
+    component: () => import("./pages/AppsView.vue"),
   },
   {
     path: "/services/new",
     name: "service-add",
-    component: ServiceAddPage,
+    component: () => import("./pages/ServiceAddPage.vue"),
   },
   {
     path: "/services/:id/edit",
     name: "service-edit",
-    component: ServiceEditPage,
+    component: () => import("./pages/ServiceEditPage.vue"),
   },
   {
     path: "/",

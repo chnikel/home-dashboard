@@ -2,7 +2,6 @@
 import Header from "@/components/Header.vue";
 import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
 import PageContent from "@/components/PageContent.vue";
-import ToolBar from "@/components/ToolBar.vue";
 import Badge from "@/components/ui/badge/Badge.vue";
 import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 import Button from "@/components/ui/button/Button.vue";
@@ -44,17 +43,15 @@ import {
   XIcon,
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
-import GroupDialog from "../components/GroupDialog.vue";
+import GroupDialog, { type GroupDialogFormData } from "../components/GroupDialog.vue";
 import Service from "../components/Service.vue";
 import ServiceAppLayout from "../components/ServiceAppLayout.vue";
-import ServiceDialog, {
-  type ServiceDialogFormData,
-} from "../components/ServiceDialog.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
-import { findTag, store, updateLocalServicePings } from "../store";
+import { store, updateLocalServicePings } from "../store";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -93,7 +90,7 @@ onMounted(async () => {
 });
 
 const isEditMode = ref(false);
-const editData = ref<ServiceDialogFormData | null>(null);
+const editData = ref<GroupDialogFormData | null>(null);
 
 const onEditServiceSuccess = async () => {
   refreshServices();
@@ -145,35 +142,6 @@ const onAddTagSuccess = async (data: TagDialogFormData) => {
   refreshServices();
 };
 
-const onAddService = async (data: ServiceDialogFormData) => {
-  const tags = (data.tagIds || []).reduce<string[]>((acc, id) => {
-    const tag = findTag(id);
-    if (tag) {
-      acc.push(tag.name);
-    }
-
-    return acc;
-  }, []);
-
-  try {
-    await ServiceRepository.create({
-      title: data.title,
-      description: data.description,
-      link: data.link,
-      icon_url: data.icon_url,
-      icon_wrap: data.icon_wrap,
-      enabled: data.enabled,
-      groupId: data.groupId,
-      tags,
-      bgColor: data.bgColor,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
-  refreshServices();
-};
-
 const onAddGroupSuccess = async (data: { title: string }) => {
   try {
     await GroupRepository.create({
@@ -186,7 +154,6 @@ const onAddGroupSuccess = async (data: { title: string }) => {
   refreshServices();
 };
 
-const showServiceDialog = ref(false);
 const showGroupDialog = ref(false);
 const showTagDialog = ref(false);
 
@@ -219,6 +186,12 @@ const { services: filteredServiceGroups, totalCount: totalServiceCount } =
   useFilteredServices(searchText, isEditMode);
 
 const { isPinned } = usePinnedServices();
+
+const router = useRouter();
+
+const onNewServiceClick = () => {
+  router.push({ name: "service-add" });
+};
 </script>
 
 <template>
@@ -315,7 +288,7 @@ const { isPinned } = usePinnedServices();
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem @click="showServiceDialog = true">
+                  <DropdownMenuItem @click="onNewServiceClick()">
                     <FilePlusIcon /> Service hinzufügen
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -338,14 +311,6 @@ const { isPinned } = usePinnedServices();
             </div>
           </div>
         </PageContent>
-
-        <ServiceDialog
-          :open="showServiceDialog"
-          :handleClose="() => (showServiceDialog = false)"
-          @submit="onAddService"
-          title="Service hinzufügen"
-          submitButton="Hinzufügen"
-        />
 
         <GroupDialog
           :open="showGroupDialog"
@@ -413,7 +378,7 @@ const { isPinned } = usePinnedServices();
       </div>
     </ContextMenuTrigger>
     <ContextMenuContent>
-      <ContextMenuItem @click="showServiceDialog = true">
+      <ContextMenuItem @click="onNewServiceClick()">
         <FilePlusIcon /> Service hinzufügen
       </ContextMenuItem>
       <ContextMenuSeparator />

@@ -20,7 +20,7 @@ export function usePinnedServices() {
 
   const filteredServices = computed(() =>
     (services.value || []).filter((service) =>
-      store.pinnedServiceIds.includes(service.id.toString()),
+      store.pinnedServiceIds.includes(service.id.toString()) && service.enabled,
     ),
   );
 

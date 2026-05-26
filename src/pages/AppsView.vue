@@ -2,7 +2,6 @@
 import Header from "@/components/Header.vue";
 import LayoutSwitcher from "@/components/LayoutSwitcher.vue";
 import PageContent from "@/components/PageContent.vue";
-import Badge from "@/components/ui/badge/Badge.vue";
 import ButtonGroup from "@/components/ui/button-group/ButtonGroup.vue";
 import Button from "@/components/ui/button/Button.vue";
 import {
@@ -38,15 +37,16 @@ import {
   PenIcon,
   PlusIcon,
   SaveIcon,
-  SearchIcon,
   TagIcon,
-  XIcon,
+  XIcon
 } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
-import GroupDialog, { type GroupDialogFormData } from "../components/GroupDialog.vue";
+import GroupDialog, {
+  type GroupDialogFormData,
+} from "../components/GroupDialog.vue";
 import Service from "../components/Service.vue";
 import ServiceAppLayout from "../components/ServiceAppLayout.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
@@ -182,8 +182,10 @@ const {
   canSave: canSaveSearch,
 } = useSavedSearch();
 
-const { services: filteredServiceGroups, totalCount: totalServiceCount } =
-  useFilteredServices(searchText, isEditMode);
+const { services: filteredServiceGroups } = useFilteredServices(
+  searchText,
+  isEditMode,
+);
 
 const { isPinned } = usePinnedServices();
 
@@ -199,17 +201,23 @@ const onNewServiceClick = () => {
     <ContextMenuTrigger>
       <div class="h-screen overflow-auto">
         <Header>
-          <template #center>
-            <InputGroup class="w-60 sm:w-80 ml-auto md:ml-0">
+          <template #center> </template>
+          <template #end> </template>
+        </Header>
+
+        <PageContent
+          class="p-4 grid gap-2 items-center grid-cols-2 sm:grid-cols-3"
+        >
+          <div class="justify-self-start flex">
+            <InputGroup class="w-40 sm:w-40 md:w-80 ml-auto md:ml-0">
               <InputGroupInput
                 v-model="searchText"
                 placeholder="Search name, description or #tag"
                 @keydown.enter="saveSearch()"
               />
-              <InputGroupAddon>
-                <SearchIcon v-if="!searchText" />
+              <InputGroupAddon align="inline-end">
                 <InputGroupButton
-                  v-else
+                  v-if="searchText"
                   size="icon-xs"
                   @click="searchText = ''"
                 >
@@ -217,7 +225,6 @@ const onNewServiceClick = () => {
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>
-
             <Button
               size="icon"
               variant="outline"
@@ -226,18 +233,6 @@ const onNewServiceClick = () => {
             >
               <SaveIcon />
             </Button>
-          </template>
-          <template #end> </template>
-        </Header>
-
-        <PageContent
-          class="p-4 grid gap-2 items-center grid-cols-2 sm:grid-cols-3"
-        >
-          <div class="justify-self-start shrink-0">
-            <Badge variant="outline">
-              {{ totalServiceCount }}
-            </Badge>
-            Services
           </div>
 
           <ButtonGroup

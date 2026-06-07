@@ -24,6 +24,7 @@ import { useFilteredServices } from "@/composables/filtered-services";
 import { useLayoutMode } from "@/composables/layout-mode";
 import { usePinnedServices } from "@/composables/pinned-service";
 import { useSavedSearch } from "@/composables/saved-search";
+import { useUserSettings } from "@/composables/user-settings.ts";
 import GroupRepository from "@/repositories/GroupRepository";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import TagRepository from "@/repositories/TagRepository";
@@ -54,7 +55,6 @@ import ServiceAppLayout from "../components/ServiceAppLayout.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
-import { useLocalStorage } from "@vueuse/core";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -92,7 +92,6 @@ onMounted(async () => {
   refreshServices();
 });
 
-const isEditMode = ref(false);
 const editData = ref<GroupDialogFormData | null>(null);
 
 const onEditServiceSuccess = async () => {
@@ -185,10 +184,7 @@ const {
   canSave: canSaveSearch,
 } = useSavedSearch();
 
-const showHiddenServices = useLocalStorage(
-  "setting.services.showHidden",
-  false,
-);
+const { isEditMode, showHiddenServices } = useUserSettings()
 
 const isShowHiddenServicesEnabled = computed(() => isEditMode.value || showHiddenServices.value)
 

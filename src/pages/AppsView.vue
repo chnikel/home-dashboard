@@ -184,9 +184,11 @@ const {
   canSave: canSaveSearch,
 } = useSavedSearch();
 
-const { isEditMode, showHiddenServices } = useUserSettings()
+const { isEditMode, showHiddenServices } = useUserSettings();
 
-const isShowHiddenServicesEnabled = computed(() => isEditMode.value || showHiddenServices.value)
+const isShowHiddenServicesEnabled = computed(
+  () => isEditMode.value || showHiddenServices.value,
+);
 
 const { services: filteredServiceGroups } = useFilteredServices(
   searchText,
@@ -286,42 +288,44 @@ const onNewServiceClick = () => {
               </Button>
 
               <LayoutSwitcher />
-              <Button
-                v-if="!isEditMode"
-                variant="outline"
-                @click="isEditMode = true"
-              >
-                <PenIcon />
-                <span class="text-white hidden md:inline">Bearbeiten</span>
-              </Button>
-              <DropdownMenu v-if="isEditMode">
-                <DropdownMenuTrigger>
-                  <Button>
-                    <PlusIcon />
-                    <span class="hidden md:inline">Hinzufügen</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem @click="onNewServiceClick()">
-                    <FilePlusIcon /> Service hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem @click="showGroupDialog = true">
-                    <FolderIcon /> Gruppe hinzufügen
-                  </DropdownMenuItem>
-                  <DropdownMenuItem @click="showTagDialog = true">
-                    <TagIcon /> Tag hinzufügen
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button
-                v-if="isEditMode"
-                class="!bg-orange-500"
-                @click="isEditMode = false"
-              >
-                <CheckIcon color="white" />
-                <span class="text-white hidden md:inline">Fertig</span>
-              </Button>
+              <div class="flex gap-1">
+                <Button
+                  v-if="!isEditMode"
+                  variant="outline"
+                  @click="isEditMode = true"
+                >
+                  <PenIcon />
+                  <span class="text-white hidden md:inline">Bearbeiten</span>
+                </Button>
+                <DropdownMenu v-if="isEditMode">
+                  <DropdownMenuTrigger>
+                    <Button>
+                      <PlusIcon />
+                      <span class="hidden md:inline">Hinzufügen</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem @click="onNewServiceClick()">
+                      <FilePlusIcon /> Service hinzufügen
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem @click="showGroupDialog = true">
+                      <FolderIcon /> Gruppe hinzufügen
+                    </DropdownMenuItem>
+                    <DropdownMenuItem @click="showTagDialog = true">
+                      <TagIcon /> Tag hinzufügen
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <Button
+                  v-if="isEditMode"
+                  class="!bg-orange-500"
+                  @click="isEditMode = false"
+                >
+                  <CheckIcon color="white" />
+                  <span class="text-white hidden md:inline">Fertig</span>
+                </Button>
+              </div>
             </div>
           </div>
         </PageContent>

@@ -30,6 +30,8 @@ import TagRepository from "@/repositories/TagRepository";
 import {
   CheckIcon,
   CircleXIcon,
+  EyeIcon,
+  EyeOffIcon,
   FilePlusIcon,
   FolderIcon,
   LayoutGridIcon,
@@ -40,7 +42,7 @@ import {
   TagIcon,
   XIcon,
 } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { type GetServicesResponse } from "../api";
 import EditServiceWrapper from "../components/EditServiceWrapper.vue";
@@ -52,6 +54,7 @@ import ServiceAppLayout from "../components/ServiceAppLayout.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
+import { useLocalStorage } from "@vueuse/core";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -182,9 +185,16 @@ const {
   canSave: canSaveSearch,
 } = useSavedSearch();
 
+const showHiddenServices = useLocalStorage(
+  "setting.services.showHidden",
+  false,
+);
+
+const isShowHiddenServicesEnabled = computed(() => isEditMode.value || showHiddenServices.value)
+
 const { services: filteredServiceGroups } = useFilteredServices(
   searchText,
-  isEditMode,
+  isShowHiddenServicesEnabled,
 );
 
 const { isPinned } = usePinnedServices();
@@ -265,6 +275,20 @@ const onNewServiceClick = () => {
             class="col-start-2 justify-self-end sm:justify-self-end sm:col-start-auto"
           >
             <div class="flex items-center gap-3">
+              <Button
+                size="icon"
+                type="button"
+                variant="outline"
+                @click="showHiddenServices = !showHiddenServices"
+              >
+                <template v-if="showHiddenServices">
+                  <EyeIcon />
+                </template>
+                <template v-else>
+                  <EyeOffIcon />
+                </template>
+              </Button>
+
               <LayoutSwitcher />
               <Button
                 v-if="!isEditMode"
@@ -338,7 +362,7 @@ const onNewServiceClick = () => {
             >
               <template v-for="service in item.services">
                 <EditServiceWrapper
-                  v-if="service.enabled || isEditMode"
+                  v-if="isShowHiddenServicesEnabled || service.enabled"
                   :draggable="isEditMode"
                   :id="service.id"
                   :service="service"

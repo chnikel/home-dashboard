@@ -20,7 +20,7 @@ const replaceSearchText = (text: string) => {
 
 export function useFilteredServices(
   searchText: Ref<string, string>,
-  isEditMode: Ref<boolean>,
+  includeEnabled: Ref<boolean>,
 ) {
   const filteredServiceGroups = computed(() =>
     store.groups.map((group) => {
@@ -45,7 +45,7 @@ export function useFilteredServices(
       });
 
       const filteredEnabledServices = filteredServices.filter((service) => {
-        if (isEditMode.value) {
+        if (includeEnabled.value) {
           return true;
         }
 

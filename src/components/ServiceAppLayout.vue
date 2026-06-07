@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { preConfiguredIcons } from "@/lib/status-icons";
 import { store } from "@/store";
-import { AppWindowIcon, EyeOffIcon } from "lucide-vue-next";
+import {
+  AppWindowIcon,
+  EyeOffIcon,
+  FlaskConicalIcon,
+  ShieldCheckIcon,
+  ShieldOffIcon,
+  ShieldQuestionMarkIcon,
+} from "lucide-vue-next";
 import { computed } from "vue";
 import type { GetServicesResponse } from "../api";
 import ServiceIcon from "./ServiceIcon.vue";
@@ -33,13 +40,42 @@ const showPhysicalIndicator = computed(() => {
     props.data.tags.findIndex((t) => t.name.toLowerCase() == "physical") != -1
   );
 });
+
+const hasTag = (tag: string) =>
+  props.data.tags.findIndex((t) => t.name.toLowerCase() == tag) !== -1;
+
+const isHttps = props.data.link?.startsWith("https://") || false;
+const isHttp = props.data.link?.startsWith("http://") || false;
+
+const titleIndicators = [
+  {
+    when: hasTag("test") || hasTag("testen"),
+    class: "text-yellow-500",
+    icon: FlaskConicalIcon,
+  },
+  {
+    when: isHttps,
+    class: "text-emerald-500",
+    icon: ShieldCheckIcon,
+  },
+  {
+    when: isHttp,
+    class: "text-orange-500",
+    icon: ShieldOffIcon,
+  },
+  {
+    when: !isHttps && !isHttp,
+    class: "text-red-500",
+    icon: ShieldQuestionMarkIcon,
+  },
+];
 </script>
 
 <template>
   <a
     :href="data.link || '#'"
     :target="data.link && '_blank'"
-    class="block relative h-full hover:bg-neutral-800 p-4 pt-4 pb-2 rounded-xl border"
+    class="relative grid grid-cols-[16px_auto_16px] pt-4 pb-2 gap-y-2 hover:bg-neutral-800 rounded-xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
       'outline-2 outline-blue-500': isPinned,
@@ -63,7 +99,7 @@ const showPhysicalIndicator = computed(() => {
       :component="preConfiguredIcons['pinned'].component"
       :colorClass="preConfiguredIcons['pinned'].colorClass"
     />
-    <div class="relative">
+    <div class="relative col-start-2 col-end-3">
       <ServiceIcon
         class="mx-auto"
         :wrap="data.icon_wrap"
@@ -91,7 +127,18 @@ const showPhysicalIndicator = computed(() => {
       />
     </div>
 
-    <p class="mt-2 overflow-hidden text-center text-xs min-h-8">
+    <div class="col-start-3 flex flex-col gap-1">
+      <template v-for="indicator in titleIndicators">
+        <component
+          v-if="indicator.when"
+          :is="indicator.icon"
+          :size="16"
+          :class="indicator.class"
+        ></component>
+      </template>
+    </div>
+
+    <p class="col-span-3 overflow-hidden text-center text-xs min-h-8">
       {{ data.title }}
     </p>
   </a>

@@ -230,7 +230,10 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
       </div>
 
       <div class="flex items-center gap-1 sm:gap-3 justify-self-end">
-        <Button type="submit">
+        <Button
+          type="submit"
+          :disabled="!form.meta.value.touched"
+        >
           <SaveIcon />
           <span class="hidden sm:inline">Speichern</span>
         </Button>
@@ -244,6 +247,8 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
         </Button>
       </div>
     </ToolBar>
+
+    {{ form.meta.value.touched }}
 
     <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
       <div class="justify-self-start">

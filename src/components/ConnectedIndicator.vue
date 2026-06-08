@@ -1,21 +1,28 @@
 <script setup lang="ts">
 import { useConnectionStatus } from "@/composables/connection-status";
+import { useLocalStorage } from "@vueuse/core";
 import { CloudIcon, CloudOff } from "lucide-vue-next";
-import { ref } from "vue";
+import { onMounted } from "vue";
 
 const { status, start, stop } = useConnectionStatus();
 
-const isEnabled = ref(true);
+const isEnabled = useLocalStorage("setting.app.backendConnectionTest", true);
 
 const toggle = () => {
   if (isEnabled.value) {
-    stop()
+    stop();
   } else {
-    start()
+    start();
   }
 
   isEnabled.value = !isEnabled.value;
 };
+
+onMounted(() => {
+  if (isEnabled) {
+    start();
+  }
+});
 </script>
 
 <template>

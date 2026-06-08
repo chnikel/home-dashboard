@@ -53,10 +53,6 @@ export function useConnectionStatus() {
     interval = undefined;
   };
 
-  if (!interval) {
-    start();
-  }
-
   const isConnected = computed(() => status.value === "online");
 
   return {

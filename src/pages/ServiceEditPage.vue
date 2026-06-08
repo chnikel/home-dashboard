@@ -248,8 +248,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
       </div>
     </ToolBar>
 
-    {{ form.meta.value.touched }}
-
     <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
       <div class="justify-self-start">
         <h2 class="text-lg">Service bearbeiten</h2>

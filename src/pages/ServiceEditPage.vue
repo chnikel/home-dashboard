@@ -276,40 +276,10 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             </FormControl>
           </FormItem>
         </FormField>
-        <FormField
-          v-slot="{ componentField }"
-          name="groupId"
-        >
-          <FormItem>
-            <FormControl>
-              <div v-if="isFetchingGroups">Gruppen werden geladen...</div>
-
-              <Select
-                v-else
-                v-bind="componentField"
-              >
-                <SelectTrigger class="w-full">
-                  <GroupIcon />
-                  <SelectValue placeholder="Keine" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem
-                      v-for="group in groups"
-                      :value="Number(group.id)"
-                    >
-                      {{ group.title || "-" }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormControl>
-          </FormItem>
-        </FormField>
       </div>
     </PageContent>
     <PageContent class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-      <div class="space-y-8 px-4 overflow-auto max-w-xl">
+      <div class="space-y-8 px-4 max-w-xl">
         <FormField
           v-slot="{ componentField }"
           name="title"
@@ -484,21 +454,27 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             </FormControl>
           </FormItem>
         </FormField>
-        <Separator class="my-6" />
-        <FormField
-          v-slot="{ value, handleChange }"
-          name="enabled"
-        >
-          <FormItem>
-            <FormLabel>Enabled</FormLabel>
-            <FormControl>
-              <Switch
-                :model-value="value"
-                @update:model-value="handleChange"
-              />
-            </FormControl>
-          </FormItem>
-        </FormField>
+      </div>
+
+      <div class="space-y-8 mt-8 sm:mt-0 px-4">
+        <div class="flex flex-wrap border rounded-lg py-6 px-3">
+          <ServiceAppLayout
+            class="mx-auto w-[100px]"
+            :data="{
+              id: 0,
+              title: form.values.title || '',
+              description: form.values.description || '',
+              icon_url: form.values.icon_url || '',
+              icon_wrap: form.values.icon_wrap || false,
+              tags: [],
+              bgColor: form.values.bgColor || '',
+              enabled: form.values.enabled || false,
+              link: '',
+              groupId: -1,
+            }"
+          />
+        </div>
+
         <FormField
           v-slot="{ componentField }"
           name="groupId"
@@ -528,6 +504,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             </FormControl>
           </FormItem>
         </FormField>
+
         <FormField name="tagIds">
           <FormItem>
             <FormLabel>Tags</FormLabel>
@@ -586,45 +563,6 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
             </div>
           </FormItem>
         </FormField>
-      </div>
-
-      <div class="space-y-8 mt-8 sm:mt-0 px-4">
-        <div class="flex flex-wrap border rounded-lg py-6 px-3">
-          <ServiceAppLayout
-            class="mx-auto w-[100px]"
-            :data="{
-              id: 0,
-              title: form.values.title || '',
-              description: form.values.description || '',
-              icon_url: form.values.icon_url || '',
-              icon_wrap: form.values.icon_wrap || false,
-              tags: [],
-              bgColor: form.values.bgColor || '',
-              enabled: form.values.enabled || false,
-              link: '',
-              groupId: -1,
-            }"
-          />
-        </div>
-
-        <div
-          class="border-b pb-6 border-solid border-inherit flex overflow-hidden"
-        >
-          <ServiceTags
-            class="flex overflow-auto"
-            style="scrollbar-width: none"
-            :tags="serviceData?.tags || []"
-            :max="8"
-          />
-        </div>
-
-        <div>
-          <code
-            class="border-input dark:bg-input/30 flex min-h-16 rounded-md border bg-transparent px-3 py-2 shadow-xs md:text-sm"
-          >
-            <pre class="overflow-auto">{{ form.values }}</pre>
-          </code>
-        </div>
       </div>
     </PageContent>
   </form>

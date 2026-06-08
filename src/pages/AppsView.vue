@@ -55,6 +55,7 @@ import ServiceAppLayout from "../components/ServiceAppLayout.vue";
 import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
+import { useConnectionStatus } from "@/composables/connection-status.ts";
 
 async function refreshServices() {
   const groupsResponse = await GroupRepository.get();
@@ -161,13 +162,19 @@ const showTagDialog = ref(false);
 
 const { isCompact: compactMode } = useLayoutMode();
 
+const { isConnected } = useConnectionStatus();
+
 onMounted(async () => {
-  updateLocalServicePings();
+  if (isConnected.value) {
+    updateLocalServicePings();
+  }
 
   const pingInterval = setInterval(() => {
     console.log("Refreshing pings");
 
-    updateLocalServicePings();
+    if (isConnected.value) {
+      updateLocalServicePings();
+    }
   }, 60000);
 
   return () => {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Header from "@/components/Header.vue";
+import Page from "@/components/Page.vue";
 import PageContent from "@/components/PageContent.vue";
 import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import Button from "@/components/ui/button/Button.vue";
@@ -23,7 +24,7 @@ const {
 </script>
 
 <template>
-  <div class="h-screen grid grid-rows-[auto_1fr]">
+  <Page>
     <Header />
 
     <PageContent class="relative flex items-center justify-center">
@@ -75,5 +76,5 @@ const {
         </template>
       </div>
     </PageContent>
-  </div>
+  </Page>
 </template>

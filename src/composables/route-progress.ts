@@ -1,3 +1,4 @@
+import { range } from "@/lib/utils";
 import { ref } from "vue";
 
 let interval: number | undefined;
@@ -13,7 +14,7 @@ export function useRouteProgress() {
     progress.value = 0.01;
     setTimeout(() => {
       progress.value = 10;
-    }, 0);
+    }, 10);
 
     interval = setInterval(() => {
       inc();
@@ -31,7 +32,7 @@ export function useRouteProgress() {
     }, 100);
   };
   const inc = () => {
-    const incrementBy = 2;
+    const incrementBy = range(2, 10);
     const maxPercentage = 95;
     if (progress.value + incrementBy > maxPercentage) {
       return;

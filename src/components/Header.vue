@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ConnectedIndicator from "./Connectedindicator.vue";
 import PageContent from "./PageContent.vue";
 import Button from "./ui/button/Button.vue";
 
@@ -16,9 +17,7 @@ const navigationRoutes = [
 
 <template>
   <div class="border-b">
-    <PageContent
-      class="p-4 grid grid-cols-2 gap-2 shadow-lg justify-between min-h-[70px]"
-    >
+    <PageContent class="p-4 flex gap-2 shadow-lg min-h-[70px]">
       <RouterLink
         to="/"
         class="items-center flex"
@@ -26,7 +25,9 @@ const navigationRoutes = [
         HomeLinker
       </RouterLink>
 
-      <div class="space-x-2 justify-self-end">
+      <ConnectedIndicator />
+
+      <div class="ml-auto space-x-2 justify-self-end">
         <RouterLink
           v-for="route in navigationRoutes"
           :to="route.to"

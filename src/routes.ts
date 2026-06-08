@@ -1,6 +1,7 @@
+import type { RouteRecordRaw } from "vue-router";
 import HomeView from "./pages/HomeVIew.vue";
 
-export const routes = [
+export const routes: RouteRecordRaw[] = [
   {
     path: "/apps",
     name: "apps",

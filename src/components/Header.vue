@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ConnectedIndicator from "./Connectedindicator.vue";
+import ConnectedIndicator from "./ConnectedIndicator.vue";
 import PageContent from "./PageContent.vue";
 import Button from "./ui/button/Button.vue";
 

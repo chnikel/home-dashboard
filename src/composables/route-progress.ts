@@ -4,19 +4,11 @@ let interval: number | undefined;
 const duration = 1500;
 const progress = ref(0);
 
-let finished = false;
-
 export function useRouteProgress() {
   const start = () => {
     if (interval) {
       return;
     }
-
-    if (finished) {
-      return;
-    }
-
-    finished = false;
 
     progress.value = 0.01;
     setTimeout(() => {
@@ -28,8 +20,6 @@ export function useRouteProgress() {
     }, duration);
   };
   const finish = () => {
-    finished = true;
-
     if (interval) {
       clearInterval(interval);
       interval = undefined;

@@ -3,7 +3,6 @@ import type { GetTagsResponse } from "@/api";
 import PageContent from "@/components/PageContent.vue";
 import ServiceAppLayout from "@/components/ServiceAppLayout.vue";
 import ServiceIcon from "@/components/ServiceIcon.vue";
-import ServiceTags from "@/components/ServiceTags.vue";
 import Tag from "@/components/Tag.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,6 @@ import SelectItem from "@/components/ui/select/SelectItem.vue";
 import SelectTrigger from "@/components/ui/select/SelectTrigger.vue";
 import SelectValue from "@/components/ui/select/SelectValue.vue";
 import { Separator } from "@/components/ui/separator";
-import Switch from "@/components/ui/switch/Switch.vue";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
 import { useGroups } from "@/composables/group";
 import { useService } from "@/composables/service";
@@ -35,10 +33,9 @@ import {
   ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
-  GroupIcon,
   LoaderCircleIcon,
   SaveIcon,
-  XIcon,
+  XIcon
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, useTemplateRef } from "vue";

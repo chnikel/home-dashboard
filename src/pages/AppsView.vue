@@ -57,7 +57,10 @@ import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
 import { useConnectionStatus } from "@/composables/connection-status.ts";
 
+const isFetching = ref(true);
+
 async function refreshServices() {
+  isFetching.value = true;
   const groupsResponse = await GroupRepository.get();
 
   const groupedServicesResponse =
@@ -85,6 +88,8 @@ async function refreshServices() {
       title: "",
     });
   }
+
+  isFetching.value = false;
 
   store.groups = servicesWithGroupName;
 }
@@ -392,7 +397,8 @@ const onNewServiceClick = () => {
               </template>
             </ServiceGroup>
           </template>
-          <template v-if="filteredServiceGroups.length === 0">
+          <template v-if="isFetching"> Services werden geladen... </template>
+          <template v-else-if="filteredServiceGroups.length === 0">
             <div
               class="border p-8 rounded-xl text-center border-dashed text-white/30"
             >

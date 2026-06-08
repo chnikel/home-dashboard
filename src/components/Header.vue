@@ -18,14 +18,16 @@ const navigationRoutes = [
 <template>
   <div class="border-b">
     <PageContent class="p-4 flex gap-2 shadow-lg min-h-[70px]">
-      <RouterLink
-        to="/"
-        class="items-center flex"
-      >
-        HomeLinker
-      </RouterLink>
+      <div class="flex items-center">
+        <RouterLink
+          to="/"
+          class="items-center flex"
+        >
+          HomeLinker
+        </RouterLink>
 
-      <ConnectedIndicator />
+        <ConnectedIndicator class="mb-4"/>
+      </div>
 
       <div class="ml-auto space-x-2 justify-self-end">
         <RouterLink

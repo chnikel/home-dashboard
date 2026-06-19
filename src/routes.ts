@@ -21,4 +21,8 @@ export const routes: RouteRecordRaw[] = [
     path: "/",
     component: HomeView,
   },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("./pages/PageNotFound.vue"),
+  },
 ];

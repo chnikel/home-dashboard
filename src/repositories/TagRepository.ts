@@ -35,4 +35,13 @@ export default {
       body: null,
     });
   },
+  delete: async (id: number) => {
+    const response = await fetch(`${resource}/${id}`, {
+      method: "delete",
+    });
+
+    const services = await response.json();
+
+    return services;
+  },
 };

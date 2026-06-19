@@ -18,6 +18,21 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("./pages/ServiceEditPage.vue"),
   },
   {
+    path: "/tags",
+    children: [
+      {
+        path: ":id/edit",
+        name: "tags-edit",
+        component: () => import("./pages/ServiceEditPage.vue"),
+      },
+       {
+        path: "",
+        name: "tags",
+        component: () => import("./pages/TagsView.vue"),
+      },
+    ],
+  },
+  {
     path: "/",
     component: HomeView,
   },

@@ -158,7 +158,7 @@ const serviceHasTag = async (serviceId: number, tagId: number) => {
     .select()
     .from(serviceTags)
     .where(
-      and(eq(serviceTags.serviceId, serviceId), eq(serviceTags.tagId, tagId))
+      and(eq(serviceTags.serviceId, serviceId), eq(serviceTags.tagId, tagId)),
     );
 
   return result.length > 0;
@@ -198,8 +198,14 @@ const removeTagFromServiceById = async (tagId: number, serviceId: number) => {
   const result = db
     .delete(serviceTags)
     .where(
-      and(eq(serviceTags.tagId, tagId), eq(serviceTags.serviceId, serviceId))
+      and(eq(serviceTags.tagId, tagId), eq(serviceTags.serviceId, serviceId)),
     );
+
+  return result;
+};
+
+const deleteTag = async (tagId: number) => {
+  const result = db.delete(serviceTags).where(eq(serviceTags.tagId, tagId));
 
   return result;
 };
@@ -225,4 +231,5 @@ export default {
   allTagsForService,
   tagToService,
   removeTagFromService,
+  deleteTag,
 };

@@ -12,6 +12,10 @@ const navigationRoutes = [
     text: "Apps",
     to: "apps",
   },
+    {
+    text: "Tags",
+    to: "tags",
+  },
 ];
 </script>
 

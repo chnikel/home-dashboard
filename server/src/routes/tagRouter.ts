@@ -58,4 +58,12 @@ userRouter.post("/:id/toggle/:serviceId", async (req, res) => {
   }
 });
 
+userRouter.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  await db.deleteTag(id);
+
+  res.json({ message: "Tag erfolgreich gelöscht" });
+});
+
 export default userRouter;

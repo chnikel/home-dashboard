@@ -24,18 +24,20 @@ import SelectValue from "@/components/ui/select/SelectValue.vue";
 import { Separator } from "@/components/ui/separator";
 import Textarea from "@/components/ui/textarea/Textarea.vue";
 import { useGroups } from "@/composables/group";
-import { useService } from "@/composables/service";
+import { useService, useServices } from "@/composables/service";
 import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
   ChevronLeftIcon,
+  DeleteIcon,
   ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
   LoaderCircleIcon,
   SaveIcon,
-  XIcon
+  TrashIcon,
+  XIcon,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, useTemplateRef } from "vue";
@@ -69,6 +71,11 @@ onMounted(async () => {
   });
 });
 
+// const ServiceLinksForm = z.object({
+//   name: z.string(),
+//   description: z.string(),
+// });
+
 const ServiceDialogFormData = z.object({
   title: z.string(),
   description: z.string().optional().default(""),
@@ -79,6 +86,14 @@ const ServiceDialogFormData = z.object({
   groupId: z.number().optional().nullable(),
   tagIds: z.array(z.number()).optional(),
   bgColor: z.string().optional().default(""),
+  linkedServices: z
+    .array(
+      z.object({
+        name: z.string(),
+        serviceId: z.string(),
+      }),
+    )
+    .default([]),
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -171,6 +186,8 @@ const serviceTags = computed(() => {
 
 const customColorInput = useTemplateRef("custom-color");
 const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
+
+const { services, serviceById } = useServices();
 </script>
 
 <template>
@@ -553,6 +570,69 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
                 >
                   Verfügbar
                 </div>
+              </div>
+            </div>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          name="linkedServices"
+          v-slot="{ value, setValue }"
+        >
+          <FormItem>
+            <FormLabel>Service Links</FormLabel>
+            <Button
+              class="mb-3"
+              type="button"
+              variant="secondary"
+              @click="setValue([{ name: '', serviceId: '' }, ...value])"
+            >
+              Link hinzufügen
+            </Button>
+
+            <div class="space-y-3">
+              <div
+                class="flex gap-1"
+                v-for="(link, index) in value"
+              >
+                <Input
+                  type="text"
+                  autocomplete="off"
+                  placeholder="Name"
+                  v-model="link.name"
+                />
+
+                <Select v-model="link.serviceId">
+                  <SelectTrigger class="w-full">
+                    <div class="flex items-center">
+                      <ServiceIcon
+                        class="!size-10 grow-0"
+                        :url="serviceById(link.serviceId)?.icon_url"
+                      />
+                      <SelectValue placeholder="Service to link" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem
+                        v-for="service in services"
+                        :value="Number(service.id)"
+                      >
+                        <ServiceIcon :url="service.icon_url" />
+                        {{ service.title || "-" }}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  @click="
+                    setValue((value as any[]).filter((_, i) => i !== index))
+                  "
+                >
+                  <TrashIcon />
+                </Button>
               </div>
             </div>
           </FormItem>

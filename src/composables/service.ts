@@ -16,5 +16,15 @@ export function useServices() {
     null,
   );
 
-  return { services: state, isReady, isLoading, error };
+  const serviceById = (id: number | string) => {
+    return state.value?.find((service) => service.id == id);
+  };
+
+  return {
+    services: state,
+    isReady,
+    isLoading,
+    error,
+    serviceById,
+  };
 }

@@ -56,6 +56,7 @@ import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
 import { useConnectionStatus } from "@/composables/connection-status.ts";
+import EmptyPageContent from "@/views/EmptyPageContent.vue";
 
 const isFetching = ref(true);
 
@@ -397,7 +398,12 @@ const onNewServiceClick = () => {
               </template>
             </ServiceGroup>
           </template>
-          <template v-if="isFetching"> Services werden geladen... </template>
+          <template v-if="isFetching">
+            <EmptyPageContent
+              title="Services werden geladen... "
+              description="dwa"
+            />
+          </template>
           <template v-else-if="filteredServiceGroups.length === 0">
             <div
               class="border p-8 rounded-xl text-center border-dashed text-white/30"

@@ -6,8 +6,8 @@ import type { RouteLocationRaw } from "vue-router";
 defineProps<{
   title: string;
   description?: string;
-  primaryActionText: string;
-  primaryAction: RouteLocationRaw
+  primaryActionText?: string;
+  primaryAction?: RouteLocationRaw
 }>();
 </script>
 
@@ -24,7 +24,7 @@ defineProps<{
         </p>
       </div>
 
-      <RouterLink :to="primaryAction">
+      <RouterLink v-if="primaryAction" :to="primaryAction">
         <Button variant="default"> {{ primaryActionText }} </Button>
       </RouterLink>
     </div>

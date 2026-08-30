@@ -99,6 +99,13 @@ const titleIndicators = [
       :component="preConfiguredIcons['pinned'].component"
       :colorClass="preConfiguredIcons['pinned'].colorClass"
     />
+    <ServiceInfoIcon
+      class="z-10"
+      position="top-left"
+      :show="data.archived"
+      :component="preConfiguredIcons['archived'].component"
+      :colorClass="preConfiguredIcons['archived'].colorClass"
+    />
     <div class="relative col-start-2 col-end-3">
       <ServiceIcon
         class="mx-auto"

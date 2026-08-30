@@ -1,4 +1,5 @@
 import {
+  ArchiveIcon,
   CloudOffIcon,
   ConstructionIcon,
   HardDriveIcon,
@@ -31,5 +32,9 @@ export const preConfiguredIcons = {
   pinned: {
     component: PinIcon,
     colorClass: "bg-blue-500",
+  },
+  archived: {
+    component: ArchiveIcon,
+    colorClass: "bg-gray-500",
   },
 };

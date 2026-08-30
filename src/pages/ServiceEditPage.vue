@@ -248,6 +248,36 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
     </ToolBar>
 
     <PageContent class="p-4 grid gap-2 items-center grid-cols-2">
+      <div
+        v-if="serviceData?.archived"
+        class="flex justify-between gap-3 items-center col-span-2 bg-yellow-800 rounded p-3"
+      >
+        Dieser Eintrag ist Archiviert.
+
+        <FormField
+          v-slot="{ value, setValue }"
+          name="archived"
+        >
+          <FormItem>
+            <FormControl>
+              <Button
+                type="button"
+                @click="setValue(!value)"
+              >
+                <template v-if="value">
+                  <ArchiveRestoreIcon />
+                  <span class="hidden md:inline">Wiederherstellen</span>
+                </template>
+                <template v-else>
+                  <ArchiveIcon />
+                  <span class="hidden md:inline">Archivieren</span>
+                </template>
+              </Button>
+            </FormControl>
+          </FormItem>
+        </FormField>
+      </div>
+
       <div class="justify-self-start">
         <h2 class="text-lg">Service bearbeiten</h2>
       </div>
@@ -277,6 +307,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
         </FormField>
 
         <FormField
+          v-if="!serviceData?.archived"
           v-slot="{ value, setValue }"
           name="archived"
         >

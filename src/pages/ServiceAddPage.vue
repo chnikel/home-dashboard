@@ -85,6 +85,7 @@ const onAddService = async (data: ServiceDialogFormData) => {
       groupId: data.groupId,
       tags,
       bgColor: data.bgColor,
+      archived: false,
     });
   } catch (error) {
     console.log(error);

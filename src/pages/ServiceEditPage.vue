@@ -37,7 +37,7 @@ import {
   EyeOffIcon,
   LoaderCircleIcon,
   SaveIcon,
-  XIcon
+  XIcon,
 } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { computed, onMounted, useTemplateRef } from "vue";
@@ -68,6 +68,7 @@ onMounted(async () => {
     groupId: service.groupId,
     tagIds: service.tags.map((tag) => tag.id),
     bgColor: service.bgColor || "",
+    archived: service.archived,
   });
 });
 
@@ -81,7 +82,7 @@ const ServiceDialogFormData = z.object({
   groupId: z.number().optional().nullable(),
   tagIds: z.array(z.number()).optional(),
   bgColor: z.string().optional().default(""),
-  archived: z.boolean().default(false)
+  archived: z.boolean().default(false),
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -287,12 +288,12 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
                 @click="setValue(!value)"
               >
                 <template v-if="value">
-                  <ArchiveIcon />
-                  <span class="hidden md:inline">Archivieren</span>
-                </template>
-                <template v-else>
                   <ArchiveRestoreIcon />
                   <span class="hidden md:inline">Wiederherstellen</span>
+                </template>
+                <template v-else>
+                  <ArchiveIcon />
+                  <span class="hidden md:inline">Archivieren</span>
                 </template>
               </Button>
             </FormControl>
@@ -493,6 +494,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
               enabled: form.values.enabled || false,
               link: '',
               groupId: -1,
+              archived: form.values.archived,
             }"
           />
         </div>

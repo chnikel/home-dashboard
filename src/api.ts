@@ -20,6 +20,7 @@ export type GetServicesResponse = {
   groupId: number;
   tags: ServiceTag[];
   bgColor?: string;
+  archived: boolean;
 };
 
 export type GetServicesGroupedResponse = {

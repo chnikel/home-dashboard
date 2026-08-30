@@ -568,6 +568,7 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
               enabled: form.values.enabled || false,
               link: '',
               groupId: -1,
+              archived: false
             }"
           />
         </div>

@@ -22,6 +22,7 @@ export const NEED_REFACTOR_getServices = async () => {
         groupId: entry.groupId,
         tags,
         bgColor: entry.bgColor,
+        archived: entry.archived ?? false
       };
     }),
   );
@@ -67,6 +68,7 @@ serviceRouter.post("", async (req, res) => {
     enabled: req.body.enabled,
     groupId: req.body.groupId,
     bgColor: req.body.bgColor,
+    archived: req.body.archived
   };
 
   const serviceId = await db.insertService(data);
@@ -103,6 +105,7 @@ serviceRouter.put("/:id", async (req, res) => {
     enabled: req.body.enabled,
     groupId: req.body.groupId,
     bgColor: req.body.bgColor,
+    archived: req.body.archived
   };
 
   await db.updateService(serviceId, data);

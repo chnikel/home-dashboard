@@ -36,6 +36,7 @@ export type AddServiceRequest = {
   groupId?: number | null;
   tags: string[];
   bgColor: string;
+  archived: boolean;
 };
 
 export type AddServiceResponse = {};

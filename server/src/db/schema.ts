@@ -10,6 +10,7 @@ export const services = sqliteTable("services", {
   enabled: integer("status_enabled", { mode: "boolean" }),
   groupId: integer("group_id").references(() => groups.id),
   bgColor: text("bgColor"),
+  archived: integer("archived", { mode: "boolean" }),
 });
 
 export type Service = typeof services.$inferInsert;

@@ -29,6 +29,8 @@ import { useTags } from "@/composables/tag";
 import ServiceRepository from "@/repositories/ServiceRepository";
 import { toTypedSchema } from "@vee-validate/zod";
 import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
   ChevronLeftIcon,
   ExternalLinkIcon,
   EyeIcon,
@@ -79,6 +81,7 @@ const ServiceDialogFormData = z.object({
   groupId: z.number().optional().nullable(),
   tagIds: z.array(z.number()).optional(),
   bgColor: z.string().optional().default(""),
+  archived: z.boolean().default(false)
 });
 
 export type ServiceDialogFormData = z.infer<typeof ServiceDialogFormData>;
@@ -110,6 +113,7 @@ const onEditService = async (data: ServiceDialogFormData) => {
       groupId: data.groupId,
       tags,
       bgColor: data.bgColor,
+      archived: data.archived,
     });
   } catch (error) {
     console.log(error);
@@ -265,6 +269,30 @@ const suggestedColors = ["#ffffff", "#000000", "#3b3b3b"];
                 <template v-else>
                   <EyeIcon />
                   <span class="hidden md:inline">Anzeigen</span>
+                </template>
+              </Button>
+            </FormControl>
+          </FormItem>
+        </FormField>
+
+        <FormField
+          v-slot="{ value, setValue }"
+          name="archived"
+        >
+          <FormItem>
+            <FormControl>
+              <Button
+                type="button"
+                variant="outline"
+                @click="setValue(!value)"
+              >
+                <template v-if="value">
+                  <ArchiveIcon />
+                  <span class="hidden md:inline">Archivieren</span>
+                </template>
+                <template v-else>
+                  <ArchiveRestoreIcon />
+                  <span class="hidden md:inline">Wiederherstellen</span>
                 </template>
               </Button>
             </FormControl>

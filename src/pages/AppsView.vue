@@ -399,10 +399,7 @@ const onNewServiceClick = () => {
             </ServiceGroup>
           </template>
           <template v-if="isFetching">
-            <EmptyPageContent
-              title="Services werden geladen... "
-              description="dwa"
-            />
+            <EmptyPageContent title="Services werden geladen... " />
           </template>
           <template v-else-if="filteredServiceGroups.length === 0">
             <div

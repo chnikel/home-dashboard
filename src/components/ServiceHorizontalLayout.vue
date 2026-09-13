@@ -86,7 +86,6 @@ const urlSecureIndicator = [
     class="relative flex gap-3 hover:bg-neutral-800 rounded-2xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
-      'outline-2 outline-blue-500': isPinned,
     }"
   >
     <div

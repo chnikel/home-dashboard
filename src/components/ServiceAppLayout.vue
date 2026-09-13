@@ -78,7 +78,6 @@ const titleIndicators = [
     class="relative grid grid-cols-[16px_auto_16px] pt-4 pb-2 gap-y-2 hover:bg-neutral-800 rounded-xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
-      'outline-2 outline-blue-500': isPinned,
     }"
   >
     <div

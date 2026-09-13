@@ -5,6 +5,7 @@ import {
   AppWindowIcon,
   EyeOffIcon,
   FlaskConicalIcon,
+  HardDriveIcon,
   ShieldCheckIcon,
   ShieldOffIcon,
   ShieldQuestionMarkIcon,
@@ -49,10 +50,17 @@ const isHttp = props.data.link?.startsWith("http://") || false;
 
 const titleIndicators = [
   {
+    when: showPhysicalIndicator,
+    class: "text-blue-500",
+    icon: HardDriveIcon,
+  },
+  {
     when: hasTag("test") || hasTag("testen"),
     class: "text-yellow-500",
     icon: FlaskConicalIcon,
   },
+];
+const urlSecureIndicator = [
   {
     when: isHttps,
     class: "text-emerald-500",
@@ -75,7 +83,7 @@ const titleIndicators = [
   <a
     :href="data.link || '#'"
     :target="data.link && '_blank'"
-    class="relative grid grid-cols-[auto_1fr] hover:bg-neutral-800 rounded-2xl border"
+    class="relative flex gap-3 hover:bg-neutral-800 rounded-2xl border"
     :class="{
       'outline-2 outline-red-500': !isReachable,
       'outline-2 outline-blue-500': isPinned,
@@ -87,88 +95,61 @@ const titleIndicators = [
     >
       <EyeOffIcon />
     </div>
-
     <div
       v-if="!isReachable"
       class="absolute inset-0 flex justify-center items-center bg-neutral-900/50 z-[9] rounded-2xl"
-    ></div>
-
-    <div class="relative">
-      <ServiceIcon
-        class="mx-auto"
-        :wrap="data.icon_wrap"
-        :url="data.icon_url"
-        :boxed="true"
-        :bg-color="data.bgColor"
-      >
-        <AppWindowIcon />
-      </ServiceIcon>
-
-      <ServiceInfoIcon
-        class="z-10"
-        position="top-left"
-        :show="isPinned"
-        :component="preConfiguredIcons['pinned'].component"
-        :colorClass="preConfiguredIcons['pinned'].colorClass"
-      />
-
+    >
       <ServiceInfoIcon
         class="z-10"
         position="top-left-out"
-        :show="!isReachable"
+        :show="true"
         :component="preConfiguredIcons['disconnected'].component"
         :colorClass="preConfiguredIcons['disconnected'].colorClass"
       />
-
-      <ServiceInfoIcon
-        class="z-[8]"
-        position="bottom-right-out"
-        :show="showPhysicalIndicator"
-        :component="preConfiguredIcons['device'].component"
-        :colorClass="preConfiguredIcons['device'].colorClass"
-      />
     </div>
 
-    <div class="py-1 flex flex-col justify-center gap-1 p-3">
+    <ServiceInfoIcon
+      class="z-10"
+      position="top-left-out"
+      :show="isPinned"
+      :component="preConfiguredIcons['pinned'].component"
+      :colorClass="preConfiguredIcons['pinned'].colorClass"
+    />
+
+    <ServiceIcon
+      :wrap="data.icon_wrap"
+      :url="data.icon_url"
+      :boxed="true"
+      :bg-color="data.bgColor"
+    >
+      <AppWindowIcon />
+    </ServiceIcon>
+
+    <div class="flex flex-col justify-center grow">
       <p class="overflow-hidden">
         {{ data.title }}
       </p>
-
-        <div class="flex">
-          <template v-for="indicator in titleIndicators">
-            <component
-              v-if="indicator.when"
-              :is="indicator.icon"
-              :size="16"
-              :class="indicator.class"
-            ></component>
-          </template>
+      <div class="flex gap-0.5">
+        <template v-for="indicator in titleIndicators">
+          <component
+            v-if="indicator.when"
+            :is="indicator.icon"
+            :size="16"
+            :class="indicator.class"
+          ></component>
+        </template>
       </div>
     </div>
 
-    <!-- 
-    
-    <div class="relative row-span-2">
-    
-
-      <ServiceInfoIcon
-        class="z-10"
-        position="top-left-out"
-        :show="!isReachable"
-        :component="preConfiguredIcons['disconnected'].component"
-        :colorClass="preConfiguredIcons['disconnected'].colorClass"
-      />
-
-      <ServiceInfoIcon
-        class="z-[8]"
-        position="bottom-right-out"
-        :show="showPhysicalIndicator"
-        :component="preConfiguredIcons['device'].component"
-        :colorClass="preConfiguredIcons['device'].colorClass"
-      />
+    <div class="flex items-center p-3">
+      <template v-for="indicator in urlSecureIndicator">
+        <component
+          v-if="indicator.when"
+          :is="indicator.icon"
+          :size="16"
+          :class="indicator.class"
+        ></component>
+      </template>
     </div>
-
-
--->
   </a>
 </template>

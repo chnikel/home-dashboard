@@ -37,6 +37,7 @@ import {
   FolderIcon,
   LayoutGridIcon,
   LayoutListIcon,
+  LoaderCircleIcon,
   PenIcon,
   PlusIcon,
   SaveIcon,
@@ -56,7 +57,6 @@ import ServiceGroup from "../components/ServiceGroup.vue";
 import TagDialog, { type TagDialogFormData } from "../components/TagDialog.vue";
 import { store, updateLocalServicePings } from "../store";
 import { useConnectionStatus } from "@/composables/connection-status.ts";
-import EmptyPageContent from "@/views/EmptyPageContent.vue";
 
 const isFetching = ref(true);
 
@@ -399,7 +399,9 @@ const onNewServiceClick = () => {
             </ServiceGroup>
           </template>
           <template v-if="isFetching">
-            <EmptyPageContent title="Services werden geladen... " />
+            <div class="border p-8 rounded-xl border-dashed text-white/30">
+              <LoaderCircleIcon class="animate-spin mx-auto" />
+            </div>
           </template>
           <template v-else-if="filteredServiceGroups.length === 0">
             <div

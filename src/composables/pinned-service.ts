@@ -4,7 +4,7 @@ import PinServiceRepository from "@/repositories/PinServiceRepository";
 import { computed } from "vue";
 
 export function usePinnedServices() {
-  const { services, isLoading } = useServices();
+  const { services, isLoading, error } = useServices();
 
   const toggle = (serviceId: string) => {
     if (isPinned(serviceId)) {
@@ -26,6 +26,7 @@ export function usePinnedServices() {
 
   return {
     services: filteredServices,
+    error,
     toggle,
     isPinned,
     pin: PinServiceRepository.pin,

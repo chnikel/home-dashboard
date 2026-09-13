@@ -10,6 +10,7 @@ import ContextMenuItem from "@/components/ui/context-menu/ContextMenuItem.vue";
 import ContextMenuTrigger from "@/components/ui/context-menu/ContextMenuTrigger.vue";
 import { usePinnedServices } from "@/composables/pinned-service";
 import {
+  CircleXIcon,
   LoaderCircleIcon,
   PinIcon,
   PinOffIcon,
@@ -17,6 +18,7 @@ import {
 } from "lucide-vue-next";
 
 const {
+  error,
   services,
   unpin: unpinService,
   isLoading: isLoadingServices,
@@ -33,6 +35,20 @@ const {
         class="absolute inset-0 z-40 flex items-center justify-center"
       >
         <LoaderCircleIcon class="animate-spin" />
+      </div>
+      <div
+        v-else-if="error"
+        class="flex flex-col items-center gap-3"
+      >
+        <CircleXIcon
+          :size="24"
+          color="#fb2c36"
+        />
+
+        <div class="text-center">
+          <h3 class="text-lg font-bold">Ein Fehler ist aufgetreten</h3>
+          <p class="text-neutral-500">{{ error }}</p>
+        </div>
       </div>
       <div
         v-else-if="services.length === 0"

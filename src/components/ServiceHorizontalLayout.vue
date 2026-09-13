@@ -50,7 +50,7 @@ const isHttp = props.data.link?.startsWith("http://") || false;
 
 const titleIndicators = [
   {
-    when: showPhysicalIndicator,
+    when: showPhysicalIndicator.value,
     class: "",
     icon: HardDriveIcon,
   },
@@ -128,7 +128,7 @@ const urlSecureIndicator = [
 
     <div class="flex flex-col justify-center grow">
       <p class="overflow-hidden flex gap-1 items-center">
-         <template v-for="indicator in titleIndicators">
+        <template v-for="indicator in titleIndicators">
           <component
             v-if="indicator.when"
             :is="indicator.icon"
@@ -137,7 +137,6 @@ const urlSecureIndicator = [
           ></component>
         </template>
         {{ data.title }}
-
       </p>
       <div class="flex gap-0.5">
         <template v-for="indicator in descriptionIndicators">

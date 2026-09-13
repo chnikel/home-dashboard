@@ -227,7 +227,7 @@ const onNewServiceClick = () => {
         </Header>
 
         <PageContent
-          class="p-4 grid gap-2 items-center grid-cols-2 sm:grid-cols-3"
+          class="p-4 grid gap-2 items-center grid-cols-2 sm:grid-cols-3 border-b mb-5"
         >
           <div class="justify-self-start flex">
             <InputGroup class="w-40 sm:w-40 md:w-80 ml-auto md:ml-0">
